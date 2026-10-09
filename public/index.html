@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Launch-Your-Store | Zero-Code Storefront Builder</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/onboarding.css">
+</head>
+<body class="wizard-layout">
+
+  <!-- Header -->
+  <header class="wizard-topbar">
+    <div class="flex items-center justify-between" style="max-width: 1040px; margin: 0 auto; width: 100%;">
+      <div class="wizard-brand">
+        <span style="font-size: 1.5rem;">⚡</span>
+        <span>Launch-Your-Store</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/design-system" class="btn btn-outline btn-sm">🎨 Design System</a>
+        <a href="/store/urban-threads" class="btn btn-secondary btn-sm" target="_blank">Sample Store 1</a>
+        <a href="/store/artisan-bakery" class="btn btn-secondary btn-sm" target="_blank">Sample Store 2</a>
+        <a href="/admin" class="btn btn-primary btn-sm">Admin Dashboard</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Wizard -->
+  <main class="wizard-main">
+    
+    <!-- Stepper Navigation Header -->
+    <div class="stepper">
+      <div class="step-item active" id="stepIndicator1" onclick="goToStep(1)">
+        <div class="step-circle">1</div>
+        <div class="step-label">Store Details</div>
+      </div>
+      <div class="step-item" id="stepIndicator2" onclick="goToStep(2)">
+        <div class="step-circle">2</div>
+        <div class="step-label">Categories & Products</div>
+      </div>
+      <div class="step-item" id="stepIndicator3" onclick="goToStep(3)">
+        <div class="step-circle">3</div>
+        <div class="step-label">Choose Theme</div>
+      </div>
+      <div class="step-item" id="stepIndicator4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Publish Live</div>
+      </div>
+    </div>
+
+    <!-- Step 1: Store Details -->
+    <div class="step-pane active" id="stepPane1">
+      <h2 class="step-title">Screen 1: Tell us about your business</h2>
+      <p class="step-subtitle">Enter your store name, business type, and contact information. We'll generate your live URL automatically.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div class="form-group">
+          <label class="form-label" for="storeNameInput">Store Name <span class="req">*</span></label>
+          <input type="text" id="storeNameInput" class="form-control" placeholder="e.g. Velvet & Oak Atelier" required>
+          <div class="form-hint">Live URL Preview: <strong id="slugPreview" style="color: var(--primary);">http://localhost:5000/store/your-store</strong></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="businessTypeSelect">Business Category</label>
+          <select id="businessTypeSelect" class="form-select">
+            <option value="Fashion & Apparel">Fashion & Apparel</option>
+            <option value="Food & Gourmet Bakery">Food & Gourmet Bakery</option>
+            <option value="Electronics & Tech">Electronics & Tech</option>
+            <option value="Home & Lifestyle">Home & Lifestyle</option>
+            <option value="Artisanal & Handmade">Artisanal & Handmade</option>
+            <option value="Beauty & Wellness">Beauty & Wellness</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contactEmailInput">Owner / Support Email <span class="req">*</span></label>
+          <input type="email" id="contactEmailInput" class="form-control" placeholder="owner@yourdomain.com" value="owner@example.com" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="contactPhoneInput">Business Phone</label>
+          <input type="tel" id="contactPhoneInput" class="form-control" placeholder="+1 (555) 234-5678" value="+1 (555) 890-1234">
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="form-label" for="storeAddressInput">Physical Address / Headquarters</label>
+          <input type="text" id="storeAddressInput" class="form-control" placeholder="Suite 400, 500 Broadway, New York, NY">
+        </div>
+
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label class="form-label" for="logoUrlInput">Logo Image URL (Optional)</label>
+          <input type="url" id="logoUrlInput" class="form-control" placeholder="https://images.unsplash.com/... or leave blank for typographic logo">
+          <div class="flex items-center gap-2" style="margin-top: 8px;">
+            <span class="form-hint">Quick Logo Presets:</span>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80')">Fashion Monogram</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80')">Artisan Bake</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('')">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-actions">
+        <a href="/design-system" class="btn btn-outline">View Design System</a>
+        <button type="button" class="btn btn-primary" onclick="proceedToStep(2)">Next: Categories & Products →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Categories & Products Setup -->
+    <div class="step-pane" id="stepPane2">
+      <h2 class="step-title">Screen 2: Categories & Initial Inventory</h2>
+      <p class="step-subtitle">Select product categories for your catalog, then choose how to populate your initial products.</p>
+
+      <!-- Category selection (Checkpoint 2) -->
+      <div style="margin-bottom: 28px;">
+        <label class="form-label" style="margin-bottom: 10px; display: block;">Select Categories (Click to toggle):</label>
+        <div class="categories-selector" id="categoriesPills">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Add Custom Category -->
+        <div class="flex items-center gap-2" style="max-width: 420px; margin-top: 10px;">
+          <input type="text" id="customCategoryInput" class="form-control" placeholder="Add custom category name...">
+          <button type="button" class="btn btn-secondary" onclick="addCustomCategory()">+ Add</button>
+        </div>
+      </div>
+
+      <!-- Inventory Loading Mode (Checkpoints 3 & 4) -->
+      <div>
+        <label class="form-label" style="margin-bottom: 12px; display: block;">How would you like to add products?</label>
+        
+        <div class="method-tabs">
+          <div class="method-card active" id="tabDummy" onclick="switchProductMode('dummy')">
+            <div class="method-icon">🚀</div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">1-Click Dummy Import</h3>
+            <p class="text-muted" style="font-size: 0.85rem;">Instantly populate realistic products, prices, images, and variants tailored to your categories.</p>
+          </div>
+
+          <div class="method-card" id="tabCsv" onclick="switchProductMode('csv')">
+            <div class="method-icon">📊</div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Upload Excel / CSV File</h3>
+            <p class="text-muted" style="font-size: 0.85rem;">Import catalog from spreadsheet with downloadable template, preview, and row validation report.</p>
+          </div>
+        </div>
+
+        <!-- Dummy Import Pane -->
+        <div id="dummySection" class="card" style="background: #f8fafc;">
+          <div class="flex items-center justify-between">
+            <div>
+              <div style="font-weight: 700; margin-bottom: 2px;">Ready to generate sample catalog</div>
+              <div class="text-muted" style="font-size: 0.85rem;">Will generate 4–8 high-resolution products with pricing, descriptions, and stock counts.</div>
+            </div>
+            <span class="badge badge-success">Recommended</span>
+          </div>
+        </div>
+
+        <!-- CSV Upload Pane -->
+        <div id="csvSection" style="display: none;">
+          <div class="flex items-center justify-between" style="margin-bottom: 12px;">
+            <span class="form-hint">Accepted format: .csv with Name, Price, Category, Stock</span>
+            <a href="/api/stores/template/products/csv-template" download class="btn btn-outline btn-sm">📥 Download Sample CSV Template</a>
+          </div>
+
+          <div class="upload-dropzone" id="csvDropzone" onclick="document.getElementById('csvFileInput').click()">
+            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCsvFileSelected(event)">
+            <div style="font-size: 2rem; margin-bottom: 8px;">📁</div>
+            <div style="font-weight: 700;">Drag and drop your CSV file here, or click to browse</div>
+            <div class="text-muted" style="font-size: 0.8rem; margin-top: 4px;">Columns: Name, Price, Category, Stock, SKU, Description, ImageUrl</div>
+          </div>
+
+          <!-- CSV Validation & Preview Box -->
+          <div id="csvPreviewContainer" style="display: none;">
+            <div class="flex items-center justify-between" style="margin-top: 14px;">
+              <div style="font-weight: 700;">Parsed Spreadsheet Preview (<span id="parsedRowCount">0</span> rows)</div>
+              <div id="csvValidationBadge"></div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="preview-table">
+                <thead>
+                  <tr>
+                    <th>Row</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Validation</th>
+                  </tr>
+                </thead>
+                <tbody id="csvPreviewTableBody"></tbody>
+              </table>
+            </div>
+
+            <div id="csvErrorReport" style="margin-top: 10px; display: none;"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-secondary" onclick="proceedToStep(1)">← Back to Details</button>
+        <button type="button" class="btn btn-primary" onclick="proceedToStep(3)">Next: Choose Theme →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Choose Theme -->
+    <div class="step-pane" id="stepPane3">
+      <h2 class="step-title">Screen 3: Choose your storefront style</h2>
+      <p class="step-subtitle">Pick from 4 curated visual themes. Layouts, typography, colors, and button radii switch seamlessly.</p>
+
+      <div class="themes-grid" id="themesGrid">
+        <!-- Modern Theme -->
+        <div class="theme-option-card selected" onclick="selectTheme('modern')">
+          <div class="theme-preview-box" style="background: linear-gradient(135deg, #4f46e5, #06b6d4);">
+            <div style="font-weight: 700;">MODERN MINIMAL</div>
+            <div>Clean lines & Indigo</div>
+          </div>
+          <div style="font-weight: 700; margin-bottom: 2px;">Modern Minimalist</div>
+          <div class="text-muted" style="font-size: 0.8rem;">Sans-serif Inter • High clarity • 10px radius</div>
+        </div>
+
+        <!-- Cyber Streetwear -->
+        <div class="theme-option-card" onclick="selectTheme('cyber')">
+          <div class="theme-preview-box" style="background: linear-gradient(135deg, #0f172a, #6366f1); border: 1px solid #ec4899;">
+            <div style="font-weight: 700; color: #ec4899;">CYBER STREETWEAR</div>
+            <div style="color: #cbd5e1;">Bold neon & Space Grotesk</div>
+          </div>
+          <div style="font-weight: 700; margin-bottom: 2px;">Cyber Streetwear</div>
+          <div class="text-muted" style="font-size: 0.8rem;">Dark mode aesthetic • Sharp 4px borders</div>
+        </div>
+
+        <!-- Luxury Elegance -->
+        <div class="theme-option-card" onclick="selectTheme('luxury')">
+          <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #d97706);">
+            <div style="font-weight: 700; font-family: serif; color: #fef3c7;">LUXURY ELEGANCE</div>
+            <div style="color: #e2e8f0;">Editorial serif & Gold</div>
+          </div>
+          <div style="font-weight: 700; margin-bottom: 2px;">Luxury Elegance</div>
+          <div class="text-muted" style="font-size: 0.8rem;">Playfair Display serif • Refined prestige</div>
+        </div>
+
+        <!-- Organic Artisan -->
+        <div class="theme-option-card" onclick="selectTheme('organic')">
+          <div class="theme-preview-box" style="background: linear-gradient(135deg, #b45309, #15803d);">
+            <div style="font-weight: 700;">ORGANIC ARTISAN</div>
+            <div>Earthy amber & Sage</div>
+          </div>
+          <div style="font-weight: 700; margin-bottom: 2px;">Organic Artisan</div>
+          <div class="text-muted" style="font-size: 0.8rem;">Plus Jakarta Sans • Warm & pillowy 16px radius</div>
+        </div>
+      </div>
+
+      <!-- Theme Customizer Mini Controls -->
+      <div class="card" style="margin-top: 20px; background: #fafafa;">
+        <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Customize Storefront Hero Banner:</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label class="form-label" for="bannerHeadlineInput">Banner Headline</label>
+            <input type="text" id="bannerHeadlineInput" class="form-control" value="Welcome to our official store">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bannerSubtitleInput">Banner Subtitle</label>
+            <input type="text" id="bannerSubtitleInput" class="form-control" value="Curated premium items crafted for discerning tastes.">
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-actions">
+        <button type="button" class="btn btn-secondary" onclick="proceedToStep(2)">← Back to Categories</button>
+        <button type="button" class="btn btn-success btn-lg" id="publishStoreBtn" onclick="publishStore()">⚡ Create & Publish Live Store to MongoDB</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Published & Live URL Success -->
+    <div class="step-pane" id="stepPane4">
+      <div class="published-success">
+        <div style="font-size: 3.5rem; margin-bottom: 12px; animation: bounce 1s infinite alternate;">🎉</div>
+        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text);">Your Online Store is Live!</h2>
+        <p class="text-muted" style="max-width: 540px; margin: 8px auto 24px;">
+          Your store database has been registered in MongoDB with isolated multi-tenant data, sample inventory, and responsive storefront themes.
+        </p>
+
+        <!-- Live URL Box -->
+        <div class="live-url-box" style="max-width: 640px; margin: 0 auto 24px;">
+          <span id="createdStoreUrlText" style="word-break: break-all;">http://localhost:5000/store/your-store</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy</button>
+        </div>
+
+        <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap;">
+          <a href="#" id="viewStoreLink" class="btn btn-primary btn-lg" target="_blank">🌐 Open Live Storefront →</a>
+          <a href="#" id="openAdminLink" class="btn btn-secondary btn-lg">⚙️ Open Store Admin Panel</a>
+          <button type="button" class="btn btn-outline btn-lg" onclick="location.reload()">+ Create Another Store</button>
+        </div>
+
+        <div style="margin-top: 36px; padding: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); text-align: left; max-width: 640px; margin-left: auto; margin-right: auto;">
+          <div style="font-weight: 700; margin-bottom: 6px;">💡 What's already ready for you:</div>
+          <ul style="padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+            <li><strong>Live Shopper Storefront:</strong> Cart drawer, filter tabs, checkout flow with real DB orders.</li>
+            <li><strong>Admin Dashboard:</strong> Live revenue metrics, product inventory editor, order status workflow.</li>
+            <li><strong>AI Store Copilot:</strong> Ask questions grounded in your MongoDB store data without hallucinations.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/onboarding.js"></script>
+</body>
+</html>

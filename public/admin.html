@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Launch-Your-Store</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-layout">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-header">
+      <span style="font-size: 1.4rem;">⚡</span>
+      <span class="sidebar-brand">Merchant Admin</span>
+    </div>
+
+    <!-- Multi-Tenant Store Selector (Checkpoint 12) -->
+    <div class="store-selector-box">
+      <label style="font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; font-weight: 700; display: block; margin-bottom: 6px;">
+        Active Store (Tenant):
+      </label>
+      <select id="activeStoreSelect" class="store-selector-select" onchange="switchActiveStore(event.target.value)">
+        <option value="">Loading stores...</option>
+      </select>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="switchAdminTab('dashboard')" id="tabNav-dashboard">
+        <span>📊</span> <span>Dashboard</span>
+      </div>
+      <div class="nav-item" onclick="switchAdminTab('products')" id="tabNav-products">
+        <span>📦</span> <span>Products & Stock</span>
+      </div>
+      <div class="nav-item" onclick="switchAdminTab('orders')" id="tabNav-orders">
+        <span>🛍️</span> <span>Orders Workflow</span>
+      </div>
+      <div class="nav-item" onclick="switchAdminTab('theme')" id="tabNav-theme">
+        <span>🎨</span> <span>Theme & Branding</span>
+      </div>
+      <div class="nav-item" onclick="switchAdminTab('copilot')" id="tabNav-copilot">
+        <span>🤖</span> <span>AI Store Copilot</span>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="#" id="viewStoreLiveBtn" class="btn btn-outline btn-sm" target="_blank" style="color: #f8fafc; border-color: #334155;">
+        🌐 View Live Store ↗
+      </a>
+      <a href="/" class="btn btn-outline btn-sm" style="color: #94a3b8; border-color: #334155;">
+        + Create Another Store
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="admin-main">
+    
+    <!-- Top Bar -->
+    <header class="admin-topbar">
+      <div class="topbar-store-info">
+        <h2 id="topStoreName" style="font-size: 1.25rem; font-weight: 800;">Loading...</h2>
+        <span class="role-badge" id="roleBadge">Role: Store Owner</span>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <!-- Role toggle (Checkpoint 12) -->
+        <select id="roleSelector" class="form-select" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="toggleRole(event.target.value)">
+          <option value="owner">Role: Store Owner</option>
+          <option value="staff">Role: Staff Member</option>
+        </select>
+
+        <button class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy Storefront URL</button>
+      </div>
+    </header>
+
+    <div class="admin-body">
+
+      <!-- PANE 1: DASHBOARD OVERVIEW (Checkpoint 8) -->
+      <div class="admin-pane active" id="pane-dashboard">
+        
+        <!-- Low Stock Banner -->
+        <div class="low-stock-alert" id="lowStockAlertBanner" style="display: none;">
+          <div class="flex items-center gap-2">
+            <span style="font-size: 1.2rem;">⚠️</span>
+            <div>
+              <strong>Inventory Attention Needed:</strong>
+              <span id="lowStockAlertText">Some products have 5 or fewer items remaining.</span>
+            </div>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="switchAdminTab('products')">Review Inventory →</button>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span>TOTAL REVENUE</span>
+              <span>💰</span>
+            </div>
+            <div class="metric-value" id="metricRevenue">$0.00</div>
+            <div class="metric-sub">Confirmed gross sales</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span>TOTAL ORDERS</span>
+              <span>📦</span>
+            </div>
+            <div class="metric-value" id="metricOrders">0</div>
+            <div class="metric-sub" id="metricActiveOrders">0 pending fulfillment</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span>AVG ORDER VALUE</span>
+              <span>📈</span>
+            </div>
+            <div class="metric-value" id="metricAov">$0.00</div>
+            <div class="metric-sub">Per checkout average</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span>CATALOG PRODUCTS</span>
+              <span>🛍️</span>
+            </div>
+            <div class="metric-value" id="metricProducts">0</div>
+            <div class="metric-sub" id="metricLowStockCount">0 low in stock</div>
+          </div>
+        </div>
+
+        <!-- Recent Activity & Orders Table -->
+        <div class="table-container">
+          <div class="flex items-center justify-between" style="padding: 16px 20px; border-bottom: 1px solid var(--border);">
+            <h3 style="font-size: 1.1rem; font-weight: 700;">Recent Transactions & Orders</h3>
+            <button class="btn btn-outline btn-sm" onclick="switchAdminTab('orders')">View All Orders →</button>
+          </div>
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody id="recentOrdersTableBody">
+              <tr>
+                <td colspan="6" class="text-center text-muted" style="padding: 24px;">Loading recent orders...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANE 2: PRODUCTS & INVENTORY (Checkpoint 10) -->
+      <div class="admin-pane" id="pane-products">
+        <div class="flex items-center justify-between" style="margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 style="font-size: 1.3rem; font-weight: 800;">Product Catalog & Inventory</h3>
+            <p class="text-muted" style="font-size: 0.85rem;">Manage prices, stock limits, variants, and bulk adjustments.</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <button class="btn btn-outline btn-sm" onclick="triggerDummyImport()">⚡ Import Dummy Products</button>
+            <button class="btn btn-primary btn-sm" onclick="openAddProductModal()">+ Add New Product</button>
+          </div>
+        </div>
+
+        <!-- Bulk Actions Toolbar (Checkpoint 10) -->
+        <div class="card" style="padding: 12px 18px; margin-bottom: 18px; background: #fafafa;">
+          <div class="flex items-center justify-between" style="flex-wrap: wrap; gap: 10px;">
+            <div class="flex items-center gap-2">
+              <span style="font-weight: 700; font-size: 0.85rem;">Bulk Operations:</span>
+              <button class="btn btn-secondary btn-sm" onclick="executeBulkAction('increase_price', 10)">📈 +10% Price</button>
+              <button class="btn btn-secondary btn-sm" onclick="executeBulkAction('decrease_price', 10)">🏷️ -10% Sale</button>
+              <button class="btn btn-secondary btn-sm" onclick="executeBulkAction('set_stock', 25)">📦 Set All Stock = 25</button>
+            </div>
+            <div class="text-muted" style="font-size: 0.8rem;">Updates persist in real-time to MongoDB.</div>
+          </div>
+        </div>
+
+        <!-- Products Table -->
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock Level</th>
+                <th>SKU</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr>
+                <td colspan="6" class="text-center text-muted" style="padding: 24px;">Loading products...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANE 3: ORDERS WORKFLOW (Checkpoint 11) -->
+      <div class="admin-pane" id="pane-orders">
+        <div class="flex items-center justify-between" style="margin-bottom: 20px;">
+          <div>
+            <h3 style="font-size: 1.3rem; font-weight: 800;">Order Management & Customer Updates</h3>
+            <p class="text-muted" style="font-size: 0.85rem;">Transition orders through fulfillment and dispatch email status notifications.</p>
+          </div>
+        </div>
+
+        <!-- Status Filter Tabs -->
+        <div class="category-tabs" style="margin-bottom: 18px;" id="orderFilterTabs">
+          <button class="cat-tab-btn active" onclick="filterAdminOrders('all')">All Orders</button>
+          <button class="cat-tab-btn" onclick="filterAdminOrders('placed')">Placed</button>
+          <button class="cat-tab-btn" onclick="filterAdminOrders('packed')">Packed</button>
+          <button class="cat-tab-btn" onclick="filterAdminOrders('shipped')">Shipped</button>
+          <button class="cat-tab-btn" onclick="filterAdminOrders('delivered')">Delivered</button>
+          <button class="cat-tab-btn" onclick="filterAdminOrders('cancelled')">Cancelled</button>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="table-container">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Items Ordered</th>
+                <th>Total</th>
+                <th>Status (Workflow)</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+              <tr>
+                <td colspan="6" class="text-center text-muted" style="padding: 24px;">Loading orders...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PANE 4: THEME & CONTENT EDITOR (Checkpoint 9) -->
+      <div class="admin-pane" id="pane-theme">
+        <div class="flex items-center justify-between" style="margin-bottom: 20px;">
+          <div>
+            <h3 style="font-size: 1.3rem; font-weight: 800;">Storefront Content & Theme Customizer</h3>
+            <p class="text-muted" style="font-size: 0.85rem;">Modify branding, fonts, banners, and color schemes without editing any code.</p>
+          </div>
+          <button class="btn btn-success" onclick="saveStoreSettings()">💾 Save Changes to MongoDB</button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          
+          <!-- General Branding -->
+          <div class="card">
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 14px;">Identity & Contact Details</h4>
+            
+            <div class="form-group">
+              <label class="form-label" for="editStoreName">Store Name</label>
+              <input type="text" id="editStoreName" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editLogoUrl">Logo Image URL</label>
+              <input type="url" id="editLogoUrl" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editContactEmail">Support Email</label>
+              <input type="email" id="editContactEmail" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editContactPhone">Support Phone</label>
+              <input type="text" id="editContactPhone" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editAddress">Physical Address</label>
+              <input type="text" id="editAddress" class="form-control">
+            </div>
+          </div>
+
+          <!-- Hero Banner & Styling Tokens -->
+          <div class="card">
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin-bottom: 14px;">Hero Banner & Visual Theme</h4>
+
+            <div class="form-group">
+              <label class="form-label" for="editBannerTitle">Hero Headline</label>
+              <input type="text" id="editBannerTitle" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editBannerSubtitle">Hero Subtitle</label>
+              <input type="text" id="editBannerSubtitle" class="form-control">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editBannerImg">Hero Background Image URL</label>
+              <input type="url" id="editBannerImg" class="form-control">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="editPrimaryColor">Primary Accent Color</label>
+                <input type="color" id="editPrimaryColor" class="form-control" style="height: 42px; padding: 2px;">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="editSecondaryColor">Secondary Accent Color</label>
+                <input type="color" id="editSecondaryColor" class="form-control" style="height: 42px; padding: 2px;">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <div class="form-group">
+                <label class="form-label" for="editFontFamily">Font Family</label>
+                <select id="editFontFamily" class="form-select">
+                  <option value="'Inter', sans-serif">Inter (Modern Clean)</option>
+                  <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech / Cyber)</option>
+                  <option value="'Playfair Display', serif">Playfair Display (Luxury Serif)</option>
+                  <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Artisanal)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="editBorderRadius">Button & Card Corner Radius</label>
+                <select id="editBorderRadius" class="form-select">
+                  <option value="4px">4px (Sharp / Edgy)</option>
+                  <option value="8px">8px (Refined)</option>
+                  <option value="12px">12px (Smooth)</option>
+                  <option value="18px">18px (Pill / Warm)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="editFooterText">Footer Copyright Notice</label>
+              <input type="text" id="editFooterText" class="form-control">
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PANE 5: AI COPILOT CHATBOT (Checkpoints 13 & 14) -->
+      <div class="admin-pane" id="pane-copilot">
+        <div style="margin-bottom: 16px;">
+          <h3 style="font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+            <span>🤖</span> Store AI Copilot (MongoDB-Grounded)
+          </h3>
+          <p class="text-muted" style="font-size: 0.85rem;">
+            Answers merchant questions strictly using real MongoDB catalog and order aggregation pipelines without hallucinations.
+          </p>
+        </div>
+
+        <div class="copilot-container">
+          <!-- Chat messages area -->
+          <div class="copilot-messages" id="copilotMessages">
+            <div class="copilot-msg">
+              <div class="copilot-avatar">AI</div>
+              <div class="copilot-bubble">
+                Hello! I am your store's AI Copilot. I have real-time read access to your MongoDB database for this store. You can ask me about top sellers, low stock warnings, weekly revenue comparisons, or order fulfillment statuses.
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <div class="copilot-input-area">
+            <!-- Quick prompt pills -->
+            <div class="quick-prompts">
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What are my top 5 selling products?')">🏆 Top 5 selling products?</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Which products are low on stock?')">⚠️ Which products are low on stock?</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What is my revenue this week vs last week?')">💰 Revenue this week vs last week?</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Show my orders breakdown')">📦 Orders breakdown by status</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Who are my top customers?')">👤 Who are my top customers?</span>
+            </div>
+
+            <form class="flex items-center gap-2" onsubmit="handleCopilotSubmit(event)">
+              <input type="text" id="copilotInput" class="form-control" placeholder="Ask a question about your catalog or sales transactions..." style="font-size: 0.95rem;">
+              <button type="submit" class="btn btn-primary" id="copilotSendBtn">Ask Copilot</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Add/Edit Product Modal -->
+  <div class="modal-overlay" id="productFormModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="productModalHeading">Add New Product</h3>
+        <button class="modal-close" onclick="closeProductFormModal()">×</button>
+      </div>
+
+      <form id="productForm" onsubmit="handleProductFormSubmit(event)">
+        <input type="hidden" id="editProductId">
+
+        <div class="form-group">
+          <label class="form-label" for="pName">Product Name <span class="req">*</span></label>
+          <input type="text" id="pName" class="form-control" required>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="pPrice">Price ($ USD) <span class="req">*</span></label>
+            <input type="number" step="0.01" id="pPrice" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pCompare">Compare at Price ($)</label>
+            <input type="number" step="0.01" id="pCompare" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group">
+            <label class="form-label" for="pStock">Stock Inventory</label>
+            <input type="number" id="pStock" class="form-control" value="15">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="pCategory">Category</label>
+            <input type="text" id="pCategory" class="form-control" placeholder="e.g. Hoodies">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pSku">SKU Code</label>
+          <input type="text" id="pSku" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pImage">Image URL</label>
+          <input type="url" id="pImage" class="form-control" placeholder="https://images.unsplash.com/...">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pDesc">Description</label>
+          <textarea id="pDesc" class="form-textarea" rows="3"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between" style="margin-top: 18px;">
+          <button type="button" class="btn btn-secondary" onclick="closeProductFormModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="saveProductBtn">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Email Notification Preview Modal (Checkpoint 11) -->
+  <div class="modal-overlay" id="emailModal">
+    <div class="modal-content" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3 class="modal-title">✉️ Customer Notification Preview</h3>
+        <button class="modal-close" onclick="closeEmailModal()">×</button>
+      </div>
+
+      <div style="margin-bottom: 14px; font-size: 0.85rem; color: var(--text-muted);">
+        <div><strong>To:</strong> <span id="notifyCustomerEmail"></span></div>
+        <div><strong>Subject:</strong> <span id="notifySubject"></span></div>
+      </div>
+
+      <div style="background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px; font-family: monospace; font-size: 0.85rem; white-space: pre-wrap; margin-bottom: 20px;" id="notifyBody"></div>
+
+      <div class="flex justify-between items-center">
+        <span class="badge badge-success">✓ Notification dispatched</span>
+        <button class="btn btn-primary btn-sm" onclick="closeEmailModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

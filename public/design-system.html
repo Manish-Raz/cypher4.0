@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System & UI Kit | Launch-Your-Store</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+</head>
+<body>
+
+  <header class="ds-header">
+    <div class="ds-container flex items-center justify-between">
+      <div>
+        <h1 style="font-size: 1.6rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+          <span>⚡</span> Launch-Your-Store Design System
+        </h1>
+        <p class="text-muted" style="margin-top: 4px;">Phase 1 & 2 Foundations: Colors, Typography, Forms, Cards & Theme Switcher</p>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/" class="btn btn-primary btn-sm">Launch Onboarding Wizard →</a>
+        <a href="/store/urban-threads" class="btn btn-secondary btn-sm" target="_blank">View Live Store</a>
+        <a href="/admin?store=urban-threads" class="btn btn-outline btn-sm">Open Admin</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="ds-container">
+
+    <!-- Theme Switcher Playground -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">🎨 Theme Token Playground (Dynamic CSS Variables)</h2>
+      <p class="ds-section-desc">Click a preset theme below to watch CSS variables switch in real-time across the entire design system!</p>
+
+      <div class="theme-matrix" id="themeButtons">
+        <div class="theme-card-sample active" onclick="applyTheme('modern')">
+          <div style="font-weight: 700; margin-bottom: 4px;">Modern Minimalist</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Indigo & Cyan • Inter Font</div>
+          <div style="display: flex; gap: 6px;">
+            <div style="width: 24px; height: 24px; background: #4f46e5; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #06b6d4; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #f8fafc; border: 1px solid #ccc; border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <div class="theme-card-sample" onclick="applyTheme('cyber')">
+          <div style="font-weight: 700; margin-bottom: 4px;">Cyber Streetwear</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Electric Violet & Pink • Space Grotesk</div>
+          <div style="display: flex; gap: 6px;">
+            <div style="width: 24px; height: 24px; background: #6366f1; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #ec4899; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #0f172a; border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <div class="theme-card-sample" onclick="applyTheme('luxury')">
+          <div style="font-weight: 700; margin-bottom: 4px;">Luxury Elegance</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Amber Gold & Slate • Playfair Serif</div>
+          <div style="display: flex; gap: 6px;">
+            <div style="width: 24px; height: 24px; background: #1e293b; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #d97706; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #fffbeb; border-radius: 4px;"></div>
+          </div>
+        </div>
+
+        <div class="theme-card-sample" onclick="applyTheme('organic')">
+          <div style="font-weight: 700; margin-bottom: 4px;">Organic Artisan</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">Warm Terracotta & Sage • Jakarta Sans</div>
+          <div style="display: flex; gap: 6px;">
+            <div style="width: 24px; height: 24px; background: #b45309; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #15803d; border-radius: 4px;"></div>
+            <div style="width: 24px; height: 24px; background: #fefce8; border-radius: 4px;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Color Palette Tokens -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">🎨 Primary & Neutral Color Tokens</h2>
+      <p class="ds-section-desc">Consistent semantics mapped to custom properties for high visual cohesion.</p>
+
+      <div class="swatch-grid">
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: var(--primary);"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Primary</div>
+            <div class="swatch-hex" id="hexPrimary">var(--primary)</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: var(--secondary);"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Secondary</div>
+            <div class="swatch-hex" id="hexSecondary">var(--secondary)</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #10b981;"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Success</div>
+            <div class="swatch-hex">#10b981</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #f59e0b;"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Warning</div>
+            <div class="swatch-hex">#f59e0b</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #ef4444;"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Danger</div>
+            <div class="swatch-hex">#ef4444</div>
+          </div>
+        </div>
+        <div class="swatch-card">
+          <div class="swatch-color" style="background: #0f172a;"></div>
+          <div class="swatch-meta">
+            <div class="swatch-name">Text Dark</div>
+            <div class="swatch-hex">#0f172a</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Typography Scales -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">🔤 Typography Hierarchy</h2>
+      <p class="ds-section-desc">Responsive type scale utilizing the active theme font family.</p>
+
+      <div class="type-sample">
+        <div class="type-meta">Heading 1 — 32px / 700 Bold</div>
+        <h1 style="font-size: 2rem; font-weight: 800;">Build & Launch Your Store in Minutes</h1>
+      </div>
+      <div class="type-sample">
+        <div class="type-meta">Heading 2 — 24px / 600 SemiBold</div>
+        <h2 style="font-size: 1.5rem; font-weight: 700;">Curated Essentials For Modern Living</h2>
+      </div>
+      <div class="type-sample">
+        <div class="type-meta">Heading 3 — 18px / 600 SemiBold</div>
+        <h3 style="font-size: 1.15rem; font-weight: 600;">Handcrafted Artisan Sourdough Boule</h3>
+      </div>
+      <div class="type-sample">
+        <div class="type-meta">Body Regular — 15px / 400 Regular</div>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+          Our platform empowers any entrepreneur to fill a simple onboarding wizard, select a design theme, and immediately launch a multi-tenant e-commerce storefront backed by MongoDB.
+        </p>
+      </div>
+    </section>
+
+    <!-- Buttons & Badges -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">🔘 Buttons & Interactive States</h2>
+      <p class="ds-section-desc">Accessible focus states, loading indicators, and sizing variants.</p>
+
+      <div class="flex items-center gap-4" style="flex-wrap: wrap; margin-bottom: 20px;">
+        <button class="btn btn-primary">Primary Action</button>
+        <button class="btn btn-secondary">Secondary Action</button>
+        <button class="btn btn-success">Save & Publish</button>
+        <button class="btn btn-danger">Delete Item</button>
+        <button class="btn btn-outline">Outline Action</button>
+        <button class="btn btn-primary" disabled>Disabled State</button>
+      </div>
+
+      <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+        <button class="btn btn-primary btn-sm">Small Button</button>
+        <button class="btn btn-primary">Regular Button</button>
+        <button class="btn btn-primary btn-lg">Large Hero Button</button>
+      </div>
+
+      <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border);">
+        <div class="type-meta" style="margin-bottom: 12px;">Status Badges</div>
+        <div class="flex items-center gap-2" style="flex-wrap: wrap;">
+          <span class="badge badge-primary">Active</span>
+          <span class="badge badge-success">Delivered</span>
+          <span class="badge badge-warning">Low Stock (3 left)</span>
+          <span class="badge badge-danger">Out of Stock</span>
+          <span class="badge badge-muted">Draft</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Form Inputs & Validation -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">📝 Form Controls & Validation States</h2>
+      <p class="ds-section-desc">Onboarding and admin inputs with hints and required indicator styling.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div class="form-group">
+          <label class="form-label" for="ex1">Store Name <span class="req">*</span></label>
+          <input type="text" id="ex1" class="form-control" value="Aura Streetwear" placeholder="e.g. Aura Studio">
+          <span class="form-hint">Generated slug: aura-streetwear</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ex2">Business Category</label>
+          <select id="ex2" class="form-select">
+            <option>Fashion & Apparel</option>
+            <option>Food & Gourmet Bakery</option>
+            <option>Electronics & Gadgets</option>
+            <option>Home & Living</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ex3">Price ($ USD) <span class="req">*</span></label>
+          <input type="number" id="ex3" class="form-control" value="89.00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ex4">Inventory Stock Quantity</label>
+          <input type="number" id="ex4" class="form-control" value="25">
+        </div>
+      </div>
+    </section>
+
+    <!-- E-Commerce Product Card Component -->
+    <section class="ds-section">
+      <h2 class="ds-section-title">🛍️ Product Card Component</h2>
+      <p class="ds-section-desc">The building block for storefronts and theme variations.</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 280px)); gap: 20px;">
+        <div class="card" style="padding: 0; overflow: hidden; position: relative;">
+          <span class="badge badge-danger" style="position: absolute; top: 12px; left: 12px; z-index: 2;">-20% SALE</span>
+          <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=80" style="height: 220px; width: 100%; object-fit: cover;">
+          <div style="padding: 16px;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600;">Hoodies & Jackets</div>
+            <h4 style="font-size: 1.05rem; font-weight: 700; margin: 4px 0 8px;">Apex Matrix Tech Windbreaker</h4>
+            <div class="flex items-center justify-between" style="margin-top: 12px;">
+              <div>
+                <span style="font-size: 1.2rem; font-weight: 800; color: var(--primary);">$129.00</span>
+                <span style="text-decoration: line-through; font-size: 0.85rem; color: var(--text-muted); margin-left: 6px;">$160.00</span>
+              </div>
+              <button class="btn btn-primary btn-sm">+ Add</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const themePresets = {
+      modern: {
+        '--primary': '#4f46e5',
+        '--secondary': '#06b6d4',
+        '--font-family': "'Inter', sans-serif",
+        '--radius-md': '10px'
+      },
+      cyber: {
+        '--primary': '#6366f1',
+        '--secondary': '#ec4899',
+        '--font-family': "'Space Grotesk', sans-serif",
+        '--radius-md': '4px'
+      },
+      luxury: {
+        '--primary': '#1e293b',
+        '--secondary': '#d97706',
+        '--font-family': "'Playfair Display', Georgia, serif",
+        '--radius-md': '4px'
+      },
+      organic: {
+        '--primary': '#b45309',
+        '--secondary': '#15803d',
+        '--font-family': "'Plus Jakarta Sans', sans-serif",
+        '--radius-md': '16px'
+      }
+    };
+
+    function applyTheme(themeKey) {
+      const tokens = themePresets[themeKey];
+      if (!tokens) return;
+
+      for (const [key, val] of Object.entries(tokens)) {
+        document.documentElement.style.setProperty(key, val);
+      }
+
+      document.querySelectorAll('.theme-card-sample').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      document.getElementById('hexPrimary').innerText = tokens['--primary'];
+      document.getElementById('hexSecondary').innerText = tokens['--secondary'];
+    }
+  </script>
+</body>
+</html>

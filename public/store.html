@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Storefront | Launch-Your-Store</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/storefront.css">
+</head>
+<body id="storeBody">
+
+  <!-- Store Navbar -->
+  <header class="store-navbar">
+    <div class="store-nav-container">
+      <div class="store-logo-wrap">
+        <img id="navLogoImg" src="" alt="Store Logo" class="store-logo-img" style="display: none;">
+        <span id="navStoreName" class="store-name-title">Loading Store...</span>
+      </div>
+
+      <div class="store-nav-actions">
+        <a href="#" id="adminShortcutLink" class="btn btn-outline btn-sm" title="Manage Store in Admin">⚙️ Admin</a>
+        <button class="cart-btn" onclick="toggleCartDrawer(true)">
+          <span>🛒 Cart</span>
+          <span class="cart-count-badge" id="cartCountBadge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="store-hero" id="heroBanner">
+    <div class="store-hero-overlay"></div>
+    <div class="store-hero-content">
+      <h1 class="store-hero-title" id="heroTitle">Curated Essentials</h1>
+      <p class="store-hero-sub" id="heroSubtitle">Explore our handpicked collection designed with passion and precision.</p>
+      <a href="#catalogSection" class="btn btn-primary btn-lg">Explore Catalog ↓</a>
+    </div>
+  </section>
+
+  <!-- Store Catalog Main -->
+  <main class="store-main" id="catalogSection">
+    
+    <!-- Toolbar: Categories, Search & Sort -->
+    <div class="catalog-toolbar">
+      <div class="category-tabs" id="categoryTabs">
+        <button class="cat-tab-btn active" onclick="filterCategory('All')">All Products</button>
+      </div>
+
+      <div class="search-sort-group">
+        <div class="search-input-wrap">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="storeSearchInput" placeholder="Search catalog..." oninput="handleSearch(event)">
+        </div>
+
+        <select id="sortSelect" class="sort-select" onchange="handleSortChange(event)">
+          <option value="newest">Newest Arrivals</option>
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="name_asc">Alphabetical (A-Z)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product Grid -->
+    <div class="products-grid" id="productsGrid">
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px 0; color: var(--sf-muted);">
+        Loading product catalog from MongoDB...
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Product Details Modal -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal-content" style="max-width: 680px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalProductTitle">Product Name</h3>
+        <button class="modal-close" onclick="closeProductModal()">×</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;" id="modalProductBody">
+        <div>
+          <img id="modalProductImg" src="" style="width: 100%; height: 260px; object-fit: cover; border-radius: var(--sf-radius);">
+        </div>
+        <div class="flex flex-col">
+          <div style="font-size: 0.8rem; color: var(--sf-muted); text-transform: uppercase; font-weight: 700;" id="modalProductCategory">Category</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--sf-primary); margin: 6px 0;" id="modalProductPrice">$0.00</div>
+          <div style="font-size: 0.85rem; color: var(--sf-muted); margin-bottom: 14px;" id="modalProductSku">SKU: ---</div>
+          <p style="font-size: 0.9rem; color: var(--sf-muted); line-height: 1.5; margin-bottom: 16px;" id="modalProductDesc"></p>
+
+          <!-- Variant Selector (if any) -->
+          <div id="modalVariantContainer" style="margin-bottom: 14px;"></div>
+
+          <!-- Stock Indicator -->
+          <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 14px;" id="modalStockStatus"></div>
+
+          <!-- Quantity Stepper -->
+          <div class="flex items-center gap-4" style="margin-top: auto;">
+            <div class="flex items-center gap-2">
+              <button class="step-btn" onclick="adjustModalQty(-1)">-</button>
+              <span id="modalQtyDisplay" style="font-weight: 700; width: 24px; text-align: center;">1</span>
+              <button class="step-btn" onclick="adjustModalQty(1)">+</button>
+            </div>
+            <button class="btn btn-primary" id="modalAddToCartBtn" style="flex: 1;" onclick="addModalItemToCart()">+ Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide-Over Cart Drawer -->
+  <div class="cart-drawer-backdrop" id="cartDrawerBackdrop" onclick="toggleCartDrawer(false)">
+    <div class="cart-drawer" onclick="event.stopPropagation()">
+      <div class="cart-drawer-header">
+        <h3 style="font-size: 1.2rem; font-weight: 800;">Shopping Cart (<span id="cartDrawerCount">0</span>)</h3>
+        <button class="modal-close" onclick="toggleCartDrawer(false)">×</button>
+      </div>
+
+      <div class="cart-drawer-items" id="cartItemsContainer">
+        <!-- Cart items injected by JS -->
+      </div>
+
+      <div class="cart-drawer-footer">
+        <div class="cart-summary-line">
+          <span>Subtotal</span>
+          <span id="cartSubtotalText">$0.00</span>
+        </div>
+        <div class="cart-summary-line">
+          <span>Estimated Shipping</span>
+          <span id="cartShippingText">$5.00</span>
+        </div>
+        <div class="cart-summary-line">
+          <span>Estimated Tax (8%)</span>
+          <span id="cartTaxText">$0.00</span>
+        </div>
+        <div class="cart-total-line">
+          <span>Estimated Total</span>
+          <span id="cartTotalText" style="color: var(--sf-primary);">$0.00</span>
+        </div>
+        <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 16px;" id="checkoutBtn" onclick="openCheckoutModal()">Proceed to Checkout →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout Modal (Checkpoint 7 Flow) -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-content" style="max-width: 620px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Complete Your Order</h3>
+        <button class="modal-close" onclick="closeCheckoutModal()">×</button>
+      </div>
+
+      <div id="checkoutFormPane">
+        <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="custName">Full Name <span class="req">*</span></label>
+              <input type="text" id="custName" class="form-control" placeholder="Jane Doe" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custEmail">Email Address <span class="req">*</span></label>
+              <input type="email" id="custEmail" class="form-control" placeholder="jane@example.com" required>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+            <div class="form-group">
+              <label class="form-label" for="custPhone">Phone Number</label>
+              <input type="tel" id="custPhone" class="form-control" placeholder="+1 (555) 000-0000" value="+1 (555) 321-7890">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="custCity">City</label>
+              <input type="text" id="custCity" class="form-control" placeholder="San Francisco" value="Seattle">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label class="form-label" for="custAddress">Shipping Address <span class="req">*</span></label>
+            <input type="text" id="custAddress" class="form-control" placeholder="123 Blossom Avenue Apt 4" value="789 Pine Ridge Way" required>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 20px;">
+            <label class="form-label">Payment Method</label>
+            <select id="custPayment" class="form-select">
+              <option value="Credit Card (Mock Gateway)">💳 Online Credit Card (Instant)</option>
+              <option value="Apple / Google Pay">📱 Apple Pay / Google Pay</option>
+              <option value="Cash on Delivery">💵 Cash on Delivery (COD)</option>
+            </select>
+          </div>
+
+          <!-- Checkout Summary -->
+          <div style="background: var(--sf-bg); border: 1px solid var(--sf-border); border-radius: var(--sf-radius); padding: 14px; margin-bottom: 20px;">
+            <div class="flex items-center justify-between" style="font-weight: 700; margin-bottom: 6px;">
+              <span>Total to Pay:</span>
+              <span id="checkoutTotalAmount" style="font-size: 1.2rem; color: var(--sf-primary);">$0.00</span>
+            </div>
+            <div class="text-muted" style="font-size: 0.8rem;">Orders directly register in the store owner's MongoDB database and decrement inventory.</div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <button type="button" class="btn btn-secondary" onclick="closeCheckoutModal()">Cancel</button>
+            <button type="submit" class="btn btn-success btn-lg" id="placeOrderSubmitBtn">Confirm & Place Order ⚡</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Confirmation Pane -->
+      <div id="checkoutSuccessPane" style="display: none; text-align: center; padding: 20px 0;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
+        <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 6px;">Thank You for Your Order!</h3>
+        <p class="text-muted" style="margin-bottom: 18px;">Your order has been recorded in the database and is currently being processed.</p>
+        
+        <div style="background: var(--sf-bg); border: 1px solid var(--sf-border); border-radius: var(--sf-radius); padding: 16px; margin-bottom: 24px; font-family: monospace;">
+          <div>Order Reference: <strong id="confirmedOrderNumber" style="color: var(--sf-primary); font-size: 1.15rem;">#ORD-0000</strong></div>
+          <div style="font-size: 0.85rem; color: var(--sf-muted); margin-top: 4px;">Confirmation email dispatched to <span id="confirmedCustomerEmail"></span></div>
+        </div>
+
+        <button class="btn btn-primary" onclick="closeCheckoutModal(true)">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Store Footer -->
+  <footer class="store-footer">
+    <div class="store-footer-container">
+      <div class="store-footer-meta">
+        <div>
+          <h4 id="footerStoreName" style="font-weight: 800; font-size: 1.1rem; margin-bottom: 6px;">Store Name</h4>
+          <p id="footerAddress" style="max-width: 320px; font-size: 0.85rem;">Address loading...</p>
+        </div>
+        <div>
+          <div style="font-weight: 700; margin-bottom: 4px;">Customer Care</div>
+          <div id="footerEmail">Email: support@example.com</div>
+          <div id="footerPhone">Phone: +1 555-0000</div>
+        </div>
+        <div>
+          <div style="font-weight: 700; margin-bottom: 4px;">Powered By</div>
+          <div>Launch-Your-Store E-Commerce Engine</div>
+          <a href="/admin" id="footerAdminLink" style="color: var(--sf-primary); text-decoration: underline; font-size: 0.85rem; margin-top: 4px; display: inline-block;">Store Admin Login</a>
+        </div>
+      </div>
+      <div style="border-top: 1px solid var(--sf-border); padding-top: 18px; text-align: center; font-size: 0.8rem;" id="footerCopyright">
+        © 2026 Store Name. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/storefront.js"></script>
+</body>
+</html>
