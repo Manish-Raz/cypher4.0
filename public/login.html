@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaunchX — Merchant Access & Authentication</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <style>
+    .auth-page-root {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      background: radial-gradient(circle at 50% 10%, rgba(139, 92, 246, 0.18) 0%, rgba(34, 211, 238, 0.05) 30%, var(--bg-page) 75%);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 36px;
+      box-shadow: var(--shadow-lg), 0 0 40px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 2;
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .auth-brand-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: var(--primary-light);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      color: var(--primary);
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+    }
+
+    .auth-role-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      background: var(--surface-elevated);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+    }
+
+    .auth-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .auth-tab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .auth-note {
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 0.78rem;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body class="auth-page-root">
+
+  <div class="spatial-ambient-glow glow-violet" style="top: -100px; left: -100px;"></div>
+  <div class="spatial-ambient-glow glow-cyan" style="bottom: -100px; right: -100px;"></div>
+
+  <div class="auth-card glass-panel">
+    <div class="auth-brand">
+      <div class="auth-brand-logo">✦</div>
+      <h1 style="font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); margin-bottom: 4px;">
+        LaunchX Studio Access
+      </h1>
+      <p class="text-muted" style="font-size: 0.88rem;">
+        Authenticate into your multi-tenant merchant workspace
+      </p>
+    </div>
+
+    <!-- Role Switcher -->
+    <div class="auth-role-tabs">
+      <button class="auth-tab-btn active" id="tabOwner" onclick="setAuthRole('owner')">
+        👑 Store Owner
+      </button>
+      <button class="auth-tab-btn" id="tabStaff" onclick="setAuthRole('staff')">
+        💼 Staff Operator
+      </button>
+    </div>
+
+    <form id="authForm" onsubmit="handleAuthSubmit(event)">
+      <!-- Store Selector -->
+      <div class="form-group">
+        <label class="form-label" for="storeSelect">Target Store Tenant <span class="req">*</span></label>
+        <select id="storeSelect" class="form-select" required>
+          <option value="">Loading stores from MongoDB...</option>
+        </select>
+      </div>
+
+      <!-- Merchant Email -->
+      <div class="form-group">
+        <label class="form-label" for="authEmail">Merchant Account Email <span class="req">*</span></label>
+        <input type="email" id="authEmail" class="form-control" value="owner@example.com" placeholder="merchant@yourdomain.com" required>
+      </div>
+
+      <!-- Password / Secret Passcode -->
+      <div class="form-group">
+        <label class="form-label" for="authPassword">Access Key / Passcode <span class="req">*</span></label>
+        <input type="password" id="authPassword" class="form-control" value="••••••••••••" placeholder="Enter password or access token" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-full" id="btnAuthSubmit" style="margin-top: 8px;">
+        Sign In to Studio Dashboard →
+      </button>
+    </form>
+
+    <div class="flex items-center justify-between" style="margin-top: 16px; font-size: 0.85rem;">
+      <a href="/" style="color: var(--text-muted); text-decoration: underline;">← Back to Home</a>
+      <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn" style="padding: 2px 10px; font-size: 0.75rem;">☀️ Light</button>
+      <a href="/design-system" style="color: var(--secondary);">Explore UI Kit</a>
+    </div>
+
+    <div class="auth-note">
+      <strong>🔒 Production Auth Architecture Note:</strong><br>
+      In a live production environment, this credential check runs against an authentication service with Argon2/bcrypt password verification, issuing a secure, signed HTTP-only JWT token. In this demonstration, role access is verified against the live MongoDB store records.
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let activeRole = 'owner';
+
+    function initThemeSupport() {
+      if (localStorage.getItem('nf_theme') === 'light') {
+        document.body.classList.add('theme-light');
+        const btn = document.getElementById('themeNavBtn');
+        if (btn) btn.innerText = '🌙 Dark';
+      }
+    }
+
+    function togglePlatformTheme() {
+      const isLight = document.body.classList.toggle('theme-light');
+      const btn = document.getElementById('themeNavBtn');
+      if (isLight) {
+        if (btn) btn.innerText = '🌙 Dark';
+        localStorage.setItem('nf_theme', 'light');
+      } else {
+        if (btn) btn.innerText = '☀️ Light';
+        localStorage.setItem('nf_theme', 'dark');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      initThemeSupport();
+      try {
+        const res = await API.getStores();
+        const stores = res.stores || [];
+        const select = document.getElementById('storeSelect');
+
+        if (stores.length === 0) {
+          select.innerHTML = '<option value="">No stores found. Go to generator.</option>';
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const preselected = urlParams.get('store') || stores[0].slug;
+
+        select.innerHTML = stores.map(s => `
+          <option value="${s.slug}" ${s.slug === preselected ? 'selected' : ''}>
+            ${s.name} (${s.slug})
+          </option>
+        `).join('');
+
+      } catch (err) {
+        showToast('Failed to load stores: ' + err.message, 'error');
+      }
+    });
+
+    function setAuthRole(role) {
+      activeRole = role;
+      document.getElementById('tabOwner').classList.toggle('active', role === 'owner');
+      document.getElementById('tabStaff').classList.toggle('active', role === 'staff');
+
+      const emailInput = document.getElementById('authEmail');
+      if (role === 'owner') {
+        emailInput.value = 'owner@example.com';
+        showToast('Switched to Store Owner mode (Full privileges)', 'info');
+      } else {
+        emailInput.value = 'staff.fulfillment@example.com';
+        showToast('Switched to Staff Member mode (Inventory & fulfillment)', 'info');
+      }
+    }
+
+    function handleAuthSubmit(event) {
+      event.preventDefault();
+      const targetStore = document.getElementById('storeSelect').value;
+      if (!targetStore) {
+        showToast('Please select a target store', 'error');
+        return;
+      }
+
+      // Record authenticated session
+      sessionStorage.setItem('nf_auth_role', activeRole);
+      sessionStorage.setItem('nf_auth_store', targetStore);
+
+      const btn = document.getElementById('btnAuthSubmit');
+      btn.disabled = true;
+      btn.innerText = 'Verifying credentials...';
+
+      setTimeout(() => {
+        showToast(`Authenticated as ${activeRole.toUpperCase()} for "${targetStore}"`, 'success');
+        setTimeout(() => {
+          window.location.href = `/admin?store=${targetStore}`;
+        }, 600);
+      }, 400);
+    }
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-// API Client Helper for Launch-Your-Store
+// API Client Helper for LaunchX
 
 const API = {
   baseUrl: '',

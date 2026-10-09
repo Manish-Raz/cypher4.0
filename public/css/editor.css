@@ -1,0 +1,244 @@
+/* ==========================================================================
+   LaunchX — Visual Studio Editor Stylesheet
+   ========================================================================== */
+
+.editor-root {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-page);
+  color: var(--text);
+  font-family: var(--font-body);
+}
+
+/* Editor Header Bar */
+.editor-topbar {
+  height: 58px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  z-index: 50;
+}
+
+.editor-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.editor-store-tag {
+  font-family: var(--font-mono);
+  font-size: 0.775rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  color: var(--secondary);
+}
+
+/* Device Viewport Toggle */
+.device-toggle-group {
+  display: flex;
+  align-items: center;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 3px;
+  gap: 2px;
+}
+
+.device-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition);
+}
+
+.device-btn:hover {
+  color: var(--text);
+}
+
+.device-btn.active {
+  background: var(--surface);
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Action Controls */
+.editor-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.undo-redo-btn {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.undo-redo-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.undo-redo-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Main Studio Layout: 3 Column */
+.editor-workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Left Sidebar: Sections */
+.editor-left-panel {
+  width: 260px;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.panel-section-title {
+  padding: 16px 18px 10px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.section-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 18px;
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: var(--transition);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.section-item-row:hover {
+  background: var(--surface-elevated);
+  color: var(--text);
+}
+
+.section-item-row.active {
+  background: var(--surface-elevated);
+  color: var(--primary);
+  border-left-color: var(--primary);
+}
+
+/* Center Canvas Frame */
+.editor-center-canvas {
+  flex: 1;
+  background: var(--surface-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 24px;
+  position: relative;
+}
+
+.canvas-frame-container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transition: max-width 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-radius 0.35s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tablet Device Preset */
+.canvas-frame-container.viewport-tablet {
+  max-width: 768px;
+  border-radius: 20px;
+  border: 8px solid #1C2032;
+}
+
+/* Mobile Device Preset */
+.canvas-frame-container.viewport-mobile {
+  max-width: 375px;
+  border-radius: 28px;
+  border: 10px solid #1C2032;
+}
+
+body.theme-light .canvas-frame-container.viewport-tablet,
+body.theme-light .canvas-frame-container.viewport-mobile {
+  border-color: #E2E8F0;
+}
+
+.preview-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #fff;
+}
+
+/* Right Sidebar: Styling Inspector */
+.editor-right-panel {
+  width: 320px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.inspector-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.control-card {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.control-title {
+  font-size: 0.825rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

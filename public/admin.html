@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | Launch-Your-Store</title>
+  <title>LaunchX — Merchant Admin Dashboard</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/admin.css">
 </head>
@@ -13,7 +13,7 @@
   <aside class="admin-sidebar">
     <div class="sidebar-header">
       <span style="font-size: 1.4rem;">⚡</span>
-      <span class="sidebar-brand">Merchant Admin</span>
+      <span class="sidebar-brand">LaunchX Admin</span>
     </div>
 
     <!-- Multi-Tenant Store Selector (Checkpoint 12) -->
@@ -46,10 +46,16 @@
     </nav>
 
     <div class="sidebar-footer">
-      <a href="#" id="viewStoreLiveBtn" class="btn btn-outline btn-sm" target="_blank" style="color: #f8fafc; border-color: #334155;">
+      <a href="/editor" id="sidebarEditorBtn" class="btn btn-primary btn-sm" style="box-shadow: var(--shadow-glow);">
+        🎨 Visual Studio Editor ↗
+      </a>
+      <a href="#" id="viewStoreLiveBtn" class="btn btn-outline btn-sm" target="_blank" style="color: var(--text);">
         🌐 View Live Store ↗
       </a>
-      <a href="/" class="btn btn-outline btn-sm" style="color: #94a3b8; border-color: #334155;">
+      <button class="btn btn-outline btn-sm" onclick="openProjectsModal()" style="color: var(--text);">
+        📁 All Saved Stores
+      </button>
+      <a href="/" class="btn btn-outline btn-sm" style="color: var(--text-muted);">
         + Create Another Store
       </a>
     </div>
@@ -65,14 +71,21 @@
         <span class="role-badge" id="roleBadge">Role: Store Owner</span>
       </div>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-3">
+        <!-- Visual Studio Editor direct pill -->
+        <a href="/editor" id="editorShortcutBtn" class="btn btn-secondary btn-sm">
+          <span>🎨</span> Open Studio Editor
+        </a>
+
         <!-- Role toggle (Checkpoint 12) -->
-        <select id="roleSelector" class="form-select" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="toggleRole(event.target.value)">
+        <select id="roleSelector" class="form-select" style="padding: 4px 8px; font-size: 0.8rem; width: auto; background: var(--surface-elevated);" onchange="toggleRole(event.target.value)">
           <option value="owner">Role: Store Owner</option>
           <option value="staff">Role: Staff Member</option>
         </select>
 
-        <button class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy Storefront URL</button>
+        <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
+        <a href="/login" class="btn btn-outline btn-sm" title="Merchant Login Portal">🔑 Switch Account</a>
+        <button class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy URL</button>
       </div>
     </header>
 
@@ -91,6 +104,20 @@
             </div>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="switchAdminTab('products')">Review Inventory →</button>
+        </div>
+
+        <!-- LaunchX Mission Quote Callout -->
+        <div class="dashboard-quote-card">
+          <div class="quote-mark">“</div>
+          <div class="quote-body">
+            <p class="quote-text">
+              Traditional e-commerce is complex, time-consuming, and difficult to scale. <strong>LaunchX</strong> transforms the entire merchant journey with an AI-powered platform to build, customize, and manage online stores through one seamless, unified experience.
+            </p>
+            <div class="quote-meta">
+              <span class="badge badge-primary">LaunchX Platform Vision</span>
+              <span class="quote-sub">Unified Merchant Experience • Spatial AI Architecture</span>
+            </div>
+          </div>
         </div>
 
         <!-- Metric Cards -->
@@ -474,6 +501,29 @@
       <div class="flex justify-between items-center">
         <span class="badge badge-success">✓ Notification dispatched</span>
         <button class="btn btn-primary btn-sm" onclick="closeEmailModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Saved Stores & Projects Discovery Modal (LaunchX Spatial Dashboard) -->
+  <div class="modal-overlay" id="projectsModal">
+    <div class="modal-content" style="max-width: 720px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📁 All Saved Stores & Projects</h3>
+        <button class="modal-close" onclick="closeProjectsModal()">×</button>
+      </div>
+
+      <div style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
+        Every project below is stored independently in MongoDB. Switch active store, open in Visual Studio Editor, or inspect live URL.
+      </div>
+
+      <div id="projectsListContainer" style="display: flex; flex-direction: column; gap: 12px; max-height: 400px; overflow-y: auto;">
+        <!-- Populated dynamically by admin.js -->
+      </div>
+
+      <div class="flex justify-between items-center" style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);">
+        <a href="/" class="btn btn-outline btn-sm">+ Synthesize New Store</a>
+        <button class="btn btn-primary btn-sm" onclick="closeProjectsModal()">Close</button>
       </div>
     </div>
   </div>

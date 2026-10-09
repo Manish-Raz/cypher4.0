@@ -1,4 +1,4 @@
-// Storefront Client Logic (Launch-Your-Store)
+// Storefront Client Logic (LaunchX)
 
 let currentStore = null;
 let currentProducts = [];
@@ -12,10 +12,54 @@ let modalQuantity = 1;
 
 document.addEventListener('DOMContentLoaded', async () => {
   const slug = getStoreSlugFromUrl();
+  setupEditorIframeBridge();
   loadCart(slug);
   await loadStoreData(slug);
   await loadProducts(slug);
 });
+
+function setupEditorIframeBridge() {
+  window.addEventListener('message', (e) => {
+    if (!e.data) return;
+    if (e.data.type === 'SCROLL_TO') {
+      if (e.data.section === 'hero') {
+        document.getElementById('heroBanner')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (e.data.section === 'catalog') {
+        document.getElementById('catalogSection')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (e.data.section === 'categories') {
+        document.getElementById('categoryTabs')?.scrollIntoView({ behavior: 'smooth' });
+      } else if (e.data.section === 'cart') {
+        toggleCartDrawer(true);
+      } else if (e.data.section === 'footer') {
+        document.querySelector('.store-footer')?.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (e.data.type === 'LIVE_THEME_UPDATE') {
+      if (e.data.theme) applyStoreTheme(e.data.theme);
+      if (e.data.bannerTitle !== undefined) {
+        const el = document.getElementById('heroTitle');
+        if (el) el.innerText = e.data.bannerTitle;
+      }
+      if (e.data.bannerSubtitle !== undefined) {
+        const el = document.getElementById('heroSubtitle');
+        if (el) el.innerText = e.data.bannerSubtitle;
+      }
+      if (e.data.bannerImageUrl !== undefined && e.data.bannerImageUrl) {
+        const banner = document.getElementById('heroBanner');
+        if (banner) banner.style.backgroundImage = `url('${e.data.bannerImageUrl}')`;
+      }
+      if (e.data.storeName) {
+        const navEl = document.getElementById('navStoreName');
+        if (navEl) navEl.innerText = e.data.storeName;
+        const footEl = document.getElementById('footerStoreName');
+        if (footEl) footEl.innerText = e.data.storeName;
+      }
+      if (e.data.footerText) {
+        const copyEl = document.getElementById('footerCopyright');
+        if (copyEl) copyEl.innerText = e.data.footerText;
+      }
+    }
+  });
+}
 
 function getStoreSlugFromUrl() {
   const pathParts = window.location.pathname.split('/').filter(Boolean);
@@ -45,9 +89,13 @@ async function loadStoreData(slug) {
       logoImg.style.display = 'block';
     }
 
-    // Admin shortcut
-    document.getElementById('adminShortcutLink').href = `/admin?store=${currentStore.slug}`;
-    document.getElementById('footerAdminLink').href = `/admin?store=${currentStore.slug}`;
+    // Admin & Editor shortcuts
+    const adminLink = document.getElementById('adminShortcutLink');
+    if (adminLink) adminLink.href = `/admin?store=${currentStore.slug}`;
+    const editorLink = document.getElementById('editorShortcutLink');
+    if (editorLink) editorLink.href = `/editor/${currentStore.slug}`;
+    const footerAdmin = document.getElementById('footerAdminLink');
+    if (footerAdmin) footerAdmin.href = `/admin?store=${currentStore.slug}`;
 
     // Hero Banner
     const theme = currentStore.theme || {};
@@ -65,7 +113,7 @@ async function loadStoreData(slug) {
     document.getElementById('footerAddress').innerText = currentStore.address || 'Online Direct Store';
     document.getElementById('footerEmail').innerText = `Email: ${currentStore.contactEmail || 'support@store.com'}`;
     document.getElementById('footerPhone').innerText = `Phone: ${currentStore.contactPhone || '+1 (555) 000-0000'}`;
-    document.getElementById('footerCopyright').innerText = theme.footerText || `© ${new Date().getFullYear()} ${currentStore.name}. Powered by Launch-Your-Store.`;
+    document.getElementById('footerCopyright').innerText = theme.footerText || `© ${new Date().getFullYear()} ${currentStore.name}. Powered by LaunchX.`;
 
   } catch (err) {
     showToast('Failed to load store: ' + err.message, 'error');

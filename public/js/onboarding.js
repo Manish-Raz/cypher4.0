@@ -1,4 +1,4 @@
-// Onboarding Wizard Logic (Launch-Your-Store)
+// Onboarding Wizard Logic (LaunchX)
 
 let currentStep = 1;
 let selectedCategories = ['Hoodies & Jackets', 'Graphic Tees', 'Cargo & Pants', 'Accessories'];

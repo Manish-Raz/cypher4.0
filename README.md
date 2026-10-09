@@ -1,106 +1,75 @@
-# ⚡ Launch-Your-Store: Multi-Tenant E-Commerce Builder & Grounded AI Engine
+# ✦ LaunchX — Spatial AI Minimalism: Multi-Tenant Website Builder & Grounded AI Engine
 
-A complete, production-ready platform where any small business owner can create, customize, and publish a live online store in minutes backed by **MongoDB**.
+A production-ready platform where users can describe a business, synthesize an online store in minutes, customize its appearance in an interactive studio editor, preview it across responsive viewports, and publish it live backed by **MongoDB**.
 
 ---
 
-## 🌟 Quick Links (Server Running at `http://localhost:5000`)
+## 🌟 LaunchX Quick Links (Running at `http://localhost:5000`)
 
 | Page | URL | Description |
 | :--- | :--- | :--- |
-| **🚀 Onboarding Wizard** | [http://localhost:5000/](http://localhost:5000/) | 4-step wizard to create and publish a live store |
-| **🎨 Design System** | [http://localhost:5000/design-system](http://localhost:5000/design-system) | Interactive UI kit showcasing CSS tokens, typography, forms, & live theme switcher |
-| **🏬 Live Store 1 (Streetwear)** | [http://localhost:5000/store/urban-threads](http://localhost:5000/store/urban-threads) | Cyber Streetwear theme storefront with cart & checkout |
-| **🥐 Live Store 2 (Bakery)** | [http://localhost:5000/store/artisan-bakery](http://localhost:5000/store/artisan-bakery) | Organic Artisan warm theme storefront |
-| **⚙️ Merchant Admin Panel** | [http://localhost:5000/admin?store=urban-threads](http://localhost:5000/admin?store=urban-threads) | Real-time analytics, inventory CRUD, order status flow, & AI Copilot |
+| **🚀 Studio Generator & Landing** | [http://localhost:5000/](http://localhost:5000/) | Spatial AI hero, prompt synthesizer, bento-grid features, and 4-step store builder |
+| **🎨 Visual Studio Editor** | [http://localhost:5000/editor](http://localhost:5000/editor) | Desktop / Tablet / Mobile viewports, undo/redo stack, section controls, real-time styling inspector |
+| **⚙️ Merchant Admin Dashboard** | [http://localhost:5000/admin?store=urban-threads](http://localhost:5000/admin?store=urban-threads) | Spatial Bento-grid analytics, inventory CRUD, order status flow, & Grounded AI Copilot |
+| **🔑 Merchant Access & Auth** | [http://localhost:5000/login](http://localhost:5000/login) | Role-based authentication portal (Store Owner vs Staff Operator) |
+| **🎨 Spatial UI Kit / Design System** | [http://localhost:5000/design-system](http://localhost:5000/design-system) | LaunchX tokens: Dark/Light modes, Space Grotesk/Inter/JetBrains Mono, glass panels, bento cards |
+| **🏬 Live Store 1 (Cyber Streetwear)** | [http://localhost:5000/store/urban-threads](http://localhost:5000/store/urban-threads) | Space Grotesk dark mode storefront with cart drawer & checkout |
+| **🥐 Live Store 2 (Organic Bakery)** | [http://localhost:5000/store/artisan-bakery](http://localhost:5000/store/artisan-bakery) | Warm earthy aesthetic storefront with full product ordering |
+| **🏺 Live Store 3 (Luxury Living)** | [http://localhost:5000/store/nordic-minimal-living](http://localhost:5000/store/nordic-minimal-living) | Refined serif luxury living storefront |
 
 ---
 
-## 📋 15 Checkpoints Implementation Map
+## 🎨 Design System: Spatial AI Minimalism
 
-1. **Onboarding Form Wizard** (`/`):
-   - 4-step guided wizard collecting store name, business type, contact details, physical address, and logo URL with validation.
-   - Real-time slug generator (e.g. `Velvet & Oak` → `http://localhost:5000/store/velvet-oak`).
+### Color Tokens
+* **Dark Theme (Default Signature)**:
+  * Background: `#0B0D17`
+  * Surface: `#151827`
+  * Elevated Surface: `#1C2032`
+  * Border: `#292D42`
+  * Primary: `#8B5CF6` (Violet)
+  * Secondary Accent: `#22D3EE` (Cyan)
+  * Text: `#F5F6FF`
+  * Muted Text: `#A5A9BD`
+* **Light Theme**:
+  * Background: `#F7F8FC`
+  * Surface: `#FFFFFF`
+  * Elevated Surface: `#F0F1FA`
+  * Border: `#E6E8F0`
+  * Primary: `#7048E8`
+  * Secondary Accent: `#0891B2`
+  * Text: `#181827`
+  * Muted Text: `#62657A`
 
-2. **Category Selection**:
-   - Pre-populated smart category pills tailored to business types (Fashion, Bakery, Tech, Home, Artisanal).
-   - Dynamic "+ Add Custom Category" input to support custom business models.
-
-3. **1-Click Dummy Product Import**:
-   - Single-click generates 4–8 realistic, high-resolution products matching the chosen categories with pricing, descriptions, SKUs, inventory, and variants.
-
-4. **Excel / CSV Upload & Validation**:
-   - Downloadable official `.csv` template with sample headers (`Name`, `Price`, `Category`, `Stock`, `SKU`, `Description`, `ImageUrl`).
-   - Drag-and-drop CSV parser with row-by-row validation table, invalid row flagging, and clear error reports.
-
-5. **Theme Selection with Live Interactive Preview**:
-   - 4 distinct, cohesive design themes:
-     - **Modern Minimalist**: Clean slate, indigo/cyan, Inter sans-serif, 10px radius.
-     - **Cyber Streetwear**: Dark mode, electric violet & hot pink, Space Grotesk, sharp 4px radius.
-     - **Luxury Elegance**: Deep navy, champagne gold, Playfair Display serif, refined luxury.
-     - **Organic Artisan**: Earthy amber, forest sage, Plus Jakarta Sans, warm 16px radius.
-   - Customizer allows setting Hero Banner Title & Subtitle.
-
-6. **Unique Live URL**:
-   - Every store gets an instant path-based live URL (`http://localhost:5000/store/:slug`).
-   - Immediate clipboard copy, visit storefront button, and admin direct link upon completion.
-
-7. **Complete Shopper Storefront**:
-   - Sticky navbar with store branding, category tabs, and cart count badge.
-   - Live search bar and sort dropdown (Price Low-to-High, High-to-Low, Name).
-   - Product catalog with badges (`SALE`, `Low Stock`, `Sold Out`).
-   - Product detail modal with image view, description, variant selection, and quantity stepper.
-   - Slide-over Cart Drawer with subtotal, shipping calculation, and tax breakdown.
-   - Complete Checkout Modal with shipping form, mock payment gateway, real-time inventory decrement, and order reference confirmation.
-
-8. **Admin Panel Dashboard**:
-   - Overview KPI cards: Gross Revenue, Total Orders, Average Order Value (AOV), and Catalog Products.
-   - Real-time Low-Stock Alert banner (flags products with $\le 5$ units).
-   - Recent transactions table with status pills.
-
-9. **Full Content & Theme Control (No Code)**:
-   - Visual editor in Admin under *Theme & Branding*: change store name, logo, banner headline, subtitle, hero image URL, accent colors, typography, border radius, and footer copyright with instant save to MongoDB.
-
-10. **Product & Inventory Management**:
-    - Full CRUD (Create, Read, Update, Delete) for products.
-    - Add/Edit modal with price, compare-at price, stock level, category, and SKU.
-    - Bulk operations: `+10% Price Increase`, `-10% Discount`, and `Set All Stock = 25`.
-
-11. **Order Management & Customer Updates**:
-    - Filter orders by workflow state: `placed`, `packed`, `shipped`, `delivered`, `cancelled`.
-    - Dropdown to transition status, automatically appending to the order's history timeline.
-    - "Send Update" button: displays a branded email notification preview dispatched to the customer.
-
-12. **Multi-Tenant Isolation & Role-Based Access**:
-    - Database schemas strictly index and scope all products, orders, and themes by `storeSlug`.
-    - Tenant switcher dropdown in the sidebar to toggle between stores seamlessly.
-    - Role switcher between **Store Owner** (full privileges) and **Staff Member** (operational privileges).
-
-13. **AI Chatbot ("Store Copilot")**:
-    - Natural language query interface powered by MongoDB aggregation pipelines.
-    - Answers questions such as:
-      - *"What are my top 5 selling products?"*
-      - *"Which products are low on stock?"*
-      - *"What is my revenue this week vs last week?"*
-      - *"Show my orders breakdown"*
-      - *"Who are my top customers?"*
-
-14. **Chatbot Safety & Grounding (Zero Hallucination)**:
-    - Queries are strictly read-only and scoped to the active `storeSlug`.
-    - Includes an interactive **View Database Evidence** inspector that surfaces the actual database records behind each answer.
-    - Safeguard rule: For questions outside the store domain (e.g. weather, external stocks, or another store's metrics), honestly replies that it does not have access to that information.
-
-15. **Fully Responsive UI**:
-    - Fluid CSS grid and flexbox layouts optimized for mobile, tablet, and desktop screens across the onboarding wizard, storefront, and merchant dashboard.
+### Typography Hierarchy
+* **Headings**: `Space Grotesk` (Geometric, tech-forward)
+* **Body**: `Inter` (Optimized readability)
+* **Technical Labels & Indicators**: `JetBrains Mono` (SKU tags, latency, tenant IDs, order references)
 
 ---
 
-## 🛠️ Architecture & Tech Stack
+## 📋 Comprehensive Functionality Preserved
 
-- **Backend**: Node.js, Express, Mongoose (MongoDB ODM), CORS, Dotenv.
-- **Database**: Local MongoDB (`mongodb://127.0.0.1:27017/launch_your_store`).
-- **Frontend**: Clean semantic HTML5, Modern CSS Design System (CSS custom properties), Modular JavaScript API Client.
-- **Multi-Tenancy**: Tenant scoping via unique store slugs in all queries (`Product.find({ storeSlug })`, `Order.find({ storeSlug })`).
+1. **AI Prompt Synthesizer & Onboarding Wizard** (`/`):
+   - Interactive prompt synthesizer with quick presets.
+   - 4-step guided wizard collecting brand details, automatic URL slug generation, and logo selection.
+2. **Category Selection & Catalog Ingestion**:
+   - Smart category taxonomy presets by business vertical.
+   - 1-click realistic dummy product generation or CSV spreadsheet upload with row-by-row error reporting.
+3. **Adaptive Spatial Themes**:
+   - 4 themes (Modern Minimalist, Cyber Streetwear, Luxury Elegance, Organic Artisan) sharing a non-destructive layout schema.
+4. **Instant Multi-Tenant Live URLs**:
+   - Generates `/store/:slug` immediately upon database write.
+5. **Complete Shopper Storefront**:
+   - Real-time catalog filtering, sorting, product details modal with variants, glassmorphic cart drawer, and complete checkout flow.
+6. **Merchant Studio Dashboard**:
+   - Bento-grid KPI metrics, low-stock warnings, orders workflow, and customer email dispatch simulator.
+7. **Visual Studio Editor** (`/editor`):
+   - Desktop (1440px), Tablet (768px), and Mobile (375px) responsive frame viewports.
+   - Undo (`Ctrl+Z`) and Redo (`Ctrl+Y`) action history stack.
+   - Live canvas preview with real-time inspector controls and direct MongoDB persistence.
+8. **Grounded AI Store Copilot**:
+   - Safe, read-only aggregation queries querying confirmed orders and catalog inventory with expandable data proof.
 
 ---
 
@@ -110,10 +79,10 @@ A complete, production-ready platform where any small business owner can create,
 # 1. Install dependencies
 npm install
 
-# 2. Seed default stores (Urban Streetwear & Artisan Bakery)
+# 2. Seed initial stores (Urban Streetwear & Artisan Bakery)
 npm run seed
 
-# 3. Start the server
+# 3. Start server
 npm start
 ```
 Server runs on port **5000** (`http://localhost:5000`).

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaunchX Visual Studio Editor | Spatial AI Website Customizer</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/editor.css">
+</head>
+<body class="editor-root">
+
+  <!-- Top Studio Control Bar -->
+  <header class="editor-topbar">
+    <div class="editor-brand-group">
+      <a href="/" title="Back to Platform Home" style="display: flex; align-items: center; gap: 6px;">
+        <span style="color: var(--primary); font-size: 1.3rem;">✦</span>
+        <span style="font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem;">LaunchX Studio</span>
+      </a>
+
+      <!-- Active Store Selector -->
+      <select id="editorStoreSelect" class="form-select" style="padding: 4px 10px; font-size: 0.8rem; width: auto; background: var(--surface-elevated);" onchange="switchEditorStore(event.target.value)">
+        <option value="">Loading stores...</option>
+      </select>
+      <span class="editor-store-tag" id="editorSlugTag">slug: ---</span>
+    </div>
+
+    <!-- Device Viewport Toggle (Desktop / Tablet / Mobile) -->
+    <div class="device-toggle-group">
+      <button class="device-btn active" id="btnViewportDesktop" onclick="setViewport('desktop')">
+        <span>🖥️</span> Desktop
+      </button>
+      <button class="device-btn" id="btnViewportTablet" onclick="setViewport('tablet')">
+        <span>📱</span> Tablet (768px)
+      </button>
+      <button class="device-btn" id="btnViewportMobile" onclick="setViewport('mobile')">
+        <span>📲</span> Mobile (375px)
+      </button>
+    </div>
+
+    <!-- Studio Actions (Undo, Redo, Save, Live) -->
+    <div class="editor-actions-group">
+      <button class="undo-redo-btn" id="btnUndo" onclick="editorUndo()" title="Undo (Ctrl+Z)" disabled>↶</button>
+      <button class="undo-redo-btn" id="btnRedo" onclick="editorRedo()" title="Redo (Ctrl+Y)" disabled>↷</button>
+
+      <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
+
+      <a href="#" id="editorLiveLink" class="btn btn-outline btn-sm" target="_blank" title="Open Storefront in New Tab">
+        🌐 Live View ↗
+      </a>
+      <a href="#" id="editorAdminLink" class="btn btn-secondary btn-sm" title="Open Merchant Admin">
+        ⚙️ Dashboard
+      </a>
+      <button class="btn btn-primary btn-sm" id="btnSaveStore" onclick="saveEditorChanges()">
+        💾 Save to MongoDB
+      </button>
+    </div>
+  </header>
+
+  <!-- 3-Column Studio Workspace -->
+  <div class="editor-workspace">
+
+    <!-- Left Panel: Page & Section Tree -->
+    <aside class="editor-left-panel">
+      <div class="panel-section-title">Sections & Hierarchy</div>
+      
+      <div class="section-item-row active" onclick="highlightSection('hero', event)">
+        <span>✦ Hero Banner</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Top</span>
+      </div>
+      <div class="section-item-row" onclick="highlightSection('catalog', event)">
+        <span>📦 Product Grid</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Main</span>
+      </div>
+      <div class="section-item-row" onclick="highlightSection('categories', event)">
+        <span>🏷️ Category Tabs</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Filter</span>
+      </div>
+      <div class="section-item-row" onclick="highlightSection('cart', event)">
+        <span>🛒 Cart & Checkout Drawer</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Modal</span>
+      </div>
+      <div class="section-item-row" onclick="highlightSection('footer', event)">
+        <span>⚓ Footer & Coordinates</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Bottom</span>
+      </div>
+
+      <div class="panel-section-title" style="margin-top: 18px;">Quick Shortcuts</div>
+      <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 8px;">
+        <button class="btn btn-outline btn-sm w-full" onclick="refreshPreviewCanvas()">
+          🔄 Reload Preview Canvas
+        </button>
+        <button class="btn btn-outline btn-sm w-full" onclick="populateSampleData()">
+          🪄 Regenerate Banner Text
+        </button>
+      </div>
+    </aside>
+
+    <!-- Center Canvas: Live Preview Iframe -->
+    <main class="editor-center-canvas">
+      <div class="canvas-frame-container" id="canvasFrame">
+        <iframe id="previewIframe" src="" class="preview-iframe"></iframe>
+      </div>
+    </main>
+
+    <!-- Right Panel: Styling & Theme Inspector -->
+    <aside class="editor-right-panel">
+      <div class="panel-section-title">Styling Inspector</div>
+      
+      <div class="inspector-body">
+
+        <!-- Theme Archetype Picker -->
+        <div class="control-card">
+          <div class="control-title">
+            <span>Theme Archetype</span>
+            <span class="badge badge-primary" id="currentThemeBadge">Modern</span>
+          </div>
+          <select id="editThemePreset" class="form-select" onchange="handleThemePresetChange(event.target.value)">
+            <option value="modern">Modern Minimalist (Inter)</option>
+            <option value="cyber">Cyber Streetwear (Space Grotesk)</option>
+            <option value="luxury">Luxury Elegance (Playfair)</option>
+            <option value="organic">Organic Artisan (Plus Jakarta)</option>
+          </select>
+        </div>
+
+        <!-- Color Palette Controls -->
+        <div class="control-card">
+          <div class="control-title">
+            <span>Color Accents</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="inpPrimaryColor">Primary</label>
+              <input type="color" id="inpPrimaryColor" class="form-control" style="height: 40px; padding: 2px;" onchange="recordHistoryState()">
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="inpSecondaryColor">Accent</label>
+              <input type="color" id="inpSecondaryColor" class="form-control" style="height: 40px; padding: 2px;" onchange="recordHistoryState()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Typography & Geometry -->
+        <div class="control-card">
+          <div class="control-title">
+            <span>Typography & Geometry</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inpFontFamily">Font Family</label>
+            <select id="inpFontFamily" class="form-select" onchange="recordHistoryState()">
+              <option value="'Inter', sans-serif">Inter (Clean Body)</option>
+              <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech Headings)</option>
+              <option value="'Playfair Display', Georgia, serif">Playfair Display (Luxury Serif)</option>
+              <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans (Artisanal)</option>
+            </select>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="inpBorderRadius">Corner Radius</label>
+            <select id="inpBorderRadius" class="form-select" onchange="recordHistoryState()">
+              <option value="4px">4px (Sharp / Precision)</option>
+              <option value="8px">8px (Refined)</option>
+              <option value="12px">12px (Smooth Modern)</option>
+              <option value="18px">18px (Warm Pill / Organic)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Hero Content Controls -->
+        <div class="control-card">
+          <div class="control-title">
+            <span>Hero Banner Content</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inpHeroHeadline">Headline</label>
+            <input type="text" id="inpHeroHeadline" class="form-control" oninput="debounceRecordHistory()">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="inpHeroSubtitle">Subtitle</label>
+            <textarea id="inpHeroSubtitle" class="form-textarea" rows="2" oninput="debounceRecordHistory()"></textarea>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="inpHeroImage">Cover Image URL</label>
+            <input type="url" id="inpHeroImage" class="form-control" onchange="recordHistoryState()">
+          </div>
+        </div>
+
+        <!-- Store Name & Footer -->
+        <div class="control-card">
+          <div class="control-title">
+            <span>Store Identity & Footer</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inpStoreName">Store Name</label>
+            <input type="text" id="inpStoreName" class="form-control" oninput="debounceRecordHistory()">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label" for="inpFooterText">Footer Notice</label>
+            <input type="text" id="inpFooterText" class="form-control" oninput="debounceRecordHistory()">
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/editor.js"></script>
+</body>
+</html>

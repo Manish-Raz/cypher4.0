@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Storefront Stylesheet & Themes (Launch-Your-Store)
+   Storefront Stylesheet & Themes (LaunchX)
    ========================================================================== */
 
 /* Theme Default Tokens */
@@ -15,17 +15,17 @@
   --sf-border: #e2e8f0;
 }
 
-/* THEME: Cyber Streetwear */
+/* THEME: Cyber Streetwear (LaunchX Spatial Signature) */
 body.theme-cyber {
-  --sf-primary: #6366f1;
-  --sf-secondary: #ec4899;
+  --sf-primary: #8B5CF6;
+  --sf-secondary: #22D3EE;
   --sf-font: 'Space Grotesk', sans-serif;
-  --sf-radius: 4px;
-  --sf-bg: #090d16;
-  --sf-surface: #111827;
-  --sf-text: #f9fafb;
-  --sf-muted: #9ca3af;
-  --sf-border: #1f2937;
+  --sf-radius: 6px;
+  --sf-bg: #0B0D17;
+  --sf-surface: #151827;
+  --sf-text: #F5F6FF;
+  --sf-muted: #A5A9BD;
+  --sf-border: #292D42;
 }
 
 /* THEME: Luxury Elegance */
@@ -405,8 +405,9 @@ body {
 .cart-drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(3px);
+  background: rgba(11, 13, 23, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
@@ -426,8 +427,9 @@ body {
   width: 100%;
   max-width: 440px;
   background: var(--sf-surface);
+  border-left: 1px solid var(--sf-border);
   z-index: 1001;
-  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+  box-shadow: -10px 0 35px rgba(0, 0, 0, 0.4);
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;

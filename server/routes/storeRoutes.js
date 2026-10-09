@@ -82,7 +82,7 @@ router.post('/', async (req, res) => {
         bannerTitle: `Welcome to ${name}`,
         bannerSubtitle: 'Discover our handpicked collection designed with passion and precision.',
         bannerImageUrl: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80',
-        footerText: `© ${new Date().getFullYear()} ${name}. Powered by Launch-Your-Store.`
+        footerText: `© ${new Date().getFullYear()} ${name}. Powered by LaunchX.`
       },
       cyber: {
         id: 'cyber',

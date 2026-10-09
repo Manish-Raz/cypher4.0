@@ -40,6 +40,18 @@ app.get('/admin/:slug', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'admin.html'));
 });
 
+app.get('/editor', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'editor.html'));
+});
+
+app.get('/editor/:slug', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'editor.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+});
+
 app.get('/design-system', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'design-system.html'));
 });
@@ -62,7 +74,7 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`\n======================================================`);
-      console.log(`🚀 Launch-Your-Store Engine is running!`);
+      console.log(`🚀 LaunchX Engine is running!`);
       console.log(`📡 URL: http://localhost:${PORT}`);
       console.log(`✨ Onboarding Wizard: http://localhost:${PORT}/`);
       console.log(`🎨 Design System:    http://localhost:${PORT}/design-system`);

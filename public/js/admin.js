@@ -1,4 +1,4 @@
-// Admin Dashboard Logic (Launch-Your-Store)
+// Admin Dashboard Logic (LaunchX)
 
 let currentSlug = '';
 let currentStore = null;
@@ -8,8 +8,29 @@ let activeOrderFilter = 'all';
 let userRole = 'owner'; // 'owner' | 'staff'
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initThemeSupport();
   await initStoreSelector();
 });
+
+function initThemeSupport() {
+  if (localStorage.getItem('nf_theme') === 'light') {
+    document.body.classList.add('theme-light');
+    const btn = document.getElementById('themeNavBtn');
+    if (btn) btn.innerText = '🌙 Dark';
+  }
+}
+
+function togglePlatformTheme() {
+  const isLight = document.body.classList.toggle('theme-light');
+  const btn = document.getElementById('themeNavBtn');
+  if (isLight) {
+    if (btn) btn.innerText = '🌙 Dark';
+    localStorage.setItem('nf_theme', 'light');
+  } else {
+    if (btn) btn.innerText = '☀️ Light';
+    localStorage.setItem('nf_theme', 'dark');
+  }
+}
 
 // 1. Initialize Stores & Multi-Tenancy (Checkpoint 12)
 async function initStoreSelector() {
@@ -58,6 +79,10 @@ async function loadActiveStore(slug) {
 
     document.getElementById('topStoreName').innerText = currentStore.name;
     document.getElementById('viewStoreLiveBtn').href = `/store/${currentStore.slug}`;
+    const editorShortcut = document.getElementById('editorShortcutBtn');
+    if (editorShortcut) editorShortcut.href = `/editor/${currentStore.slug}`;
+    const sidebarEditor = document.getElementById('sidebarEditorBtn');
+    if (sidebarEditor) sidebarEditor.href = `/editor/${currentStore.slug}`;
 
     // Refresh Dashboard, Products, Orders, and Settings
     await refreshDashboard();
@@ -68,6 +93,38 @@ async function loadActiveStore(slug) {
   } catch (err) {
     showToast('Error loading active store: ' + err.message, 'error');
   }
+}
+
+async function openProjectsModal() {
+  try {
+    const res = await API.getStores();
+    const stores = res.stores || [];
+    const container = document.getElementById('projectsListContainer');
+
+    container.innerHTML = stores.map(s => `
+      <div style="background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; gap: 14px;">
+        <div>
+          <div style="font-weight: 700; font-size: 1rem; color: var(--text);">${s.name}</div>
+          <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--secondary);">slug: ${s.slug} • ${s.businessType || 'General'}</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="btn btn-secondary btn-sm" onclick="switchActiveStore('${s.slug}'); closeProjectsModal();">
+            ${s.slug === currentSlug ? '✓ Active' : 'Switch To Store'}
+          </button>
+          <a href="/editor/${s.slug}" class="btn btn-primary btn-sm">🎨 Editor</a>
+          <a href="/store/${s.slug}" target="_blank" class="btn btn-outline btn-sm">🌐 Live ↗</a>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('projectsModal').classList.add('active');
+  } catch (e) {
+    showToast('Failed to load saved projects: ' + e.message, 'error');
+  }
+}
+
+function closeProjectsModal() {
+  document.getElementById('projectsModal').classList.remove('active');
 }
 
 function toggleRole(role) {

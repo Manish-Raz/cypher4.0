@@ -48,7 +48,7 @@ const StoreSchema = new mongoose.Schema({
     bannerTitle: { type: String, default: 'Welcome to our official store' },
     bannerSubtitle: { type: String, default: 'Curated premium items crafted for discerning tastes.' },
     bannerImageUrl: { type: String, default: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80' },
-    footerText: { type: String, default: 'Crafted with Launch-Your-Store. All rights reserved.' }
+    footerText: { type: String, default: 'Crafted with LaunchX. All rights reserved.' }
   },
   isPublished: {
     type: Boolean,
