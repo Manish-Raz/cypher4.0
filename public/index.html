@@ -3,306 +3,604 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Launch-Your-Store | Zero-Code Storefront Builder</title>
+  <title>Launch-Your-Store | Build your store in few minutes</title>
   <link rel="stylesheet" href="/css/base.css">
   <link rel="stylesheet" href="/css/onboarding.css">
 </head>
 <body class="wizard-layout">
 
-  <!-- Header -->
-  <header class="wizard-topbar">
-    <div class="flex items-center justify-between" style="max-width: 1040px; margin: 0 auto; width: 100%;">
+  <!-- Main Platform Topbar -->
+  <header class="wizard-topbar" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.95);">
+    <div class="flex items-center justify-between" style="max-width: 1140px; margin: 0 auto; width: 100%;">
       <div class="wizard-brand">
         <span style="font-size: 1.5rem;">⚡</span>
-        <span>Launch-Your-Store</span>
+        <span style="letter-spacing: -0.02em;">Launch-Your-Store</span>
       </div>
-      <div class="flex items-center gap-4">
-        <a href="/design-system" class="btn btn-outline btn-sm">🎨 Design System</a>
-        <a href="/store/urban-threads" class="btn btn-secondary btn-sm" target="_blank">Sample Store 1</a>
-        <a href="/store/artisan-bakery" class="btn btn-secondary btn-sm" target="_blank">Sample Store 2</a>
-        <a href="/admin" class="btn btn-primary btn-sm">Admin Dashboard</a>
+      
+      <div class="flex items-center gap-4" style="flex-wrap: wrap;">
+        <a href="#problems" class="btn btn-outline btn-sm" style="border: none;">What We Solve</a>
+        <a href="#showcase" class="btn btn-outline btn-sm" style="border: none;">Past Work</a>
+        <a href="#testimonials" class="btn btn-outline btn-sm" style="border: none;">Appreciation</a>
+        <a href="/design-system" class="btn btn-outline btn-sm">🎨 UI Kit</a>
+        <a href="/admin?store=urban-threads" class="btn btn-secondary btn-sm">⚙️ Merchant Admin</a>
+        <a href="#build-your-store" class="btn btn-primary btn-sm">Build Your Store →</a>
       </div>
     </div>
   </header>
 
-  <!-- Main Wizard -->
-  <main class="wizard-main">
-    
-    <!-- Stepper Navigation Header -->
-    <div class="stepper">
-      <div class="step-item active" id="stepIndicator1" onclick="goToStep(1)">
-        <div class="step-circle">1</div>
-        <div class="step-label">Store Details</div>
+  <!-- =========================================================================
+       HERO SECTION (Center Stage: "Build your store in few minutes")
+       ========================================================================= -->
+  <section class="landing-hero">
+    <div style="max-width: 900px; margin: 0 auto;">
+      <div class="hero-pill-badge">
+        <span>🚀</span> The Multi-Tenant Zero-Code E-Commerce Engine
       </div>
-      <div class="step-item" id="stepIndicator2" onclick="goToStep(2)">
-        <div class="step-circle">2</div>
-        <div class="step-label">Categories & Products</div>
-      </div>
-      <div class="step-item" id="stepIndicator3" onclick="goToStep(3)">
-        <div class="step-circle">3</div>
-        <div class="step-label">Choose Theme</div>
-      </div>
-      <div class="step-item" id="stepIndicator4">
-        <div class="step-circle">4</div>
-        <div class="step-label">Publish Live</div>
-      </div>
-    </div>
+      
+      <!-- Primary Request: "Build your store" and "in few minutes" -->
+      <h1 class="hero-main-title">Build your store</h1>
+      <div class="hero-sub-title">in few minutes</div>
+      
+      <p class="hero-lead-text">
+        Empowering small businesses, creators, and artisans to launch a live online store with an instant URL, automatic inventory, theme styling, and an AI Copilot grounded in real sales data.
+      </p>
 
-    <!-- Step 1: Store Details -->
-    <div class="step-pane active" id="stepPane1">
-      <h2 class="step-title">Screen 1: Tell us about your business</h2>
-      <p class="step-subtitle">Enter your store name, business type, and contact information. We'll generate your live URL automatically.</p>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        <div class="form-group">
-          <label class="form-label" for="storeNameInput">Store Name <span class="req">*</span></label>
-          <input type="text" id="storeNameInput" class="form-control" placeholder="e.g. Velvet & Oak Atelier" required>
-          <div class="form-hint">Live URL Preview: <strong id="slugPreview" style="color: var(--primary);">http://localhost:5000/store/your-store</strong></div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="businessTypeSelect">Business Category</label>
-          <select id="businessTypeSelect" class="form-select">
-            <option value="Fashion & Apparel">Fashion & Apparel</option>
-            <option value="Food & Gourmet Bakery">Food & Gourmet Bakery</option>
-            <option value="Electronics & Tech">Electronics & Tech</option>
-            <option value="Home & Lifestyle">Home & Lifestyle</option>
-            <option value="Artisanal & Handmade">Artisanal & Handmade</option>
-            <option value="Beauty & Wellness">Beauty & Wellness</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="contactEmailInput">Owner / Support Email <span class="req">*</span></label>
-          <input type="email" id="contactEmailInput" class="form-control" placeholder="owner@yourdomain.com" value="owner@example.com" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="contactPhoneInput">Business Phone</label>
-          <input type="tel" id="contactPhoneInput" class="form-control" placeholder="+1 (555) 234-5678" value="+1 (555) 890-1234">
-        </div>
-
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label class="form-label" for="storeAddressInput">Physical Address / Headquarters</label>
-          <input type="text" id="storeAddressInput" class="form-control" placeholder="Suite 400, 500 Broadway, New York, NY">
-        </div>
-
-        <div class="form-group" style="grid-column: 1 / -1;">
-          <label class="form-label" for="logoUrlInput">Logo Image URL (Optional)</label>
-          <input type="url" id="logoUrlInput" class="form-control" placeholder="https://images.unsplash.com/... or leave blank for typographic logo">
-          <div class="flex items-center gap-2" style="margin-top: 8px;">
-            <span class="form-hint">Quick Logo Presets:</span>
-            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80')">Fashion Monogram</button>
-            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80')">Artisan Bake</button>
-            <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('')">Clear</button>
-          </div>
-        </div>
+      <div class="hero-cta-group">
+        <a href="#build-your-store" class="btn btn-primary btn-lg" style="box-shadow: var(--shadow-md);">
+          ⚡ Create Your Store Free Now ↓
+        </a>
+        <a href="#showcase" class="btn btn-secondary btn-lg">
+          👀 Explore Live Sample Stores
+        </a>
       </div>
 
-      <div class="wizard-actions">
-        <a href="/design-system" class="btn btn-outline">View Design System</a>
-        <button type="button" class="btn btn-primary" onclick="proceedToStep(2)">Next: Categories & Products →</button>
+      <div class="hero-perks-row">
+        <div class="hero-perk-item">
+          <span>⏱️</span> <span>Setup in &lt; 60 seconds</span>
+        </div>
+        <div class="hero-perk-item">
+          <span>🍃</span> <span>Backed by MongoDB</span>
+        </div>
+        <div class="hero-perk-item">
+          <span>🛒</span> <span>Working Cart & Checkout</span>
+        </div>
+        <div class="hero-perk-item">
+          <span>🤖</span> <span>Grounded AI Analytics</span>
+        </div>
       </div>
     </div>
+  </section>
 
-    <!-- Step 2: Categories & Products Setup -->
-    <div class="step-pane" id="stepPane2">
-      <h2 class="step-title">Screen 2: Categories & Initial Inventory</h2>
-      <p class="step-subtitle">Select product categories for your catalog, then choose how to populate your initial products.</p>
-
-      <!-- Category selection (Checkpoint 2) -->
-      <div style="margin-bottom: 28px;">
-        <label class="form-label" style="margin-bottom: 10px; display: block;">Select Categories (Click to toggle):</label>
-        <div class="categories-selector" id="categoriesPills">
-          <!-- Populated by JS -->
-        </div>
-
-        <!-- Add Custom Category -->
-        <div class="flex items-center gap-2" style="max-width: 420px; margin-top: 10px;">
-          <input type="text" id="customCategoryInput" class="form-control" placeholder="Add custom category name...">
-          <button type="button" class="btn btn-secondary" onclick="addCustomCategory()">+ Add</button>
-        </div>
-      </div>
-
-      <!-- Inventory Loading Mode (Checkpoints 3 & 4) -->
-      <div>
-        <label class="form-label" style="margin-bottom: 12px; display: block;">How would you like to add products?</label>
-        
-        <div class="method-tabs">
-          <div class="method-card active" id="tabDummy" onclick="switchProductMode('dummy')">
-            <div class="method-icon">🚀</div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">1-Click Dummy Import</h3>
-            <p class="text-muted" style="font-size: 0.85rem;">Instantly populate realistic products, prices, images, and variants tailored to your categories.</p>
-          </div>
-
-          <div class="method-card" id="tabCsv" onclick="switchProductMode('csv')">
-            <div class="method-icon">📊</div>
-            <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Upload Excel / CSV File</h3>
-            <p class="text-muted" style="font-size: 0.85rem;">Import catalog from spreadsheet with downloadable template, preview, and row validation report.</p>
-          </div>
-        </div>
-
-        <!-- Dummy Import Pane -->
-        <div id="dummySection" class="card" style="background: #f8fafc;">
-          <div class="flex items-center justify-between">
-            <div>
-              <div style="font-weight: 700; margin-bottom: 2px;">Ready to generate sample catalog</div>
-              <div class="text-muted" style="font-size: 0.85rem;">Will generate 4–8 high-resolution products with pricing, descriptions, and stock counts.</div>
-            </div>
-            <span class="badge badge-success">Recommended</span>
-          </div>
-        </div>
-
-        <!-- CSV Upload Pane -->
-        <div id="csvSection" style="display: none;">
-          <div class="flex items-center justify-between" style="margin-bottom: 12px;">
-            <span class="form-hint">Accepted format: .csv with Name, Price, Category, Stock</span>
-            <a href="/api/stores/template/products/csv-template" download class="btn btn-outline btn-sm">📥 Download Sample CSV Template</a>
-          </div>
-
-          <div class="upload-dropzone" id="csvDropzone" onclick="document.getElementById('csvFileInput').click()">
-            <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCsvFileSelected(event)">
-            <div style="font-size: 2rem; margin-bottom: 8px;">📁</div>
-            <div style="font-weight: 700;">Drag and drop your CSV file here, or click to browse</div>
-            <div class="text-muted" style="font-size: 0.8rem; margin-top: 4px;">Columns: Name, Price, Category, Stock, SKU, Description, ImageUrl</div>
-          </div>
-
-          <!-- CSV Validation & Preview Box -->
-          <div id="csvPreviewContainer" style="display: none;">
-            <div class="flex items-center justify-between" style="margin-top: 14px;">
-              <div style="font-weight: 700;">Parsed Spreadsheet Preview (<span id="parsedRowCount">0</span> rows)</div>
-              <div id="csvValidationBadge"></div>
-            </div>
-
-            <div class="table-responsive">
-              <table class="preview-table">
-                <thead>
-                  <tr>
-                    <th>Row</th>
-                    <th>Product Name</th>
-                    <th>Price</th>
-                    <th>Category</th>
-                    <th>Stock</th>
-                    <th>Validation</th>
-                  </tr>
-                </thead>
-                <tbody id="csvPreviewTableBody"></tbody>
-              </table>
-            </div>
-
-            <div id="csvErrorReport" style="margin-top: 10px; display: none;"></div>
-          </div>
-        </div>
-
-      </div>
-
-      <div class="wizard-actions">
-        <button type="button" class="btn btn-secondary" onclick="proceedToStep(1)">← Back to Details</button>
-        <button type="button" class="btn btn-primary" onclick="proceedToStep(3)">Next: Choose Theme →</button>
-      </div>
+  <!-- =========================================================================
+       SECTION 1: WHAT WE SERVE & REAL WORLD PROBLEMS WE SOLVE
+       ========================================================================= -->
+  <section class="section-wrapper" id="problems">
+    <div class="section-head">
+      <span class="section-tag">Real-World Impact</span>
+      <h2 class="section-headline">What We Serve & Problems We Solve</h2>
+      <p class="section-subheadline">
+        Small business owners waste weeks dealing with complex code, expensive agencies, and broken spreadsheets. Here is how we eliminate the friction.
+      </p>
     </div>
 
-    <!-- Step 3: Choose Theme -->
-    <div class="step-pane" id="stepPane3">
-      <h2 class="step-title">Screen 3: Choose your storefront style</h2>
-      <p class="step-subtitle">Pick from 4 curated visual themes. Layouts, typography, colors, and button radii switch seamlessly.</p>
-
-      <div class="themes-grid" id="themesGrid">
-        <!-- Modern Theme -->
-        <div class="theme-option-card selected" onclick="selectTheme('modern')">
-          <div class="theme-preview-box" style="background: linear-gradient(135deg, #4f46e5, #06b6d4);">
-            <div style="font-weight: 700;">MODERN MINIMAL</div>
-            <div>Clean lines & Indigo</div>
-          </div>
-          <div style="font-weight: 700; margin-bottom: 2px;">Modern Minimalist</div>
-          <div class="text-muted" style="font-size: 0.8rem;">Sans-serif Inter • High clarity • 10px radius</div>
-        </div>
-
-        <!-- Cyber Streetwear -->
-        <div class="theme-option-card" onclick="selectTheme('cyber')">
-          <div class="theme-preview-box" style="background: linear-gradient(135deg, #0f172a, #6366f1); border: 1px solid #ec4899;">
-            <div style="font-weight: 700; color: #ec4899;">CYBER STREETWEAR</div>
-            <div style="color: #cbd5e1;">Bold neon & Space Grotesk</div>
-          </div>
-          <div style="font-weight: 700; margin-bottom: 2px;">Cyber Streetwear</div>
-          <div class="text-muted" style="font-size: 0.8rem;">Dark mode aesthetic • Sharp 4px borders</div>
-        </div>
-
-        <!-- Luxury Elegance -->
-        <div class="theme-option-card" onclick="selectTheme('luxury')">
-          <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #d97706);">
-            <div style="font-weight: 700; font-family: serif; color: #fef3c7;">LUXURY ELEGANCE</div>
-            <div style="color: #e2e8f0;">Editorial serif & Gold</div>
-          </div>
-          <div style="font-weight: 700; margin-bottom: 2px;">Luxury Elegance</div>
-          <div class="text-muted" style="font-size: 0.8rem;">Playfair Display serif • Refined prestige</div>
-        </div>
-
-        <!-- Organic Artisan -->
-        <div class="theme-option-card" onclick="selectTheme('organic')">
-          <div class="theme-preview-box" style="background: linear-gradient(135deg, #b45309, #15803d);">
-            <div style="font-weight: 700;">ORGANIC ARTISAN</div>
-            <div>Earthy amber & Sage</div>
-          </div>
-          <div style="font-weight: 700; margin-bottom: 2px;">Organic Artisan</div>
-          <div class="text-muted" style="font-size: 0.8rem;">Plus Jakarta Sans • Warm & pillowy 16px radius</div>
-        </div>
-      </div>
-
-      <!-- Theme Customizer Mini Controls -->
-      <div class="card" style="margin-top: 20px; background: #fafafa;">
-        <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Customize Storefront Hero Banner:</h4>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-          <div class="form-group">
-            <label class="form-label" for="bannerHeadlineInput">Banner Headline</label>
-            <input type="text" id="bannerHeadlineInput" class="form-control" value="Welcome to our official store">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="bannerSubtitleInput">Banner Subtitle</label>
-            <input type="text" id="bannerSubtitleInput" class="form-control" value="Curated premium items crafted for discerning tastes.">
-          </div>
-        </div>
-      </div>
-
-      <div class="wizard-actions">
-        <button type="button" class="btn btn-secondary" onclick="proceedToStep(2)">← Back to Categories</button>
-        <button type="button" class="btn btn-success btn-lg" id="publishStoreBtn" onclick="publishStore()">⚡ Create & Publish Live Store to MongoDB</button>
-      </div>
-    </div>
-
-    <!-- Step 4: Published & Live URL Success -->
-    <div class="step-pane" id="stepPane4">
-      <div class="published-success">
-        <div style="font-size: 3.5rem; margin-bottom: 12px; animation: bounce 1s infinite alternate;">🎉</div>
-        <h2 style="font-size: 2rem; font-weight: 800; color: var(--text);">Your Online Store is Live!</h2>
-        <p class="text-muted" style="max-width: 540px; margin: 8px auto 24px;">
-          Your store database has been registered in MongoDB with isolated multi-tenant data, sample inventory, and responsive storefront themes.
+    <div class="problems-grid">
+      <!-- Problem 1 -->
+      <div class="problem-card">
+        <div class="problem-icon">⏳</div>
+        <div class="pain-point">The Old Problem: High Costs & Delays</div>
+        <h3 class="solution-headline">Instant 1-Click Live URLs</h3>
+        <p class="solution-desc">
+          Web agencies take 2 months and charge $5,000+ to build basic stores. With Launch-Your-Store, you fill a simple form, choose a style, and get an immediate live URL backed by MongoDB in under 60 seconds.
         </p>
-
-        <!-- Live URL Box -->
-        <div class="live-url-box" style="max-width: 640px; margin: 0 auto 24px;">
-          <span id="createdStoreUrlText" style="word-break: break-all;">http://localhost:5000/store/your-store</span>
-          <button type="button" class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy</button>
+        <div>
+          <span class="solution-pill">✓ Instant Live Deployment</span>
         </div>
+      </div>
 
-        <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap;">
-          <a href="#" id="viewStoreLink" class="btn btn-primary btn-lg" target="_blank">🌐 Open Live Storefront →</a>
-          <a href="#" id="openAdminLink" class="btn btn-secondary btn-lg">⚙️ Open Store Admin Panel</a>
-          <button type="button" class="btn btn-outline btn-lg" onclick="location.reload()">+ Create Another Store</button>
+      <!-- Problem 2 -->
+      <div class="problem-card">
+        <div class="problem-icon">📊</div>
+        <div class="pain-point">The Old Problem: Messy Excel Spreadsheets</div>
+        <h3 class="solution-headline">Smart CSV Validation & 1-Click Fill</h3>
+        <p class="solution-desc">
+          Spreadsheets often have missing headers, negative prices, and bad rows that crash websites. Our parser validates every row with a visual error report, or populates realistic dummy products with a single click.
+        </p>
+        <div>
+          <span class="solution-pill">✓ Zero Bad Data Ingestion</span>
         </div>
+      </div>
 
-        <div style="margin-top: 36px; padding: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); text-align: left; max-width: 640px; margin-left: auto; margin-right: auto;">
-          <div style="font-weight: 700; margin-bottom: 6px;">💡 What's already ready for you:</div>
-          <ul style="padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
-            <li><strong>Live Shopper Storefront:</strong> Cart drawer, filter tabs, checkout flow with real DB orders.</li>
-            <li><strong>Admin Dashboard:</strong> Live revenue metrics, product inventory editor, order status workflow.</li>
-            <li><strong>AI Store Copilot:</strong> Ask questions grounded in your MongoDB store data without hallucinations.</li>
-          </ul>
+      <!-- Problem 3 -->
+      <div class="problem-card">
+        <div class="problem-icon">🎨</div>
+        <div class="pain-point">The Old Problem: Layouts Break When Themes Change</div>
+        <h3 class="solution-headline">4 Unified Adaptive Themes</h3>
+        <p class="solution-desc">
+          Switching from Modern Minimalist to Cyber Streetwear, Luxury Elegance, or Organic Artisan transforms colors, typography, buttons, and layout styles cohesively without breaking a single line of code.
+        </p>
+        <div>
+          <span class="solution-pill">✓ No-Code Visual Control</span>
+        </div>
+      </div>
+
+      <!-- Problem 4 -->
+      <div class="problem-card">
+        <div class="problem-icon">🤖</div>
+        <div class="pain-point">The Old Problem: AI Hallucinations & Guesswork</div>
+        <h3 class="solution-headline">Grounded AI Store Copilot</h3>
+        <p class="solution-desc">
+          Generic AI tools guess numbers and hallucinate metrics. Our Copilot executes read-only aggregation queries against your actual MongoDB orders, displays the real proof table, and honestly declines questions outside your data.
+        </p>
+        <div>
+          <span class="solution-pill">✓ 100% Fact-Checked Numbers</span>
         </div>
       </div>
     </div>
+  </section>
 
-  </main>
+  <!-- =========================================================================
+       SECTION 2: OUR PAST WORK & LIVE STORE SHOWCASE
+       ========================================================================= -->
+  <section class="section-wrapper" id="showcase" style="background: #fdfdfd; border-radius: var(--radius-lg); border: 1px solid var(--border);">
+    <div class="section-head">
+      <span class="section-tag">Live Work Showcase</span>
+      <h2 class="section-headline">Stores Built on Our Platform</h2>
+      <p class="section-subheadline">
+        Every store below was created using this builder, runs live on MongoDB, and features isolated multi-tenant data, working carts, and custom styling.
+      </p>
+    </div>
+
+    <div class="past-work-grid">
+      <!-- Store 1: Urban Threads -->
+      <div class="store-showcase-card">
+        <div class="showcase-cover" style="background-image: url('https://images.unsplash.com/photo-1509967419530-da38b4704bc6?w=800');">
+          <div class="showcase-overlay"></div>
+          <span class="showcase-badge" style="background: #6366f1;">Cyber Streetwear Theme</span>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-niche">Streetwear & Apparel</div>
+          <h3 class="showcase-store-title">Urban Vibe Streetwear</h3>
+          <p class="showcase-desc">
+            Heavyweight tech windbreakers, oversized acid hoodies, and ballistic utility rigs. Featuring a sleek dark mode aesthetic with Space Grotesk typography.
+          </p>
+          <div class="showcase-actions">
+            <a href="/store/urban-threads" target="_blank" class="btn btn-primary btn-sm">🌐 Visit Live Store ↗</a>
+            <a href="/admin?store=urban-threads" class="btn btn-outline btn-sm">⚙️ Peek Admin Panel</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Store 2: Golden Crust Bakery -->
+      <div class="store-showcase-card">
+        <div class="showcase-cover" style="background-image: url('https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800');">
+          <div class="showcase-overlay"></div>
+          <span class="showcase-badge" style="background: #b45309;">Organic Artisan Theme</span>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-niche">Gourmet Bakery & Coffee</div>
+          <h3 class="showcase-store-title">Golden Crust Artisan Bakery</h3>
+          <p class="showcase-desc">
+            Cold-fermented wild yeast sourdough, hand-laminated butter croissants, and single-origin coffee. Warm earth tones, pillowy 16px radii, and cozy aesthetic.
+          </p>
+          <div class="showcase-actions">
+            <a href="/store/artisan-bakery" target="_blank" class="btn btn-primary btn-sm">🌐 Visit Live Store ↗</a>
+            <a href="/admin?store=artisan-bakery" class="btn btn-outline btn-sm">⚙️ Peek Admin Panel</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Store 3: Nordic Minimal Living -->
+      <div class="store-showcase-card">
+        <div class="showcase-cover" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800');">
+          <div class="showcase-overlay"></div>
+          <span class="showcase-badge" style="background: #1e293b;">Luxury Elegance Theme</span>
+        </div>
+        <div class="showcase-body">
+          <div class="showcase-niche">Home Goods & Ceramics</div>
+          <h3 class="showcase-store-title">Nordic Minimal Living</h3>
+          <p class="showcase-desc">
+            Wheel-thrown ceramic carafes, amber glass candles, and organic cotton linens. Elegant serif typography with refined gold and deep navy accents.
+          </p>
+          <div class="showcase-actions">
+            <a href="/store/nordic-minimal-living" target="_blank" class="btn btn-primary btn-sm">🌐 Visit Live Store ↗</a>
+            <a href="/admin?store=nordic-minimal-living" class="btn btn-outline btn-sm">⚙️ Peek Admin Panel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 3: APPRECIATION FROM PEOPLE (Testimonials & Social Proof)
+       ========================================================================= -->
+  <section class="section-wrapper" id="testimonials">
+    <div class="section-head">
+      <span class="section-tag">Community Love</span>
+      <h2 class="section-headline">Appreciation From Store Owners</h2>
+      <p class="section-subheadline">
+        Hear how merchants transformed their businesses from paper notebooks and messy spreadsheets into thriving live digital storefronts.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <!-- Testimonial 1 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">
+          “I went from writing down orders in a notebook to taking payments online in less than 3 minutes. The Cyber Streetwear theme matched my brand identity immediately!”
+        </p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" class="testimonial-avatar" alt="Marcus Thorne">
+          <div>
+            <div class="author-name">Marcus Thorne</div>
+            <div class="author-role">Founder, Urban Vibe Apparel</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 2 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">
+          “The CSV import tool saved my bakery hundreds. It detected 2 broken price fields with negative numbers before they went live. The Organic theme is so warm and inviting.”
+        </p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100" class="testimonial-avatar" alt="Chloe Dupont">
+          <div>
+            <div class="author-name">Chef Chloe Dupont</div>
+            <div class="author-role">Owner, Golden Crust Bakery</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Testimonial 3 -->
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">
+          “The AI Copilot is mindblowing. I asked: ‘What are my top 5 selling items this week?’ and it showed me the exact MongoDB numbers with zero fluff or hallucination.”
+        </p>
+        <div class="testimonial-author">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" class="testimonial-avatar" alt="Elena Rostova">
+          <div>
+            <div class="author-name">Elena Rostova</div>
+            <div class="author-role">Curator, Nordic Minimal Living</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 4: INTERACTIVE 4-STEP STORE BUILDER (Original Engine Preserved)
+       ========================================================================= -->
+  <section class="builder-anchor-section" id="build-your-store">
+    <div style="max-width: 900px; margin: 0 auto; text-align: center; padding: 0 20px 24px;">
+      <span class="section-tag">Interactive Store Builder</span>
+      <h2 style="font-size: 2.4rem; font-weight: 800; color: #0f172a; margin-top: 8px;">
+        Launch Your Store in 4 Simple Steps
+      </h2>
+      <p style="color: var(--text-muted); font-size: 1rem; margin-top: 6px;">
+        Follow the wizard below. Upon completion, your store is instantly published to MongoDB with a unique live URL.
+      </p>
+    </div>
+
+    <!-- Main Wizard App Container -->
+    <main class="wizard-main" style="margin-top: 10px;">
+      
+      <!-- Stepper Navigation Header -->
+      <div class="stepper">
+        <div class="step-item active" id="stepIndicator1" onclick="goToStep(1)">
+          <div class="step-circle">1</div>
+          <div class="step-label">Store Details</div>
+        </div>
+        <div class="step-item" id="stepIndicator2" onclick="goToStep(2)">
+          <div class="step-circle">2</div>
+          <div class="step-label">Categories & Products</div>
+        </div>
+        <div class="step-item" id="stepIndicator3" onclick="goToStep(3)">
+          <div class="step-circle">3</div>
+          <div class="step-label">Choose Theme</div>
+        </div>
+        <div class="step-item" id="stepIndicator4">
+          <div class="step-circle">4</div>
+          <div class="step-label">Publish Live</div>
+        </div>
+      </div>
+
+      <!-- Step 1: Store Details -->
+      <div class="step-pane active" id="stepPane1">
+        <h2 class="step-title">Screen 1: Tell us about your business</h2>
+        <p class="step-subtitle">Enter your store name, business type, and contact information. We'll generate your live URL automatically.</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          <div class="form-group">
+            <label class="form-label" for="storeNameInput">Store Name <span class="req">*</span></label>
+            <input type="text" id="storeNameInput" class="form-control" placeholder="e.g. Velvet & Oak Atelier" required>
+            <div class="form-hint">Live URL Preview: <strong id="slugPreview" style="color: var(--primary);">http://localhost:5000/store/your-store</strong></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="businessTypeSelect">Business Category</label>
+            <select id="businessTypeSelect" class="form-select">
+              <option value="Fashion & Apparel">Fashion & Apparel</option>
+              <option value="Food & Gourmet Bakery">Food & Gourmet Bakery</option>
+              <option value="Electronics & Tech">Electronics & Tech</option>
+              <option value="Home & Lifestyle">Home & Lifestyle</option>
+              <option value="Artisanal & Handmade">Artisanal & Handmade</option>
+              <option value="Beauty & Wellness">Beauty & Wellness</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contactEmailInput">Owner / Support Email <span class="req">*</span></label>
+            <input type="email" id="contactEmailInput" class="form-control" placeholder="owner@yourdomain.com" value="owner@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contactPhoneInput">Business Phone</label>
+            <input type="tel" id="contactPhoneInput" class="form-control" placeholder="+1 (555) 234-5678" value="+1 (555) 890-1234">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="storeAddressInput">Physical Address / Headquarters</label>
+            <input type="text" id="storeAddressInput" class="form-control" placeholder="Suite 400, 500 Broadway, New York, NY">
+          </div>
+
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="form-label" for="logoUrlInput">Logo Image URL (Optional)</label>
+            <input type="url" id="logoUrlInput" class="form-control" placeholder="https://images.unsplash.com/... or leave blank for typographic logo">
+            <div class="flex items-center gap-2" style="margin-top: 8px;">
+              <span class="form-hint">Quick Logo Presets:</span>
+              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80')">Fashion Monogram</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80')">Artisan Bake</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('')">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-actions">
+          <a href="/design-system" class="btn btn-outline">View Design System</a>
+          <button type="button" class="btn btn-primary" onclick="proceedToStep(2)">Next: Categories & Products →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Categories & Products Setup -->
+      <div class="step-pane" id="stepPane2">
+        <h2 class="step-title">Screen 2: Categories & Initial Inventory</h2>
+        <p class="step-subtitle">Select product categories for your catalog, then choose how to populate your initial products.</p>
+
+        <!-- Category selection (Checkpoint 2) -->
+        <div style="margin-bottom: 28px;">
+          <label class="form-label" style="margin-bottom: 10px; display: block;">Select Categories (Click to toggle):</label>
+          <div class="categories-selector" id="categoriesPills">
+            <!-- Populated by JS -->
+          </div>
+
+          <!-- Add Custom Category -->
+          <div class="flex items-center gap-2" style="max-width: 420px; margin-top: 10px;">
+            <input type="text" id="customCategoryInput" class="form-control" placeholder="Add custom category name...">
+            <button type="button" class="btn btn-secondary" onclick="addCustomCategory()">+ Add</button>
+          </div>
+        </div>
+
+        <!-- Inventory Loading Mode (Checkpoints 3 & 4) -->
+        <div>
+          <label class="form-label" style="margin-bottom: 12px; display: block;">How would you like to add products?</label>
+          
+          <div class="method-tabs">
+            <div class="method-card active" id="tabDummy" onclick="switchProductMode('dummy')">
+              <div class="method-icon">🚀</div>
+              <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">1-Click Dummy Import</h3>
+              <p class="text-muted" style="font-size: 0.85rem;">Instantly populate realistic products, prices, images, and variants tailored to your categories.</p>
+            </div>
+
+            <div class="method-card" id="tabCsv" onclick="switchProductMode('csv')">
+              <div class="method-icon">📊</div>
+              <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;">Upload Excel / CSV File</h3>
+              <p class="text-muted" style="font-size: 0.85rem;">Import catalog from spreadsheet with downloadable template, preview, and row validation report.</p>
+            </div>
+          </div>
+
+          <!-- Dummy Import Pane -->
+          <div id="dummySection" class="card" style="background: #f8fafc;">
+            <div class="flex items-center justify-between">
+              <div>
+                <div style="font-weight: 700; margin-bottom: 2px;">Ready to generate sample catalog</div>
+                <div class="text-muted" style="font-size: 0.85rem;">Will generate 4–8 high-resolution products with pricing, descriptions, and stock counts.</div>
+              </div>
+              <span class="badge badge-success">Recommended</span>
+            </div>
+          </div>
+
+          <!-- CSV Upload Pane -->
+          <div id="csvSection" style="display: none;">
+            <div class="flex items-center justify-between" style="margin-bottom: 12px;">
+              <span class="form-hint">Accepted format: .csv with Name, Price, Category, Stock</span>
+              <a href="/api/stores/template/products/csv-template" download class="btn btn-outline btn-sm">📥 Download Sample CSV Template</a>
+            </div>
+
+            <div class="upload-dropzone" id="csvDropzone" onclick="document.getElementById('csvFileInput').click()">
+              <input type="file" id="csvFileInput" accept=".csv" style="display: none;" onchange="handleCsvFileSelected(event)">
+              <div style="font-size: 2rem; margin-bottom: 8px;">📁</div>
+              <div style="font-weight: 700;">Drag and drop your CSV file here, or click to browse</div>
+              <div class="text-muted" style="font-size: 0.8rem; margin-top: 4px;">Columns: Name, Price, Category, Stock, SKU, Description, ImageUrl</div>
+            </div>
+
+            <!-- CSV Validation & Preview Box -->
+            <div id="csvPreviewContainer" style="display: none;">
+              <div class="flex items-center justify-between" style="margin-top: 14px;">
+                <div style="font-weight: 700;">Parsed Spreadsheet Preview (<span id="parsedRowCount">0</span> rows)</div>
+                <div id="csvValidationBadge"></div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="preview-table">
+                  <thead>
+                    <tr>
+                      <th>Row</th>
+                      <th>Product Name</th>
+                      <th>Price</th>
+                      <th>Category</th>
+                      <th>Stock</th>
+                      <th>Validation</th>
+                    </tr>
+                  </thead>
+                  <tbody id="csvPreviewTableBody"></tbody>
+                </table>
+              </div>
+
+              <div id="csvErrorReport" style="margin-top: 10px; display: none;"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="wizard-actions">
+          <button type="button" class="btn btn-secondary" onclick="proceedToStep(1)">← Back to Details</button>
+          <button type="button" class="btn btn-primary" onclick="proceedToStep(3)">Next: Choose Theme →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Choose Theme -->
+      <div class="step-pane" id="stepPane3">
+        <h2 class="step-title">Screen 3: Choose your storefront style</h2>
+        <p class="step-subtitle">Pick from 4 curated visual themes. Layouts, typography, colors, and button radii switch seamlessly.</p>
+
+        <div class="themes-grid" id="themesGrid">
+          <!-- Modern Theme -->
+          <div class="theme-option-card selected" onclick="selectTheme('modern')">
+            <div class="theme-preview-box" style="background: linear-gradient(135deg, #4f46e5, #06b6d4);">
+              <div style="font-weight: 700;">MODERN MINIMAL</div>
+              <div>Clean lines & Indigo</div>
+            </div>
+            <div style="font-weight: 700; margin-bottom: 2px;">Modern Minimalist</div>
+            <div class="text-muted" style="font-size: 0.8rem;">Sans-serif Inter • High clarity • 10px radius</div>
+          </div>
+
+          <!-- Cyber Streetwear -->
+          <div class="theme-option-card" onclick="selectTheme('cyber')">
+            <div class="theme-preview-box" style="background: linear-gradient(135deg, #0f172a, #6366f1); border: 1px solid #ec4899;">
+              <div style="font-weight: 700; color: #ec4899;">CYBER STREETWEAR</div>
+              <div style="color: #cbd5e1;">Bold neon & Space Grotesk</div>
+            </div>
+            <div style="font-weight: 700; margin-bottom: 2px;">Cyber Streetwear</div>
+            <div class="text-muted" style="font-size: 0.8rem;">Dark mode aesthetic • Sharp 4px borders</div>
+          </div>
+
+          <!-- Luxury Elegance -->
+          <div class="theme-option-card" onclick="selectTheme('luxury')">
+            <div class="theme-preview-box" style="background: linear-gradient(135deg, #1e293b, #d97706);">
+              <div style="font-weight: 700; font-family: serif; color: #fef3c7;">LUXURY ELEGANCE</div>
+              <div style="color: #e2e8f0;">Editorial serif & Gold</div>
+            </div>
+            <div style="font-weight: 700; margin-bottom: 2px;">Luxury Elegance</div>
+            <div class="text-muted" style="font-size: 0.8rem;">Playfair Display serif • Refined prestige</div>
+          </div>
+
+          <!-- Organic Artisan -->
+          <div class="theme-option-card" onclick="selectTheme('organic')">
+            <div class="theme-preview-box" style="background: linear-gradient(135deg, #b45309, #15803d);">
+              <div style="font-weight: 700;">ORGANIC ARTISAN</div>
+              <div>Earthy amber & Sage</div>
+            </div>
+            <div style="font-weight: 700; margin-bottom: 2px;">Organic Artisan</div>
+            <div class="text-muted" style="font-size: 0.8rem;">Plus Jakarta Sans • Warm & pillowy 16px radius</div>
+          </div>
+        </div>
+
+        <!-- Theme Customizer Mini Controls -->
+        <div class="card" style="margin-top: 20px; background: #fafafa;">
+          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Customize Storefront Hero Banner:</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label" for="bannerHeadlineInput">Banner Headline</label>
+              <input type="text" id="bannerHeadlineInput" class="form-control" value="Welcome to our official store">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="bannerSubtitleInput">Banner Subtitle</label>
+              <input type="text" id="bannerSubtitleInput" class="form-control" value="Curated premium items crafted for discerning tastes.">
+            </div>
+          </div>
+        </div>
+
+        <div class="wizard-actions">
+          <button type="button" class="btn btn-secondary" onclick="proceedToStep(2)">← Back to Categories</button>
+          <button type="button" class="btn btn-success btn-lg" id="publishStoreBtn" onclick="publishStore()">⚡ Create & Publish Live Store to MongoDB</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Published & Live URL Success -->
+      <div class="step-pane" id="stepPane4">
+        <div class="published-success">
+          <div style="font-size: 3.5rem; margin-bottom: 12px; animation: bounce 1s infinite alternate;">🎉</div>
+          <h2 style="font-size: 2rem; font-weight: 800; color: var(--text);">Your Online Store is Live!</h2>
+          <p class="text-muted" style="max-width: 540px; margin: 8px auto 24px;">
+            Your store database has been registered in MongoDB with isolated multi-tenant data, sample inventory, and responsive storefront themes.
+          </p>
+
+          <!-- Live URL Box -->
+          <div class="live-url-box" style="max-width: 640px; margin: 0 auto 24px;">
+            <span id="createdStoreUrlText" style="word-break: break-all;">http://localhost:5000/store/your-store</span>
+            <button type="button" class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy</button>
+          </div>
+
+          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap;">
+            <a href="#" id="viewStoreLink" class="btn btn-primary btn-lg" target="_blank">🌐 Open Live Storefront →</a>
+            <a href="#" id="openAdminLink" class="btn btn-secondary btn-lg">⚙️ Open Store Admin Panel</a>
+            <button type="button" class="btn btn-outline btn-lg" onclick="location.reload()">+ Create Another Store</button>
+          </div>
+
+          <div style="margin-top: 36px; padding: 18px; background: #f8fafc; border: 1px solid var(--border); border-radius: var(--radius-md); text-align: left; max-width: 640px; margin-left: auto; margin-right: auto;">
+            <div style="font-weight: 700; margin-bottom: 6px;">💡 What's already ready for you:</div>
+            <ul style="padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;">
+              <li><strong>Live Shopper Storefront:</strong> Cart drawer, filter tabs, checkout flow with real DB orders.</li>
+              <li><strong>Admin Dashboard:</strong> Live revenue metrics, product inventory editor, order status workflow.</li>
+              <li><strong>AI Store Copilot:</strong> Ask questions grounded in your MongoDB store data without hallucinations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </section>
+
+  <!-- Platform Footer -->
+  <footer style="background: #0f172a; color: #94a3b8; padding: 48px 20px 24px; border-top: 1px solid #1e293b;">
+    <div style="max-width: 1140px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
+      <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px;">
+        <div>
+          <div style="color: #fff; font-weight: 800; font-size: 1.25rem; display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+            <span>⚡</span> Launch-Your-Store
+          </div>
+          <p style="font-size: 0.85rem; max-width: 360px; line-height: 1.6;">
+            The zero-code multi-tenant e-commerce platform. Connect to MongoDB, pick your theme, and get a live online store in minutes.
+          </p>
+        </div>
+
+        <div>
+          <div style="color: #fff; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Platform Shortcuts</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem;">
+            <a href="#build-your-store" style="color: #94a3b8;">Create New Store</a>
+            <a href="/design-system" style="color: #94a3b8;">Design System & UI Kit</a>
+            <a href="/admin?store=urban-threads" style="color: #94a3b8;">Merchant Admin Dashboard</a>
+          </div>
+        </div>
+
+        <div>
+          <div style="color: #fff; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem;">Live Demo Stores</div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem;">
+            <a href="/store/urban-threads" target="_blank" style="color: #94a3b8;">Urban Vibe Streetwear (Cyber)</a>
+            <a href="/store/artisan-bakery" target="_blank" style="color: #94a3b8;">Golden Crust Bakery (Organic)</a>
+            <a href="/store/nordic-minimal-living" target="_blank" style="color: #94a3b8;">Nordic Minimal Living (Luxury)</a>
+          </div>
+        </div>
+      </div>
+
+      <div style="border-top: 1px solid #1e293b; padding-top: 20px; text-align: center; font-size: 0.8rem; color: #64748b;">
+        © 2026 Launch-Your-Store Engine. Fully connected to MongoDB. All rights reserved.
+      </div>
+    </div>
+  </footer>
 
   <script src="/js/api.js"></script>
   <script src="/js/onboarding.js"></script>
