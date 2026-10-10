@@ -3,21 +3,212 @@
 A production-ready platform where users can describe a business, synthesize an online store in minutes, customize its appearance in an interactive studio editor, preview it across responsive viewports, and publish it live backed by **MongoDB**.
 
 ---
+# 🚀 LaunchX — AI-Powered E-Commerce Builder
 
-## 🌟 LaunchX Quick Links (Running at `http://localhost:5000`)
+Build and launch your own online store in minutes, without writing code. LaunchX helps small business owners create customized storefronts, manage products and orders, and customize their store designs through a unified platform.
 
-| Page | URL | Description |
-| :--- | :--- | :--- |
-| **🚀 Studio Generator & Landing** | [http://localhost:5000/](http://localhost:5000/) | Spatial AI hero, prompt synthesizer, bento-grid features, and 4-step store builder |
-| **🎨 Visual Studio Editor** | [http://localhost:5000/editor](http://localhost:5000/editor) | Desktop / Tablet / Mobile viewports, undo/redo stack, section controls, real-time styling inspector |
-| **⚙️ Merchant Admin Dashboard** | [http://localhost:5000/admin?store=urban-threads](http://localhost:5000/admin?store=urban-threads) | Spatial Bento-grid analytics, inventory CRUD, order status flow, & Grounded AI Copilot |
-| **🔑 Merchant Access & Auth** | [http://localhost:5000/login](http://localhost:5000/login) | Role-based authentication portal (Store Owner vs Staff Operator) |
-| **🎨 Spatial UI Kit / Design System** | [http://localhost:5000/design-system](http://localhost:5000/design-system) | LaunchX tokens: Dark/Light modes, Space Grotesk/Inter/JetBrains Mono, glass panels, bento cards |
-| **🏬 Live Store 1 (Cyber Streetwear)** | [http://localhost:5000/store/urban-threads](http://localhost:5000/store/urban-threads) | Space Grotesk dark mode storefront with cart drawer & checkout |
-| **🥐 Live Store 2 (Organic Bakery)** | [http://localhost:5000/store/artisan-bakery](http://localhost:5000/store/artisan-bakery) | Warm earthy aesthetic storefront with full product ordering |
-| **🏺 Live Store 3 (Luxury Living)** | [http://localhost:5000/store/nordic-minimal-living](http://localhost:5000/store/nordic-minimal-living) | Refined serif luxury living storefront |
+## 🌐 Live Demo
 
----
+**Live Website:** https://cypher4-0.onrender.com/
+
+## 🌟 Quick Links
+
+| Page | Live URL | Description |
+|---|---|---|
+| 🚀 Studio Generator & Landing | [Open Studio](https://cypher4-0.onrender.com/) | Landing page, AI-assisted store generation, and store builder |
+| 🎨 Visual Studio Editor | [Open Editor](https://cypher4-0.onrender.com/editor) | Responsive previews, section controls, undo/redo, and styling tools |
+| ⚙️ Merchant Admin Dashboard | [Open Admin](https://cypher4-0.onrender.com/admin?store=urban-threads) | Store analytics, inventory, order management, and AI Copilot |
+| 🔑 Merchant Login | [Open Login](https://cypher4-0.onrender.com/login) | Merchant access portal |
+| 🎨 Design System | [Open Design System](https://cypher4-0.onrender.com/design-system) | Design tokens, dark/light themes, and reusable UI components |
+| 🏬 Urban Threads | [Open Store](https://cypher4-0.onrender.com/store/urban-threads) | Cyber streetwear storefront |
+| 🥐 Artisan Bakery | [Open Store](https://cypher4-0.onrender.com/store/artisan-bakery) | Warm, earthy bakery storefront |
+| 🏺 Nordic Minimal Living | [Open Store](https://cypher4-0.onrender.com/store/nordic-minimal-living) | Minimal luxury home-living storefront |
+| ❤️ API Health Check | [Check API](https://cypher4-0.onrender.com/api/health) | Checks API availability and database connection status |
+
+## ✨ Features
+
+### 🛍️ Store Creation
+- Create customized online stores through a guided builder.
+- Configure store names, branding, logos, and contact information.
+- Generate storefront layouts using configurable design options.
+
+### 🎨 Visual Store Editor
+- Preview designs across desktop, tablet, and mobile viewports.
+- Customize store sections and styling.
+- Use undo/redo controls while editing.
+- Apply reusable design-system components.
+
+### 📦 Product and Inventory Management
+- Manage store products and product information.
+- Organize inventory and update product details.
+- Support store-specific product management.
+
+### 🧾 Order Management
+- Access store orders from the merchant dashboard.
+- Track and update order statuses.
+- Support customer shopping and checkout workflows.
+
+### 🤖 AI-Assisted Experience
+- AI-assisted store creation and prompt-based design workflows.
+- AI Copilot functionality where configured.
+- Simplify the process of creating and managing an online store.
+
+### 🔐 Merchant Access
+- Merchant login interface.
+- Role-oriented access workflows for store owners and staff, where implemented.
+
+### 📱 Responsive Design
+- Responsive storefront layouts.
+- Dark and light themes.
+- Modern typography, glass-style panels, and bento-grid layouts.
+
+## 🧰 Tech Stack
+
+**Frontend**
+- HTML5
+- CSS3
+- JavaScript
+
+**Backend**
+- Node.js
+- Express.js
+- REST API routes
+
+**Database**
+- MongoDB Atlas
+- Mongoose
+
+**Deployment**
+- GitHub
+- Render
+
+## 🗂️ Project Structure
+
+```text
+Cypher01/
+├── public/
+│   ├── index.html
+│   ├── editor.html
+│   ├── admin.html
+│   ├── login.html
+│   ├── design-system.html
+│   ├── store.html
+│   ├── css/
+│   └── js/
+├── server/
+│   ├── server.js
+│   ├── config/
+│   │   └── db.js
+│   ├── models/
+│   ├── routes/
+│   └── seed/
+│       └── seedData.js
+├── .gitignore
+├── package.json
+└── README.md
+```
+
+*The structure above represents the expected layout; adjust it if your repository differs.*
+
+## ⚙️ Run Locally
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Manish-Raz/cypher4.0.git
+cd cypher4.0
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure environment variables
+
+Create a `.env` file in the project root if your `server.js` loads environment variables from there.
+
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_atlas_connection_string
+NODE_ENV=development
+```
+
+Replace the MongoDB placeholder with your own connection string. Never commit `.env` or publish database credentials.
+
+### 4. Start the application
+
+If `package.json` is in the repository root and the server entry point is `server/server.js`, configure this script in `package.json`:
+
+```json
+"scripts": {
+  "start": "node server/server.js"
+}
+```
+
+Then run:
+
+```bash
+npm start
+```
+
+Open http://localhost:5000 in your browser.
+
+## 🔌 API Routes
+
+| Route | Purpose |
+|---|---|
+| `/api/health` | API and database health status |
+| `/api/stores` | Store-related operations |
+| `/api/stores/:slug/products` | Store-specific product operations |
+| `/api/stores/:slug/orders` | Store-specific order operations |
+| `/api/stores/:slug/chatbot` | Store-specific chatbot operations |
+
+The available HTTP methods and request formats depend on the implemented route handlers.
+
+## ☁️ Deployment
+
+LaunchX is deployed using Render, with MongoDB Atlas as its cloud database.
+
+**Production URL:** https://cypher4-0.onrender.com/
+
+Configure these environment variables in your Render service:
+
+| Variable | Purpose |
+|---|---|
+| `MONGODB_URI` | MongoDB Atlas connection string |
+| `NODE_ENV` | Set to `production` |
+| `PORT` | Provided automatically by Render |
+
+Ensure MongoDB Atlas permits connections from your hosting service and that your database credentials are valid.
+
+## ⚠️ Deployment Notes
+
+- Render's free web services may spin down after inactivity, causing the first request to take longer.
+- Store and dashboard functionality that depends on MongoDB requires a working database connection.
+- Sample storefronts depend on the appropriate store records and seed data being present.
+- The live links above use the application's configured routes; verify individual features on the deployed site.
+
+## 🔒 Security
+
+- Keep `.env` out of Git.
+- Never commit passwords, database URIs, or API keys.
+- Use strong database credentials and least-privilege database access.
+- Validate and sanitize user input on the server.
+- Protect merchant-only operations with appropriate authentication and authorization.
+
+## 🎯 Project Goal
+
+LaunchX aims to make online commerce more accessible by helping small businesses establish an online presence without needing extensive coding knowledge.
+
+## 👨‍💻 Contributors
+
+Developed as a hackathon project for **CYPHER 4.0**.
+
+## 📄 License
+
+Add a license file if you intend to distribute this project as open source.
 
 ## 🎨 Design System: Spatial AI Minimalism
 
