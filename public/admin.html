@@ -475,15 +475,18 @@
           <div class="copilot-input-area">
             <!-- Quick prompt pills -->
             <div class="quick-prompts">
-              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What are my top 5 selling products?')">🏆 Top 5 selling products?</span>
-              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Which products are low on stock?')">⚠️ Which products are low on stock?</span>
-              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What is my revenue this week vs last week?')">💰 Revenue this week vs last week?</span>
-              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Show my orders breakdown')">📦 Orders breakdown by status</span>
-              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Who are my top customers?')">👤 Who are my top customers?</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('How to build website step by step?')">🚀 Make Website Steps</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('How do I build the hero banner component?')">✦ Build Hero Banner</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('How do I build product cards?')">📦 Build Product Cards</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('How to customize themes, colors, and typography?')">🎨 Customize Themes</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What are my top 5 selling products?')">🏆 Top 5 products</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Which products are low on stock?')">⚠️ Low stock</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('What is my revenue this week vs last week?')">💰 Revenue</span>
+              <span class="quick-prompt-pill" onclick="sendCopilotPrompt('Show my orders breakdown')">📦 Orders status</span>
             </div>
 
             <form class="flex items-center gap-2" onsubmit="handleCopilotSubmit(event)">
-              <input type="text" id="copilotInput" class="form-control" placeholder="Ask a question about your catalog or sales transactions..." style="font-size: 0.95rem;">
+              <input type="text" id="copilotInput" class="form-control" placeholder="Ask how to build components, site steps, or sales transactions..." style="font-size: 0.95rem;">
               <button type="submit" class="btn btn-primary" id="copilotSendBtn">Ask Copilot</button>
             </form>
           </div>

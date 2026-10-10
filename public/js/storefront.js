@@ -98,6 +98,9 @@ async function loadStoreData(slug) {
     const footerAdmin = document.getElementById('footerAdminLink');
     if (footerAdmin) footerAdmin.href = `/admin?store=${currentStore.slug}`;
 
+    const aiSub = document.getElementById('aiStoreContextSubtitle');
+    if (aiSub) aiSub.innerText = `Grounded in ${currentStore.name} (MongoDB & Studio)`;
+
     // Hero Banner
     const theme = currentStore.theme || {};
     document.getElementById('heroTitle').innerText = theme.bannerTitle || `Welcome to ${currentStore.name}`;
@@ -610,4 +613,152 @@ function shareCustomerOrderWhatsApp() {
   const itemsText = (lastRecordedOrder.items || []).map(it => `${it.quantity}x ${it.name}`).join(', ');
   const text = encodeURIComponent(`Hi! My order ${orderNum} with ${storeName} for ₹${total} (${itemsText}) is confirmed.`);
   window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+}
+
+// ==========================================================================
+// LaunchX AI Store Assistant & Builder Copilot Client
+// ==========================================================================
+
+function toggleStoreAiDrawer(forceOpen) {
+  const overlay = document.getElementById('storeAiDrawerOverlay');
+  if (!overlay) return;
+
+  const isActive = overlay.classList.contains('active');
+  const shouldOpen = forceOpen !== undefined ? forceOpen : !isActive;
+
+  if (shouldOpen) {
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+      document.getElementById('storeAiInput')?.focus();
+    }, 200);
+  } else {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+function handleAiOverlayClick(event) {
+  if (event.target === document.getElementById('storeAiDrawerOverlay')) {
+    toggleStoreAiDrawer(false);
+  }
+}
+
+function sendAiQuickPrompt(promptText) {
+  const input = document.getElementById('storeAiInput');
+  if (!input) return;
+  input.value = promptText;
+  handleStoreAiSubmit(new Event('submit'));
+}
+
+async function handleStoreAiSubmit(event) {
+  if (event && event.preventDefault) event.preventDefault();
+
+  const input = document.getElementById('storeAiInput');
+  const sendBtn = document.getElementById('storeAiSendBtn');
+  const messagesList = document.getElementById('storeAiMessagesList');
+  if (!input || !messagesList) return;
+
+  const question = input.value.trim();
+  if (!question) return;
+
+  // Append user bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'ai-chat-bubble user';
+  userBubble.innerText = question;
+  messagesList.appendChild(userBubble);
+
+  input.value = '';
+  if (sendBtn) sendBtn.disabled = true;
+
+  // Append thinking indicator
+  const thinkingBubble = document.createElement('div');
+  thinkingBubble.className = 'ai-chat-bubble assistant';
+  thinkingBubble.id = 'aiThinkingBubbleTemp';
+  thinkingBubble.innerHTML = `
+    <div class="bubble-sender">
+      <span class="sender-avatar">AI</span>
+      <span class="sender-name">LaunchX Store & Builder Copilot</span>
+    </div>
+    <div class="bubble-text" style="color: #94a3b8; font-style: italic;">
+      <span>✦ Synthesizing response with store context...</span>
+    </div>
+  `;
+  messagesList.appendChild(thinkingBubble);
+  messagesList.scrollTop = messagesList.scrollHeight;
+
+  try {
+    const slug = currentStore ? currentStore.slug : getStoreSlugFromUrl();
+    const res = await API.askChatbot(slug, question);
+
+    thinkingBubble.remove();
+
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'ai-chat-bubble assistant';
+    aiBubble.innerHTML = `
+      <div class="bubble-sender">
+        <span class="sender-avatar">AI</span>
+        <span class="sender-name">LaunchX Store & Builder Copilot</span>
+      </div>
+      <div class="bubble-text">
+        ${formatAiMarkdown(res.answer || 'I could not synthesize a response. Please try again.')}
+      </div>
+    `;
+    messagesList.appendChild(aiBubble);
+
+  } catch (err) {
+    thinkingBubble.remove();
+
+    const errBubble = document.createElement('div');
+    errBubble.className = 'ai-chat-bubble assistant';
+    errBubble.innerHTML = `
+      <div class="bubble-sender">
+        <span class="sender-avatar">AI</span>
+        <span class="sender-name">LaunchX Store Assistant</span>
+      </div>
+      <div class="bubble-text" style="color: #f87171;">
+        Sorry, an error occurred while connecting to the AI Assistant: ${err.message}. Please verify the server connection.
+      </div>
+    `;
+    messagesList.appendChild(errBubble);
+  } finally {
+    if (sendBtn) sendBtn.disabled = false;
+    messagesList.scrollTop = messagesList.scrollHeight;
+  }
+}
+
+function formatAiMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Headings
+  html = html.replace(/^### (.*$)/gim, '<h4 class="ai-msg-h3">$1</h4>');
+  html = html.replace(/^#### (.*$)/gim, '<h5 class="ai-msg-h4">$1</h5>');
+
+  // Bold & Italics
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+  // Inline Code
+  html = html.replace(/`([^`]+)`/g, '<code class="ai-code">$1</code>');
+
+  // Links [text](url)
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="ai-link" target="_blank">$1</a>');
+
+  // Bullet Lists
+  html = html.replace(/^\s*-\s+(.*$)/gim, '<li class="ai-li">$1</li>');
+  html = html.replace(/^\s*([0-9]+\.)\s+(.*$)/gim, '<li class="ai-li-num"><strong>$1</strong> $2</li>');
+
+  // Wrap in ul / ol
+  html = html.replace(/((?:<li class="ai-li">.*<\/li>\s*)+)/gim, '<ul class="ai-ul">$1</ul>');
+  html = html.replace(/((?:<li class="ai-li-num">.*<\/li>\s*)+)/gim, '<ol class="ai-ol">$1</ol>');
+
+  // Spacing
+  html = html.replace(/\n\n/g, '<div class="ai-space"></div>');
+  html = html.replace(/\n/g, '<br>');
+
+  return html;
 }

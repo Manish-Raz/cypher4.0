@@ -44,6 +44,10 @@
 
       <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
 
+      <button class="btn btn-primary btn-sm" onclick="toggleEditorAiDrawer(true)" style="background: linear-gradient(135deg, #10b981 0%, #34d399 100%); color: #040608; font-weight: 700; border: none; box-shadow: 0 0 14px rgba(52, 211, 153, 0.4);" title="Ask AI how to build components">
+        <span>🤖</span> AI Assistant
+      </button>
+
       <a href="#" id="editorLiveLink" class="btn btn-outline btn-sm" target="_blank" title="Open Storefront in New Tab">
         🌐 Live View ↗
       </a>
@@ -204,6 +208,67 @@
       </div>
     </aside>
 
+  <!-- Studio AI Assistant Drawer -->
+  <div class="store-ai-drawer-overlay" id="editorAiDrawerOverlay" onclick="handleEditorAiOverlayClick(event)">
+    <div class="store-ai-drawer" id="editorAiDrawer">
+      
+      <!-- Drawer Header -->
+      <div class="store-ai-header">
+        <div class="store-ai-title-wrap">
+          <div class="ai-avatar-badge">✦</div>
+          <div>
+            <div class="store-ai-title">LaunchX Studio AI Assistant</div>
+            <div class="store-ai-subtitle" id="editorAiStoreSubtitle">Component Architecture & Design Copilot</div>
+          </div>
+        </div>
+        <div class="store-ai-header-actions">
+          <button class="store-ai-close-btn" onclick="toggleEditorAiDrawer(false)" aria-label="Close Assistant">×</button>
+        </div>
+      </div>
+
+      <!-- Quick Guidance Prompt Chips -->
+      <div class="store-ai-chips-bar">
+        <div class="chips-scroll-track">
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How do I build the hero banner component?')">✦ Build Hero Banner</button>
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How do I build product cards?')">📦 Build Product Cards</button>
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How to customize themes, colors, and typography?')">🎨 Themes & Styling</button>
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How do I build category tabs and filtering?')">🏷️ Category Filters</button>
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How to build website step by step?')">🚀 Make Website Steps</button>
+          <button type="button" class="ai-chip-pill" onclick="sendEditorAiQuickPrompt('How does the shopping cart and checkout work?')">🛒 Cart Drawer</button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Scroll Area -->
+      <div class="store-ai-messages" id="editorAiMessagesList">
+        <div class="ai-chat-bubble assistant">
+          <div class="bubble-sender">
+            <span class="sender-avatar">AI</span>
+            <span class="sender-name">LaunchX Studio Copilot</span>
+          </div>
+          <div class="bubble-text">
+            Hello! I am your Studio AI Assistant. 
+            <br><br>
+            Ask me how to configure or build any component, customize theme tokens, or walkthrough website creation steps:
+            <ul class="ai-ul">
+              <li class="ai-li"><strong>Hero Banner:</strong> Headlines, subtitles, background photography</li>
+              <li class="ai-li"><strong>Product Cards:</strong> Thumbnails, SKU, live stock badges</li>
+              <li class="ai-li"><strong>Design Tokens:</strong> Primary/Accent colors, typography, corner radii</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Form -->
+      <div class="store-ai-input-wrap">
+        <form class="store-ai-input-form" onsubmit="handleEditorAiSubmit(event)">
+          <input type="text" id="editorAiInput" class="store-ai-input" placeholder="Ask how to build components, themes, or site steps..." autocomplete="off">
+          <button type="submit" class="store-ai-send-btn" id="editorAiSendBtn" aria-label="Send query">
+            <span>Send ⚡</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
   </div>
 
   <script src="/js/api.js"></script>

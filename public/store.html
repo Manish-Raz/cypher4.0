@@ -18,6 +18,9 @@
       </div>
 
       <div class="store-nav-actions">
+        <button class="btn btn-primary btn-sm store-ai-nav-btn" onclick="toggleStoreAiDrawer(true)" title="Launch Store & Builder AI Assistant">
+          <span>🤖</span> AI Assistant
+        </button>
         <button class="btn btn-secondary btn-sm" onclick="toggleStoreTheme()" id="storeThemeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
         <a href="#" id="editorShortcutLink" class="btn btn-secondary btn-sm" title="Edit this store in Visual Studio">🎨 Visual Editor</a>
         <a href="#" id="adminShortcutLink" class="btn btn-outline btn-sm" title="Manage Store in Admin">⚙️ Dashboard</a>
@@ -359,6 +362,83 @@
             🛍️ Continue Shopping
           </button>
         </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       Floating Store AI Assistant Launcher & Slide-over Drawer
+       ========================================================================= -->
+  <div class="store-ai-floating-btn-wrap" id="storeAiLauncherWrap">
+    <button class="store-ai-floating-btn" onclick="toggleStoreAiDrawer()" aria-label="Open AI Store Assistant">
+      <span class="ai-btn-pulse"></span>
+      <span class="ai-btn-icon">🤖</span>
+      <span class="ai-btn-label">AI Store Assistant</span>
+    </button>
+  </div>
+
+  <!-- Store AI Assistant Drawer / Modal -->
+  <div class="store-ai-drawer-overlay" id="storeAiDrawerOverlay" onclick="handleAiOverlayClick(event)">
+    <div class="store-ai-drawer" id="storeAiDrawer">
+      
+      <!-- Drawer Header -->
+      <div class="store-ai-header">
+        <div class="store-ai-title-wrap">
+          <div class="ai-avatar-badge">✦</div>
+          <div>
+            <div class="store-ai-title">LaunchX AI Store Assistant</div>
+            <div class="store-ai-subtitle" id="aiStoreContextSubtitle">Grounded in MongoDB & Builder Architecture</div>
+          </div>
+        </div>
+        <div class="store-ai-header-actions">
+          <button class="store-ai-close-btn" onclick="toggleStoreAiDrawer(false)" aria-label="Close Assistant">×</button>
+        </div>
+      </div>
+
+      <!-- Quick Guidance Prompt Chips -->
+      <div class="store-ai-chips-bar">
+        <div class="chips-scroll-track">
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How to build website step by step?')">🚀 Make Website Steps</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How do I build the hero banner component?')">✦ Build Hero Banner</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How do I build product cards?')">📦 Build Product Cards</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How do I build category tabs and filtering?')">🏷️ Build Categories</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How does the shopping cart and checkout work?')">🛒 Cart & Checkout</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('How to customize themes, colors, and typography?')">🎨 Customize Themes</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('What are my top 5 selling products?')">📊 Top Products</button>
+          <button type="button" class="ai-chip-pill" onclick="sendAiQuickPrompt('Which products are low on stock?')">⚠️ Low Stock Alerts</button>
+        </div>
+      </div>
+
+      <!-- Chat Messages Scroll Area -->
+      <div class="store-ai-messages" id="storeAiMessagesList">
+        <div class="ai-chat-bubble assistant">
+          <div class="bubble-sender">
+            <span class="sender-avatar">AI</span>
+            <span class="sender-name">LaunchX Store & Builder Copilot</span>
+          </div>
+          <div class="bubble-text">
+            Hello! I am your store's AI Assistant. 
+            <br><br>
+            I can help you:
+            <ul class="ai-ul">
+              <li class="ai-li"><strong>Build any component</strong> (Hero Banner, Product Cards, Category Tabs, Cart Drawer, Navigation, Themes)</li>
+              <li class="ai-li"><strong>Walk you through each step</strong> for making, customizing, and launching websites</li>
+              <li class="ai-li"><strong>Answer live store queries</strong> on sales, orders, and MongoDB inventory</li>
+            </ul>
+            What would you like to build or check today?
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Form -->
+      <div class="store-ai-input-wrap">
+        <form class="store-ai-input-form" onsubmit="handleStoreAiSubmit(event)">
+          <input type="text" id="storeAiInput" class="store-ai-input" placeholder="Ask how to build components, site steps, or sales..." autocomplete="off">
+          <button type="submit" class="store-ai-send-btn" id="storeAiSendBtn" aria-label="Send query">
+            <span>Send ⚡</span>
+          </button>
+        </form>
       </div>
 
     </div>

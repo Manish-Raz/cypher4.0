@@ -27,6 +27,7 @@ app.use('/api/stores', storeRoutes);
 app.use('/api/stores/:slug/products', productRoutes);
 app.use('/api/stores/:slug/orders', orderRoutes);
 app.use('/api/stores/:slug/chatbot', chatbotRoutes);
+app.use('/api/ai', chatbotRoutes);
 
 // Health check: verify that the server is responding
 app.get('/api/health', (req, res) => {

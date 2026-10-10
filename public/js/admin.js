@@ -701,7 +701,7 @@ async function askCopilot(question) {
     const res = await API.askChatbot(currentSlug, question);
     thinkingEl.remove();
 
-    const formattedAnswer = res.answer.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    const formattedAnswer = formatAdminAiMarkdown(res.answer || '');
 
     // Evidence table builder
     let evidenceHtml = '';
@@ -766,6 +766,26 @@ function escapeHtml(text) {
   const div = document.createElement('div');
   div.innerText = text;
   return div.innerHTML;
+}
+
+function formatAdminAiMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  html = html.replace(/^### (.*$)/gim, '<h4 style="color: var(--primary); font-weight: 800; margin: 10px 0 6px 0; font-size: 1.05rem;">$1</h4>');
+  html = html.replace(/^#### (.*$)/gim, '<h5 style="color: var(--text); font-weight: 700; margin: 8px 0 4px 0; font-size: 0.95rem;">$1</h5>');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/`([^`]+)`/g, '<code style="background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace;">$1</code>');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color: var(--primary); text-decoration: underline;" target="_blank">$1</a>');
+  html = html.replace(/^\s*-\s+(.*$)/gim, '<li style="margin-left: 18px; margin-bottom: 4px;">$1</li>');
+  html = html.replace(/^\s*([0-9]+\.)\s+(.*$)/gim, '<li style="margin-left: 18px; margin-bottom: 4px;"><strong>$1</strong> $2</li>');
+  html = html.replace(/\n\n/g, '<div style="height: 6px;"></div>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
 }
 
 // 7. Storefront QR Code Suite (LaunchX)

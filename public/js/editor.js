@@ -361,3 +361,135 @@ async function saveEditorChanges() {
     saveBtn.innerText = '💾 Save to MongoDB';
   }
 }
+
+// ==========================================================================
+// 7. Studio AI Assistant & Component Architecture Copilot
+// ==========================================================================
+
+function toggleEditorAiDrawer(forceOpen) {
+  const overlay = document.getElementById('editorAiDrawerOverlay');
+  if (!overlay) return;
+
+  const isActive = overlay.classList.contains('active');
+  const shouldOpen = forceOpen !== undefined ? forceOpen : !isActive;
+
+  if (shouldOpen) {
+    overlay.classList.add('active');
+    setTimeout(() => {
+      document.getElementById('editorAiInput')?.focus();
+    }, 200);
+  } else {
+    overlay.classList.remove('active');
+  }
+}
+
+function handleEditorAiOverlayClick(event) {
+  if (event.target === document.getElementById('editorAiDrawerOverlay')) {
+    toggleEditorAiDrawer(false);
+  }
+}
+
+function sendEditorAiQuickPrompt(promptText) {
+  const input = document.getElementById('editorAiInput');
+  if (!input) return;
+  input.value = promptText;
+  handleEditorAiSubmit(new Event('submit'));
+}
+
+async function handleEditorAiSubmit(event) {
+  if (event && event.preventDefault) event.preventDefault();
+
+  const input = document.getElementById('editorAiInput');
+  const sendBtn = document.getElementById('editorAiSendBtn');
+  const messagesList = document.getElementById('editorAiMessagesList');
+  if (!input || !messagesList) return;
+
+  const question = input.value.trim();
+  if (!question) return;
+
+  // Append user bubble
+  const userBubble = document.createElement('div');
+  userBubble.className = 'ai-chat-bubble user';
+  userBubble.innerText = question;
+  messagesList.appendChild(userBubble);
+
+  input.value = '';
+  if (sendBtn) sendBtn.disabled = true;
+
+  // Thinking indicator
+  const thinkingBubble = document.createElement('div');
+  thinkingBubble.className = 'ai-chat-bubble assistant';
+  thinkingBubble.id = 'editorAiThinking';
+  thinkingBubble.innerHTML = `
+    <div class="bubble-sender">
+      <span class="sender-avatar">AI</span>
+      <span class="sender-name">LaunchX Studio Copilot</span>
+    </div>
+    <div class="bubble-text" style="color: #94a3b8; font-style: italic;">
+      <span>✦ Synthesizing component guide...</span>
+    </div>
+  `;
+  messagesList.appendChild(thinkingBubble);
+  messagesList.scrollTop = messagesList.scrollHeight;
+
+  try {
+    const slug = currentSlug || 'urban-threads';
+    const res = await API.askChatbot(slug, question);
+
+    thinkingBubble.remove();
+
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'ai-chat-bubble assistant';
+    aiBubble.innerHTML = `
+      <div class="bubble-sender">
+        <span class="sender-avatar">AI</span>
+        <span class="sender-name">LaunchX Studio Copilot</span>
+      </div>
+      <div class="bubble-text">
+        ${formatEditorAiMarkdown(res.answer || 'I could not synthesize a guide. Please try again.')}
+      </div>
+    `;
+    messagesList.appendChild(aiBubble);
+
+  } catch (err) {
+    thinkingBubble.remove();
+
+    const errBubble = document.createElement('div');
+    errBubble.className = 'ai-chat-bubble assistant';
+    errBubble.innerHTML = `
+      <div class="bubble-sender">
+        <span class="sender-avatar">AI</span>
+        <span class="sender-name">LaunchX Studio Copilot</span>
+      </div>
+      <div class="bubble-text" style="color: #f87171;">
+        Error connecting to Assistant: ${err.message}
+      </div>
+    `;
+    messagesList.appendChild(errBubble);
+  } finally {
+    if (sendBtn) sendBtn.disabled = false;
+    messagesList.scrollTop = messagesList.scrollHeight;
+  }
+}
+
+function formatEditorAiMarkdown(text) {
+  if (!text) return '';
+  let html = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  html = html.replace(/^### (.*$)/gim, '<h4 class="ai-msg-h3">$1</h4>');
+  html = html.replace(/^#### (.*$)/gim, '<h5 class="ai-msg-h4">$1</h5>');
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  html = html.replace(/`([^`]+)`/g, '<code class="ai-code">$1</code>');
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="ai-link" target="_blank">$1</a>');
+  html = html.replace(/^\s*-\s+(.*$)/gim, '<li class="ai-li">$1</li>');
+  html = html.replace(/^\s*([0-9]+\.)\s+(.*$)/gim, '<li class="ai-li-num"><strong>$1</strong> $2</li>');
+  html = html.replace(/((?:<li class="ai-li">.*<\/li>\s*)+)/gim, '<ul class="ai-ul">$1</ul>');
+  html = html.replace(/((?:<li class="ai-li-num">.*<\/li>\s*)+)/gim, '<ol class="ai-ol">$1</ol>');
+  html = html.replace(/\n\n/g, '<div class="ai-space"></div>');
+  html = html.replace(/\n/g, '<br>');
+  return html;
+}
