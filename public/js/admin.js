@@ -167,10 +167,10 @@ async function refreshDashboard() {
     const res = await API.getStats(currentSlug);
     const stats = res.stats;
 
-    document.getElementById('metricRevenue').innerText = `$${stats.totalRevenue.toFixed(2)}`;
+    document.getElementById('metricRevenue').innerText = `₹${stats.totalRevenue.toFixed(2)}`;
     document.getElementById('metricOrders').innerText = stats.totalOrders;
     document.getElementById('metricActiveOrders').innerText = `${stats.activeOrders} pending fulfillment`;
-    document.getElementById('metricAov').innerText = `$${stats.averageOrderValue.toFixed(2)}`;
+    document.getElementById('metricAov').innerText = `₹${stats.averageOrderValue.toFixed(2)}`;
     document.getElementById('metricProducts').innerText = stats.totalProducts;
     document.getElementById('metricLowStockCount').innerText = `${stats.lowStockCount} low in stock`;
 
@@ -211,7 +211,7 @@ function renderRecentOrders(orders) {
           <div style="font-size: 0.8rem; color: var(--text-muted);">${o.customer.email}</div>
         </td>
         <td>${itemCount} item${itemCount > 1 ? 's' : ''}</td>
-        <td style="font-weight: 700;">$${o.total.toFixed(2)}</td>
+        <td style="font-weight: 700;">₹${o.total.toFixed(2)}</td>
         <td><span class="status-pill status-${o.status}">${o.status}</span></td>
         <td style="color: var(--text-muted); font-size: 0.85rem;">${dateStr}</td>
       </tr>
@@ -252,7 +252,7 @@ function renderProductsTable(products) {
           </div>
         </td>
         <td><span class="badge badge-muted">${p.category}</span></td>
-        <td style="font-weight: 700;">$${p.price.toFixed(2)}</td>
+        <td style="font-weight: 700;">₹${p.price.toFixed(2)}</td>
         <td>
           <span style="font-weight: 700;">${p.stock} units</span>
           ${isLow ? '<span class="badge badge-warning" style="margin-left: 6px;">Low</span>' : ''}
@@ -407,7 +407,7 @@ function renderOrdersTable(orders) {
         <td style="max-width: 240px; font-size: 0.85rem;" title="${itemsSummary}">
           ${itemsSummary.length > 50 ? itemsSummary.slice(0, 50) + '...' : itemsSummary}
         </td>
-        <td style="font-weight: 700;">$${o.total.toFixed(2)}</td>
+        <td style="font-weight: 700;">₹${o.total.toFixed(2)}</td>
         <td>
           <select class="form-select" style="padding: 4px 8px; font-size: 0.8rem; width: auto;" onchange="handleOrderStatusChange('${o._id}', event.target.value)">
             <option value="placed" ${o.status === 'placed' ? 'selected' : ''}>Placed</option>
@@ -615,3 +615,77 @@ function escapeHtml(text) {
   div.innerText = text;
   return div.innerHTML;
 }
+
+// 7. Storefront QR Code Suite (LaunchX)
+function openStoreQrModal() {
+  if (!currentStore && !currentSlug) return;
+  const storeName = (currentStore && currentStore.name) || currentSlug;
+  const url = `${window.location.origin}/store/${currentSlug}`;
+
+  const titleEl = document.getElementById('adminQrStoreTitle');
+  if (titleEl) titleEl.innerText = storeName;
+  const urlEl = document.getElementById('adminQrStoreUrl');
+  if (urlEl) urlEl.innerText = url;
+
+  const container = document.getElementById('adminQrCodeDisplay');
+  if (container) {
+    container.innerHTML = '';
+    if (typeof QRCode !== 'undefined') {
+      new QRCode(container, {
+        text: url,
+        width: 200,
+        height: 200,
+        colorDark: "#0B0D17",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+  }
+
+  const modal = document.getElementById('storeQrModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeStoreQrModal() {
+  const modal = document.getElementById('storeQrModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function downloadAdminStoreQr() {
+  const container = document.getElementById('adminQrCodeDisplay');
+  if (!container) return;
+  const img = container.querySelector('img');
+  const canvas = container.querySelector('canvas');
+  let dataUrl = '';
+  if (img && img.src && img.src.startsWith('data:')) {
+    dataUrl = img.src;
+  } else if (canvas) {
+    dataUrl = canvas.toDataURL('image/png');
+  }
+  if (!dataUrl) {
+    showToast('QR code is still preparing, please try again in a moment', 'info');
+    return;
+  }
+  const link = document.createElement('a');
+  link.download = `${currentSlug || 'store'}-qr.png`;
+  link.href = dataUrl;
+  link.click();
+  showToast('QR code downloaded successfully!', 'success');
+}
+
+function shareAdminStoreWhatsApp() {
+  const url = `${window.location.origin}/store/${currentSlug}`;
+  const name = currentStore ? currentStore.name : 'Our Store';
+  const text = encodeURIComponent(`Shop online at ${name}: ${url}`);
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+}
+
+function copyAdminStoreUrl() {
+  const url = `${window.location.origin}/store/${currentSlug}`;
+  navigator.clipboard.writeText(url).then(() => {
+    showToast('Storefront URL copied to clipboard!', 'success');
+  }).catch(() => {
+    showToast('Failed to copy text', 'error');
+  });
+}
+

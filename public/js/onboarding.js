@@ -34,6 +34,7 @@ function setupEventListeners() {
     const bannerHeadline = document.getElementById('bannerHeadlineInput');
     if (bannerHeadline && (!bannerHeadline.value || bannerHeadline.value.startsWith('Welcome to'))) {
       bannerHeadline.value = e.target.value ? `Welcome to ${e.target.value}` : 'Welcome to our official store';
+      updateBannerTextPreview();
     }
   });
 
@@ -75,6 +76,106 @@ function slugify(text) {
 
 function setPresetLogo(url) {
   document.getElementById('logoUrlInput').value = url;
+  updateLogoPreview(url);
+}
+
+function updateLogoPreview(url) {
+  const img = document.getElementById('logoPreviewImg');
+  const placeholder = document.getElementById('logoPlaceholder');
+  if (!img || !placeholder) return;
+  if (url) {
+    img.src = url;
+    img.style.display = 'block';
+    placeholder.style.display = 'none';
+  } else {
+    img.src = '';
+    img.style.display = 'none';
+    placeholder.style.display = 'flex';
+  }
+}
+
+function updateLogoPreviewFromInput(val) {
+  updateLogoPreview(val ? val.trim() : '');
+}
+
+function handleLogoFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    showToast('Please select a valid image file (PNG, JPG, SVG, WebP)', 'error');
+    return;
+  }
+
+  if (file.size > 3 * 1024 * 1024) {
+    showToast('Image size should be less than 3MB', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    document.getElementById('logoUrlInput').value = dataUrl;
+    updateLogoPreview(dataUrl);
+    showToast('Logo loaded successfully!', 'success');
+  };
+  reader.readAsDataURL(file);
+}
+
+// Banner Handling Suite
+function setPresetBanner(url, label) {
+  const input = document.getElementById('bannerImageUrlInput');
+  if (input) input.value = url;
+  updateBannerPreview(url);
+  if (label) showToast(`Applied banner preset: ${label}`, 'info');
+}
+
+function updateBannerPreview(url) {
+  const img = document.getElementById('bannerPreviewImg');
+  if (!img) return;
+  img.src = url || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80';
+}
+
+function updateBannerPreviewFromInput(val) {
+  updateBannerPreview(val ? val.trim() : '');
+}
+
+function updateBannerTextPreview() {
+  const headline = document.getElementById('bannerHeadlineInput');
+  const subtitle = document.getElementById('bannerSubtitleInput');
+  const hEl = document.getElementById('bannerPreviewHeadline');
+  const sEl = document.getElementById('bannerPreviewSub');
+  if (hEl && headline) {
+    hEl.innerText = headline.value.trim() || 'Welcome to our official store';
+  }
+  if (sEl && subtitle) {
+    sEl.innerText = subtitle.value.trim() || 'Curated premium items crafted for discerning tastes.';
+  }
+}
+
+function handleBannerFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    showToast('Please select a valid image file (PNG, JPG, WebP)', 'error');
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    showToast('Banner image size should be less than 5MB', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const input = document.getElementById('bannerImageUrlInput');
+    if (input) input.value = dataUrl;
+    updateBannerPreview(dataUrl);
+    showToast('Banner image uploaded successfully!', 'success');
+  };
+  reader.readAsDataURL(file);
 }
 
 function renderCategories() {
@@ -314,7 +415,13 @@ function proceedToStep(step) {
     else if (i < step) ind.classList.add('completed');
   }
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Smoothly scroll to the wizard section instead of jumping to the top of the landing page
+  const wizardSection = document.getElementById('build-your-store');
+  if (wizardSection) {
+    const yOffset = -70;
+    const y = wizardSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+  }
 }
 
 async function publishStore() {
@@ -333,6 +440,7 @@ async function publishStore() {
 
     const bannerHeadline = document.getElementById('bannerHeadlineInput').value.trim();
     const bannerSubtitle = document.getElementById('bannerSubtitleInput').value.trim();
+    const bannerImageUrl = document.getElementById('bannerImageUrlInput') ? document.getElementById('bannerImageUrlInput').value.trim() : '';
 
     // 1. Create Store Document
     const storeRes = await API.createStore({
@@ -347,7 +455,8 @@ async function publishStore() {
       theme: {
         id: selectedTheme,
         bannerTitle: bannerHeadline || `Welcome to ${storeName}`,
-        bannerSubtitle: bannerSubtitle || 'Handcrafted items designed for quality.'
+        bannerSubtitle: bannerSubtitle || 'Handcrafted items designed for quality.',
+        bannerImageUrl: bannerImageUrl || ''
       }
     });
 
@@ -370,12 +479,74 @@ async function publishStore() {
     document.getElementById('openAdminLink').href = `/admin?store=${createdStoreSlug}`;
 
     proceedToStep(4);
+    renderStep4QrCode(liveStoreUrl);
     showToast(`🎉 Store "${storeName}" is now live!`, 'success');
 
   } catch (err) {
     showToast(err.message || 'Failed to publish store', 'error');
     publishBtn.disabled = false;
     publishBtn.innerHTML = '⚡ Create & Publish Live Store to MongoDB';
+  }
+}
+
+function renderStep4QrCode(url) {
+  const container = document.getElementById('storeQrCodeDisplay');
+  if (!container) return;
+  container.innerHTML = '';
+  if (typeof QRCode !== 'undefined') {
+    new QRCode(container, {
+      text: url,
+      width: 180,
+      height: 180,
+      colorDark: "#0B0D17",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+}
+
+function downloadStoreQr(containerId, storeName) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const img = container.querySelector('img');
+  const canvas = container.querySelector('canvas');
+  let dataUrl = '';
+  if (img && img.src && img.src.startsWith('data:')) {
+    dataUrl = img.src;
+  } else if (canvas) {
+    dataUrl = canvas.toDataURL('image/png');
+  }
+  if (!dataUrl) {
+    showToast('QR code is still preparing, please try again in a moment', 'info');
+    return;
+  }
+  const link = document.createElement('a');
+  link.download = `${slugify(storeName || 'launchx-store')}-qr.png`;
+  link.href = dataUrl;
+  link.click();
+  showToast('QR code downloaded successfully!', 'success');
+}
+
+function shareStoreToWhatsApp() {
+  const url = document.getElementById('createdStoreUrlText').innerText;
+  const name = document.getElementById('storeNameInput').value.trim() || 'My Online Store';
+  const text = encodeURIComponent(`Shop online at ${name}: ${url}`);
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+}
+
+async function shareStoreNative() {
+  const url = document.getElementById('createdStoreUrlText').innerText;
+  const name = document.getElementById('storeNameInput').value.trim() || 'LaunchX Store';
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: name,
+        text: `Shop directly online at ${name}!`,
+        url: url
+      });
+    } catch (err) {}
+  } else {
+    copyStoreUrl();
   }
 }
 

@@ -186,9 +186,9 @@ Great news from ${store ? store.name : 'our store'}!
 Your order ${order.orderNumber} has been updated to "${order.status.toUpperCase()}".
 
 Order Summary:
-${order.items.map(it => `- ${it.name} (Qty: ${it.quantity}) - $${(it.price * it.quantity).toFixed(2)}`).join('\n')}
+${order.items.map(it => `- ${it.name} (Qty: ${it.quantity}) - ₹${(it.price * it.quantity).toFixed(2)}`).join('\n')}
 
-Order Total: $${order.total.toFixed(2)}
+Order Total: ₹${order.total.toFixed(2)}
 Shipping to: ${order.customer.address}, ${order.customer.city}
 
 Thank you for shopping with us!

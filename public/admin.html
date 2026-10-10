@@ -52,6 +52,9 @@
       <a href="#" id="viewStoreLiveBtn" class="btn btn-outline btn-sm" target="_blank" style="color: var(--text);">
         🌐 View Live Store ↗
       </a>
+      <button class="btn btn-outline btn-sm" onclick="openStoreQrModal()" style="color: var(--text);">
+        📱 Store QR Code
+      </button>
       <button class="btn btn-outline btn-sm" onclick="openProjectsModal()" style="color: var(--text);">
         📁 All Saved Stores
       </button>
@@ -85,6 +88,7 @@
 
         <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
         <a href="/login" class="btn btn-outline btn-sm" title="Merchant Login Portal">🔑 Switch Account</a>
+        <button class="btn btn-primary btn-sm" onclick="openStoreQrModal()" style="font-weight: 700;">📱 Store QR</button>
         <button class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy URL</button>
       </div>
     </header>
@@ -127,7 +131,7 @@
               <span>TOTAL REVENUE</span>
               <span>💰</span>
             </div>
-            <div class="metric-value" id="metricRevenue">$0.00</div>
+            <div class="metric-value" id="metricRevenue">₹0.00</div>
             <div class="metric-sub">Confirmed gross sales</div>
           </div>
 
@@ -145,7 +149,7 @@
               <span>AVG ORDER VALUE</span>
               <span>📈</span>
             </div>
-            <div class="metric-value" id="metricAov">$0.00</div>
+            <div class="metric-value" id="metricAov">₹0.00</div>
             <div class="metric-sub">Per checkout average</div>
           </div>
 
@@ -440,11 +444,11 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group">
-            <label class="form-label" for="pPrice">Price ($ USD) <span class="req">*</span></label>
+            <label class="form-label" for="pPrice">Price (₹ INR) <span class="req">*</span></label>
             <input type="number" step="0.01" id="pPrice" class="form-control" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="pCompare">Compare at Price ($)</label>
+            <label class="form-label" for="pCompare">Compare at Price (₹)</label>
             <input type="number" step="0.01" id="pCompare" class="form-control">
           </div>
         </div>
@@ -528,7 +532,42 @@
     </div>
   </div>
 
+  <!-- Store QR Code Modal (LaunchX QR Suite) -->
+  <div class="modal-overlay" id="storeQrModal">
+    <div class="modal-content" style="max-width: 500px; text-align: center;">
+      <div class="modal-header">
+        <h3 class="modal-title">📱 Store QR Code & Share</h3>
+        <button class="modal-close" onclick="closeStoreQrModal()">×</button>
+      </div>
+
+      <div style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
+        Customers can scan this code to open <strong id="adminQrStoreTitle" style="color: var(--text);">Your Store</strong> directly on their mobile device.
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background: #ffffff; padding: 20px; border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow-sm); max-width: 240px; margin: 0 auto 18px;">
+        <div id="adminQrCodeDisplay" style="width: 200px; height: 200px; display: flex; align-items: center; justify-content: center;"></div>
+        <div style="font-size: 0.75rem; color: #475569; font-weight: 700; margin-top: 8px; font-family: var(--font-mono);">SCAN TO VISIT STORE</div>
+      </div>
+
+      <div class="live-url-box" style="margin-bottom: 16px; background: var(--surface-elevated); padding: 8px 12px; border-radius: var(--radius-md); border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <span id="adminQrStoreUrl" style="word-break: break-all; font-family: var(--font-mono); font-size: 0.85rem; color: var(--secondary);"></span>
+        <button type="button" class="btn btn-outline btn-sm" onclick="copyAdminStoreUrl()">📋 Copy</button>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 14px;">
+        <button type="button" class="btn btn-primary btn-sm" onclick="downloadAdminStoreQr()">
+          📥 Download QR (PNG)
+        </button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="shareAdminStoreWhatsApp()">
+          💬 Share on WhatsApp
+        </button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeStoreQrModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script src="/js/api.js"></script>
+  <script src="/js/qrcode.min.js"></script>
   <script src="/js/admin.js"></script>
 </body>
 </html>

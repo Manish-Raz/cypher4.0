@@ -11,6 +11,7 @@ let selectedModalVariant = '';
 let modalQuantity = 1;
 
 document.addEventListener('DOMContentLoaded', async () => {
+  initStoreTheme();
   const slug = getStoreSlugFromUrl();
   setupEditorIframeBridge();
   loadCart(slug);
@@ -217,8 +218,8 @@ function renderProductsGrid(products) {
 
           <div class="product-footer">
             <div class="product-price-box">
-              <span class="price-current">$${prod.price.toFixed(2)}</span>
-              ${isSale ? `<span class="price-compare">$${prod.compareAtPrice.toFixed(2)}</span>` : ''}
+              <span class="price-current">₹${prod.price.toFixed(2)}</span>
+              ${isSale ? `<span class="price-compare">₹${prod.compareAtPrice.toFixed(2)}</span>` : ''}
             </div>
 
             <button class="add-cart-btn" onclick="quickAddToCart('${prod._id}')" ${isOutOfStock ? 'disabled' : ''}>
@@ -265,7 +266,7 @@ function openProductModal(productId) {
 
   document.getElementById('modalProductTitle').innerText = prod.name;
   document.getElementById('modalProductCategory').innerText = prod.category;
-  document.getElementById('modalProductPrice').innerText = `$${prod.price.toFixed(2)}`;
+  document.getElementById('modalProductPrice').innerText = `₹${prod.price.toFixed(2)}`;
   document.getElementById('modalProductSku').innerText = prod.sku ? `SKU: ${prod.sku}` : '';
   document.getElementById('modalProductDesc').innerText = prod.description || 'No description provided.';
   document.getElementById('modalProductImg').src = (prod.images && prod.images[0]) || '';
@@ -415,10 +416,10 @@ function updateCartUI() {
         <p style="font-size: 0.85rem; margin-top: 4px;">Discover products and add them to your cart.</p>
       </div>
     `;
-    document.getElementById('cartSubtotalText').innerText = '$0.00';
-    document.getElementById('cartShippingText').innerText = '$0.00';
-    document.getElementById('cartTaxText').innerText = '$0.00';
-    document.getElementById('cartTotalText').innerText = '$0.00';
+    document.getElementById('cartSubtotalText').innerText = '₹0.00';
+    document.getElementById('cartShippingText').innerText = '₹0.00';
+    document.getElementById('cartTaxText').innerText = '₹0.00';
+    document.getElementById('cartTotalText').innerText = '₹0.00';
     document.getElementById('checkoutBtn').disabled = true;
     return;
   }
@@ -437,7 +438,7 @@ function updateCartUI() {
           <div class="cart-item-name">${item.name}</div>
           <div class="cart-item-meta">
             ${item.selectedVariant ? `<span>${item.selectedVariant} • </span>` : ''}
-            <span>$${item.price.toFixed(2)}</span>
+            <span>₹${item.price.toFixed(2)}</span>
           </div>
           <div class="cart-item-stepper">
             <button class="step-btn" onclick="updateCartQty(${index}, -1)">-</button>
@@ -450,21 +451,87 @@ function updateCartUI() {
     `;
   }).join('');
 
-  const shipping = subtotal > 100 ? 0 : 5.00;
-  const tax = subtotal * 0.08;
+  const shipping = subtotal > 499 ? 0 : 49.00;
+  const tax = subtotal * 0.05;
   const grandTotal = subtotal + shipping + tax;
 
-  document.getElementById('cartSubtotalText').innerText = `$${subtotal.toFixed(2)}`;
-  document.getElementById('cartShippingText').innerText = shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`;
-  document.getElementById('cartTaxText').innerText = `$${tax.toFixed(2)}`;
-  document.getElementById('cartTotalText').innerText = `$${grandTotal.toFixed(2)}`;
-  document.getElementById('checkoutTotalAmount').innerText = `$${grandTotal.toFixed(2)}`;
+  document.getElementById('cartSubtotalText').innerText = `₹${subtotal.toFixed(2)}`;
+  document.getElementById('cartShippingText').innerText = shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`;
+  document.getElementById('cartTaxText').innerText = `₹${tax.toFixed(2)}`;
+  document.getElementById('cartTotalText').innerText = `₹${grandTotal.toFixed(2)}`;
+  if (document.getElementById('checkoutTotalAmount')) {
+    document.getElementById('checkoutTotalAmount').innerText = `₹${grandTotal.toFixed(2)}`;
+  }
 }
 
-// 5. Checkout Modal Flow
+// 5. Checkout Modal Flow (Complete Your Order Suite)
+let lastRecordedOrder = null;
+
+function initStoreTheme() {
+  if (localStorage.getItem('nf_theme') === 'light') {
+    document.body.classList.add('theme-light');
+    const btn = document.getElementById('storeThemeNavBtn');
+    if (btn) btn.innerText = '🌙 Dark';
+  }
+}
+
+function toggleStoreTheme() {
+  const isLight = document.body.classList.toggle('theme-light');
+  const btn = document.getElementById('storeThemeNavBtn');
+  if (isLight) {
+    if (btn) btn.innerText = '🌙 Dark';
+    localStorage.setItem('nf_theme', 'light');
+  } else {
+    if (btn) btn.innerText = '☀️ Light';
+    localStorage.setItem('nf_theme', 'dark');
+  }
+}
+
+function selectPaymentOpt(labelEl, value) {
+  document.querySelectorAll('.payment-card-opt').forEach(el => el.classList.remove('active'));
+  labelEl.classList.add('active');
+  const radio = labelEl.querySelector('input[type="radio"]');
+  if (radio) radio.checked = true;
+  const select = document.getElementById('custPayment');
+  if (select) select.value = value;
+}
+
 function openCheckoutModal() {
   if (cart.length === 0) return;
   toggleCartDrawer(false);
+
+  // 1. Populate Mini Items Preview in Checkout Modal
+  const listEl = document.getElementById('checkoutItemsPreview');
+  if (listEl) {
+    listEl.innerHTML = cart.map(item => `
+      <div class="checkout-item-row">
+        <img src="${item.image}" alt="${item.name}" class="checkout-item-img">
+        <div class="checkout-item-name">${item.name}</div>
+        <div class="checkout-item-qty">Qty: ${item.quantity}</div>
+        <div class="checkout-item-price">₹${(item.price * item.quantity).toFixed(2)}</div>
+      </div>
+    `).join('');
+  }
+
+  // 2. Calculations in Rupee (₹)
+  let subtotal = 0;
+  cart.forEach(it => subtotal += it.price * it.quantity);
+  const shipping = subtotal > 499 ? 0 : 49.00;
+  const tax = subtotal * 0.05;
+  const grandTotal = subtotal + shipping + tax;
+
+  const subEl = document.getElementById('checkoutModalSubtotal');
+  if (subEl) subEl.innerText = `₹${subtotal.toFixed(2)}`;
+  const shipEl = document.getElementById('checkoutModalShipping');
+  if (shipEl) shipEl.innerText = shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`;
+  const taxEl = document.getElementById('checkoutModalTax');
+  if (taxEl) taxEl.innerText = `₹${tax.toFixed(2)}`;
+  const totalEl = document.getElementById('checkoutTotalAmount');
+  if (totalEl) totalEl.innerText = `₹${grandTotal.toFixed(2)}`;
+
+  const btn = document.getElementById('placeOrderSubmitBtn');
+  if (btn) btn.innerHTML = `⚡ Place Order Now (₹${grandTotal.toFixed(2)})`;
+
   document.getElementById('checkoutFormPane').style.display = 'block';
   document.getElementById('checkoutSuccessPane').style.display = 'none';
   document.getElementById('checkoutModal').classList.add('active');
@@ -493,6 +560,9 @@ async function handlePlaceOrder(event) {
       city: document.getElementById('custCity').value.trim(),
     };
 
+    const notes = document.getElementById('custNotes') ? document.getElementById('custNotes').value.trim() : '';
+    if (notes) customer.notes = notes;
+
     const paymentMethod = document.getElementById('custPayment').value;
 
     const res = await API.createOrder(currentStore.slug, {
@@ -500,6 +570,8 @@ async function handlePlaceOrder(event) {
       items: cart,
       paymentMethod
     });
+
+    lastRecordedOrder = res.order;
 
     // Clear cart
     cart = [];
@@ -518,6 +590,24 @@ async function handlePlaceOrder(event) {
     showToast('Failed to place order: ' + err.message, 'error');
   } finally {
     submitBtn.disabled = false;
-    submitBtn.innerHTML = 'Confirm & Place Order ⚡';
+    submitBtn.innerHTML = '⚡ Place Order Now';
   }
+}
+
+function copyConfirmedOrderRef() {
+  const el = document.getElementById('confirmedOrderNumber');
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(() => {
+    showToast('Order tracking number copied!', 'success');
+  });
+}
+
+function shareCustomerOrderWhatsApp() {
+  if (!lastRecordedOrder) return;
+  const storeName = currentStore ? currentStore.name : 'Store';
+  const orderNum = lastRecordedOrder.orderNumber;
+  const total = lastRecordedOrder.total.toFixed(2);
+  const itemsText = (lastRecordedOrder.items || []).map(it => `${it.quantity}x ${it.name}`).join(', ');
+  const text = encodeURIComponent(`Hi! My order ${orderNum} with ${storeName} for ₹${total} (${itemsText}) is confirmed.`);
+  window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
 }

@@ -582,7 +582,242 @@ body.theme-light .wizard-topbar {
 .step-subtitle {
   color: var(--text-muted);
   font-size: 0.95rem;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
+}
+
+/* ==========================================================================
+   Screen 1 Wireframe Form (Matches Hand-Drawn Spec)
+   ========================================================================== */
+.wireframe-logo-card {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 24px;
+  background: var(--surface-elevated);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  align-items: center;
+  transition: var(--transition);
+}
+
+.wireframe-logo-card:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.logo-preview-box {
+  width: 140px;
+  height: 120px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition);
+  position: relative;
+}
+
+.logo-preview-box:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.logo-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 8px;
+}
+
+.logo-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: var(--text-muted);
+  padding: 6px;
+  user-select: none;
+}
+
+.logo-controls-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.screen1-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.screen1-grid .full-col {
+  grid-column: 1 / -1;
+}
+
+/* Store Hero Banner Option Card */
+.wireframe-banner-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 22px;
+  margin-top: 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+.banner-preview-box {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  background: #0B0D17;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.banner-preview-box:hover img {
+  transform: scale(1.02);
+}
+
+.banner-preview-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(11, 13, 23, 0.4) 0%, rgba(11, 13, 23, 0.82) 100%);
+  z-index: 1;
+}
+
+.banner-preview-content {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  right: 20px;
+  z-index: 2;
+  color: #ffffff;
+}
+
+.banner-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  background: rgba(139, 92, 246, 0.35);
+  border: 1px solid rgba(139, 92, 246, 0.6);
+  border-radius: 999px;
+  color: #22D3EE;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.banner-preview-headline {
+  font-family: var(--font-heading);
+  font-size: 1.28rem;
+  font-weight: 800;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.banner-preview-sub {
+  font-size: 0.82rem;
+  color: #A5A9BD;
+  margin-top: 2px;
+}
+
+.banner-controls-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Store Share & QR Code Card */
+.store-share-card {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 28px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  margin: 24px auto;
+  max-width: 760px;
+  text-align: left;
+  align-items: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.qr-code-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #ffffff;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+}
+
+.qr-canvas-holder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+}
+
+.qr-canvas-holder img, .qr-canvas-holder canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.qr-scan-hint {
+  font-size: 0.75rem;
+  color: #475569;
+  font-weight: 700;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+}
+
+.share-details-box {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .wireframe-logo-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+  .screen1-grid {
+    grid-template-columns: 1fr;
+  }
+  .store-share-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+  .share-details-box {
+    align-items: center;
+  }
 }
 
 /* Category Pills Selector */

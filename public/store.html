@@ -18,6 +18,7 @@
       </div>
 
       <div class="store-nav-actions">
+        <button class="btn btn-secondary btn-sm" onclick="toggleStoreTheme()" id="storeThemeNavBtn" title="Toggle Dark/Light Mode">☀️ Light</button>
         <a href="#" id="editorShortcutLink" class="btn btn-secondary btn-sm" title="Edit this store in Visual Studio">🎨 Visual Editor</a>
         <a href="#" id="adminShortcutLink" class="btn btn-outline btn-sm" title="Manage Store in Admin">⚙️ Dashboard</a>
         <button class="cart-btn" onclick="toggleCartDrawer(true)">
@@ -84,7 +85,7 @@
         </div>
         <div class="flex flex-col">
           <div style="font-size: 0.8rem; color: var(--sf-muted); text-transform: uppercase; font-weight: 700;" id="modalProductCategory">Category</div>
-          <div style="font-size: 1.4rem; font-weight: 800; color: var(--sf-primary); margin: 6px 0;" id="modalProductPrice">$0.00</div>
+          <div style="font-size: 1.4rem; font-weight: 800; color: var(--sf-primary); margin: 6px 0;" id="modalProductPrice">₹0.00</div>
           <div style="font-size: 0.85rem; color: var(--sf-muted); margin-bottom: 14px;" id="modalProductSku">SKU: ---</div>
           <p style="font-size: 0.9rem; color: var(--sf-muted); line-height: 1.5; margin-bottom: 16px;" id="modalProductDesc"></p>
 
@@ -123,100 +124,243 @@
       <div class="cart-drawer-footer">
         <div class="cart-summary-line">
           <span>Subtotal</span>
-          <span id="cartSubtotalText">$0.00</span>
+          <span id="cartSubtotalText">₹0.00</span>
         </div>
         <div class="cart-summary-line">
           <span>Estimated Shipping</span>
-          <span id="cartShippingText">$5.00</span>
+          <span id="cartShippingText">₹49.00</span>
         </div>
         <div class="cart-summary-line">
-          <span>Estimated Tax (8%)</span>
-          <span id="cartTaxText">$0.00</span>
+          <span>Estimated Tax (5% GST)</span>
+          <span id="cartTaxText">₹0.00</span>
         </div>
         <div class="cart-total-line">
           <span>Estimated Total</span>
-          <span id="cartTotalText" style="color: var(--sf-primary);">$0.00</span>
+          <span id="cartTotalText" style="color: var(--sf-primary);">₹0.00</span>
         </div>
         <button class="btn btn-primary btn-lg" style="width: 100%; margin-top: 16px;" id="checkoutBtn" onclick="openCheckoutModal()">Proceed to Checkout →</button>
       </div>
     </div>
   </div>
 
-  <!-- Checkout Modal (Checkpoint 7 Flow) -->
+  <!-- Checkout Modal (Complete Your Order Suite - Dashboard Styled) -->
   <div class="modal-overlay" id="checkoutModal">
-    <div class="modal-content" style="max-width: 620px;">
-      <div class="modal-header">
-        <h3 class="modal-title">Complete Your Order</h3>
+    <div class="modal-content" style="max-width: 840px;">
+      
+      <!-- Checkout Header -->
+      <div class="modal-header checkout-modal-header">
+        <div>
+          <h3 class="modal-title" style="font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+            🛍️ Complete Your Order
+          </h3>
+          <div class="checkout-badges-row">
+            <span class="badge badge-primary">LaunchX Unified Checkout</span>
+            <span class="badge badge-muted">🔒 256-Bit SSL Encrypted</span>
+            <span class="badge badge-success">⚡ Direct MongoDB Dispatch</span>
+          </div>
+        </div>
         <button class="modal-close" onclick="closeCheckoutModal()">×</button>
       </div>
 
+      <!-- Checkout Stepper Banner -->
+      <div class="checkout-stepper">
+        <div class="stepper-pill active" id="stepPillDelivery">
+          <span class="stepper-num">1</span>
+          <span>Delivery Details</span>
+        </div>
+        <div class="stepper-pill active" id="stepPillPayment">
+          <span class="stepper-num">2</span>
+          <span>Payment & Method</span>
+        </div>
+        <div class="stepper-pill" id="stepPillReview">
+          <span class="stepper-num">3</span>
+          <span>Confirmation</span>
+        </div>
+      </div>
+
+      <!-- Form Pane -->
       <div id="checkoutFormPane">
         <form id="checkoutForm" onsubmit="handlePlaceOrder(event)">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-            <div class="form-group">
-              <label class="form-label" for="custName">Full Name <span class="req">*</span></label>
-              <input type="text" id="custName" class="form-control" placeholder="Jane Doe" required>
+          <div class="checkout-bento-grid">
+            
+            <!-- Left Card: Customer & Delivery Details -->
+            <div class="checkout-card">
+              <div class="checkout-card-header">
+                <span class="checkout-card-title">📍 Shipping & Delivery Information</span>
+                <span class="text-muted" style="font-size: 0.78rem;">Required fields *</span>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="custName" style="font-size: 0.8rem;">Full Name <span class="req">*</span></label>
+                  <input type="text" id="custName" class="form-control" placeholder="Jane Doe" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="custEmail" style="font-size: 0.8rem;">Email Address <span class="req">*</span></label>
+                  <input type="email" id="custEmail" class="form-control" placeholder="jane@example.com" required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="custPhone" style="font-size: 0.8rem;">Mobile Phone <span class="req">*</span></label>
+                  <input type="tel" id="custPhone" class="form-control" placeholder="+91 98765 43210" value="+91 98765 43210" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" for="custCity" style="font-size: 0.8rem;">City / Region <span class="req">*</span></label>
+                  <input type="text" id="custCity" class="form-control" placeholder="Mumbai / Delhi" value="Bengaluru" required>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" for="custAddress" style="font-size: 0.8rem;">Street Address / Apartment <span class="req">*</span></label>
+                <input type="text" id="custAddress" class="form-control" placeholder="Flat 402, Lotus Residency, MG Road" value="Flat 402, Lotus Residency, MG Road" required>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="custNotes" style="font-size: 0.8rem;">Delivery Landmark / Instructions (Optional)</label>
+                <input type="text" id="custNotes" class="form-control" placeholder="e.g. Near Metro Pillar 42, ring doorbell">
+              </div>
             </div>
-            <div class="form-group">
-              <label class="form-label" for="custEmail">Email Address <span class="req">*</span></label>
-              <input type="email" id="custEmail" class="form-control" placeholder="jane@example.com" required>
+
+            <!-- Right Card: Payment Selection & Order Summary -->
+            <div class="checkout-card">
+              <div class="checkout-card-header">
+                <span class="checkout-card-title">💳 Payment Method</span>
+                <span class="badge badge-primary" style="font-size: 0.7rem;">Secure Gateway</span>
+              </div>
+
+              <!-- Payment Method Selection -->
+              <div class="payment-methods-grid">
+                <label class="payment-card-opt active" onclick="selectPaymentOpt(this, 'UPI / Instant QR (Google Pay, PhonePe, Paytm)')">
+                  <input type="radio" name="paymentMethodRadio" value="UPI / Instant QR (Google Pay, PhonePe, Paytm)" checked>
+                  <div>
+                    <div class="payment-opt-title">📱 UPI / QR (Instant)</div>
+                    <div class="payment-opt-desc">Google Pay, PhonePe, Paytm, BHIM</div>
+                  </div>
+                </label>
+
+                <label class="payment-card-opt" onclick="selectPaymentOpt(this, 'Credit Card (Mock Gateway)')">
+                  <input type="radio" name="paymentMethodRadio" value="Credit Card (Mock Gateway)">
+                  <div>
+                    <div class="payment-opt-title">💳 Debit / Credit Card & NetBanking</div>
+                    <div class="payment-opt-desc">Visa, MasterCard, RuPay, NetBanking</div>
+                  </div>
+                </label>
+
+                <label class="payment-card-opt" onclick="selectPaymentOpt(this, 'Cash on Delivery')">
+                  <input type="radio" name="paymentMethodRadio" value="Cash on Delivery">
+                  <div>
+                    <div class="payment-opt-title">💵 Cash on Delivery (COD)</div>
+                    <div class="payment-opt-desc">Pay cash upon home delivery</div>
+                  </div>
+                </label>
+              </div>
+
+              <!-- Hidden backing select to maintain full API contract compatibility -->
+              <select id="custPayment" style="display: none;">
+                <option value="UPI / Instant QR (Google Pay, PhonePe, Paytm)" selected>UPI / Instant QR (Google Pay, PhonePe, Paytm)</option>
+                <option value="Credit Card (Mock Gateway)">Credit Card (Mock Gateway)</option>
+                <option value="Cash on Delivery">Cash on Delivery</option>
+              </select>
+
+              <!-- Order Summary Breakdown -->
+              <div style="border-top: 1px solid var(--sf-border); padding-top: 12px; margin-top: 6px;">
+                <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--sf-text);">Selected Items:</div>
+                <div class="checkout-items-list" id="checkoutItemsPreview">
+                  <!-- Populated by storefront.js -->
+                </div>
+
+                <div class="cart-summary-line" style="font-size: 0.82rem; margin-bottom: 4px;">
+                  <span class="text-muted">Items Subtotal</span>
+                  <span id="checkoutModalSubtotal" style="font-weight: 700;">₹0.00</span>
+                </div>
+                <div class="cart-summary-line" style="font-size: 0.82rem; margin-bottom: 4px;">
+                  <span class="text-muted">Standard Delivery</span>
+                  <span id="checkoutModalShipping" style="font-weight: 700; color: #10b981;">FREE</span>
+                </div>
+                <div class="cart-summary-line" style="font-size: 0.82rem; margin-bottom: 4px;">
+                  <span class="text-muted">Estimated Tax (5% GST)</span>
+                  <span id="checkoutModalTax" style="font-weight: 700;">₹0.00</span>
+                </div>
+
+                <div class="checkout-total-banner">
+                  <span style="font-weight: 700; font-size: 0.9rem;">Total to Pay:</span>
+                  <span class="checkout-total-val" id="checkoutTotalAmount">₹0.00</span>
+                </div>
+              </div>
             </div>
+
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
-            <div class="form-group">
-              <label class="form-label" for="custPhone">Phone Number</label>
-              <input type="tel" id="custPhone" class="form-control" placeholder="+1 (555) 000-0000" value="+1 (555) 321-7890">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="custCity">City</label>
-              <input type="text" id="custCity" class="form-control" placeholder="San Francisco" value="Seattle">
-            </div>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 14px;">
-            <label class="form-label" for="custAddress">Shipping Address <span class="req">*</span></label>
-            <input type="text" id="custAddress" class="form-control" placeholder="123 Blossom Avenue Apt 4" value="789 Pine Ridge Way" required>
-          </div>
-
-          <div class="form-group" style="margin-bottom: 20px;">
-            <label class="form-label">Payment Method</label>
-            <select id="custPayment" class="form-select">
-              <option value="Credit Card (Mock Gateway)">💳 Online Credit Card (Instant)</option>
-              <option value="Apple / Google Pay">📱 Apple Pay / Google Pay</option>
-              <option value="Cash on Delivery">💵 Cash on Delivery (COD)</option>
-            </select>
-          </div>
-
-          <!-- Checkout Summary -->
-          <div style="background: var(--sf-bg); border: 1px solid var(--sf-border); border-radius: var(--sf-radius); padding: 14px; margin-bottom: 20px;">
-            <div class="flex items-center justify-between" style="font-weight: 700; margin-bottom: 6px;">
-              <span>Total to Pay:</span>
-              <span id="checkoutTotalAmount" style="font-size: 1.2rem; color: var(--sf-primary);">$0.00</span>
-            </div>
-            <div class="text-muted" style="font-size: 0.8rem;">Orders directly register in the store owner's MongoDB database and decrement inventory.</div>
-          </div>
-
-          <div class="flex items-center justify-between">
-            <button type="button" class="btn btn-secondary" onclick="closeCheckoutModal()">Cancel</button>
-            <button type="submit" class="btn btn-success btn-lg" id="placeOrderSubmitBtn">Confirm & Place Order ⚡</button>
+          <!-- Checkout Action Buttons -->
+          <div class="flex items-center justify-between" style="gap: 12px; margin-top: 8px;">
+            <button type="button" class="btn btn-secondary" onclick="closeCheckoutModal()">← Back to Store</button>
+            <button type="submit" class="btn btn-primary btn-lg" id="placeOrderSubmitBtn" style="font-weight: 800; min-width: 240px; box-shadow: var(--shadow-glow);">
+              ⚡ Place Order Now
+            </button>
           </div>
         </form>
       </div>
 
-      <!-- Order Confirmation Pane -->
-      <div id="checkoutSuccessPane" style="display: none; text-align: center; padding: 20px 0;">
-        <div style="font-size: 3rem; margin-bottom: 10px;">✅</div>
-        <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 6px;">Thank You for Your Order!</h3>
-        <p class="text-muted" style="margin-bottom: 18px;">Your order has been recorded in the database and is currently being processed.</p>
-        
-        <div style="background: var(--sf-bg); border: 1px solid var(--sf-border); border-radius: var(--sf-radius); padding: 16px; margin-bottom: 24px; font-family: monospace;">
-          <div>Order Reference: <strong id="confirmedOrderNumber" style="color: var(--sf-primary); font-size: 1.15rem;">#ORD-0000</strong></div>
-          <div style="font-size: 0.85rem; color: var(--sf-muted); margin-top: 4px;">Confirmation email dispatched to <span id="confirmedCustomerEmail"></span></div>
+      <!-- Order Confirmation Pane (Dashboard Workflow) -->
+      <div id="checkoutSuccessPane" style="display: none; text-align: center; padding: 12px 0;">
+        <div style="font-size: 3.2rem; margin-bottom: 8px; animation: bounce 1s infinite alternate;">🎉</div>
+        <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; color: var(--sf-text);">Order Confirmed & Live!</h3>
+        <p class="text-muted" style="margin-bottom: 18px; font-size: 0.9rem; max-width: 520px; margin-left: auto; margin-right: auto;">
+          Your order has been written to the merchant's MongoDB database and is ready for fulfillment in the Admin Dashboard.
+        </p>
+
+        <!-- Order Detail Card -->
+        <div class="order-success-card">
+          <div class="flex items-center justify-between" style="border-bottom: 1px solid var(--sf-border); padding-bottom: 10px; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 0.75rem; font-family: monospace; color: var(--sf-muted); text-transform: uppercase;">Tracking Number</div>
+              <div id="confirmedOrderNumber" style="color: var(--sf-primary); font-size: 1.25rem; font-weight: 800;">#ORD-0000</div>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm" onclick="copyConfirmedOrderRef()">📋 Copy Ref</button>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--sf-muted); line-height: 1.6;">
+            <div>✉️ Dispatched order receipt to: <strong id="confirmedCustomerEmail" style="color: var(--sf-text);"></strong></div>
+            <div>🚚 Status: <span class="badge badge-success" style="margin-left: 4px;">Fulfillment Initialized</span></div>
+          </div>
+
+          <!-- Workflow Timeline Tracker -->
+          <div class="order-timeline">
+            <div class="timeline-step completed">
+              <div class="timeline-dot">✓</div>
+              <div class="timeline-label">Placed</div>
+            </div>
+            <div class="timeline-step current">
+              <div class="timeline-dot">2</div>
+              <div class="timeline-label">Packed</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-dot">3</div>
+              <div class="timeline-label">Shipped</div>
+            </div>
+            <div class="timeline-step">
+              <div class="timeline-dot">4</div>
+              <div class="timeline-label">Delivered</div>
+            </div>
+          </div>
         </div>
 
-        <button class="btn btn-primary" onclick="closeCheckoutModal(true)">Continue Shopping</button>
+        <!-- Success Actions: WhatsApp Receipt, Print, Continue -->
+        <div class="flex items-center justify-center gap-3" style="flex-wrap: wrap;">
+          <button type="button" class="btn btn-secondary" onclick="shareCustomerOrderWhatsApp()">
+            💬 Share Receipt on WhatsApp
+          </button>
+          <button type="button" class="btn btn-outline" onclick="window.print()">
+            🖨️ Print Receipt
+          </button>
+          <button type="button" class="btn btn-primary" onclick="closeCheckoutModal(true)">
+            🛍️ Continue Shopping
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 

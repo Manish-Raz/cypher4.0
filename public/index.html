@@ -352,12 +352,42 @@
         </div>
       </div>
 
-      <!-- Step 1: Store Details -->
+      <!-- Step 1: Store Details (Matches Hand-Drawn Spec) -->
       <div class="step-pane active" id="stepPane1">
-        <h2 class="step-title">Screen 1: Store Identity & Contact Parameters</h2>
-        <p class="step-subtitle">Specify your brand name and coordinates. A unique multi-tenant URL slug is generated automatically.</p>
+        <h2 class="step-title">Screen 1: Store Details</h2>
+        <p class="step-subtitle">Upload your brand logo and configure essential store coordinates.</p>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <!-- Top Box: Logo Upload & Live Preview (Matches Wireframe) -->
+        <div class="wireframe-logo-card">
+          <div class="logo-preview-box" id="logoPreviewBox" onclick="document.getElementById('logoFileInput').click()" title="Click to upload brand logo file">
+            <img id="logoPreviewImg" src="" alt="Brand Logo Preview" style="display: none;">
+            <div id="logoPlaceholder" class="logo-placeholder">
+              <span style="font-size: 2.2rem;">🖼️</span>
+              <span style="font-weight: 700; font-size: 0.95rem; margin-top: 4px;">Logo</span>
+              <span class="text-muted" style="font-size: 0.75rem;">Click to Upload</span>
+            </div>
+          </div>
+          <div class="logo-controls-col">
+            <div class="flex items-center gap-3">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('logoFileInput').click()">
+                📁 Upload Logo File
+              </button>
+              <input type="file" id="logoFileInput" accept="image/*" style="display: none;" onchange="handleLogoFileUpload(event)">
+              <span class="text-muted" style="font-size: 0.85rem;">or enter image URL below:</span>
+            </div>
+            <input type="url" id="logoUrlInput" class="form-control" placeholder="https://example.com/logo.png" oninput="updateLogoPreviewFromInput(this.value)">
+            <div class="flex items-center gap-2" style="flex-wrap: wrap;">
+              <span class="form-hint">Quick Logo Presets:</span>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetLogo('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80')">Streetwear</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetLogo('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80')">Artisan Bake</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetLogo('https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=200&q=80')">Minimal Watch</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetLogo('')">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Form Fields (Row 1: Store Name & Category; Row 2: Email & Phone; Row 3: Address) -->
+        <div class="screen1-grid">
           <div class="form-group">
             <label class="form-label" for="storeNameInput">Store Name <span class="req">*</span></label>
             <input type="text" id="storeNameInput" class="form-control" placeholder="e.g. Apex Precision Atelier" required>
@@ -365,7 +395,7 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="businessTypeSelect">Business Category</label>
+            <label class="form-label" for="businessTypeSelect">Business Category <span class="req">*</span></label>
             <select id="businessTypeSelect" class="form-select">
               <option value="Fashion & Apparel">Fashion & Apparel</option>
               <option value="Food & Gourmet Bakery">Food & Gourmet Bakery</option>
@@ -386,26 +416,65 @@
             <input type="tel" id="contactPhoneInput" class="form-control" placeholder="+1 (555) 234-5678" value="+1 (555) 890-1234">
           </div>
 
-          <div class="form-group" style="grid-column: 1 / -1;">
+          <div class="form-group full-col">
             <label class="form-label" for="storeAddressInput">Headquarters / Dispatch Address</label>
             <input type="text" id="storeAddressInput" class="form-control" placeholder="Suite 400, 500 Broadway, New York, NY">
           </div>
+        </div>
 
-          <div class="form-group" style="grid-column: 1 / -1;">
-            <label class="form-label" for="logoUrlInput">Logo Image URL (Optional)</label>
-            <input type="url" id="logoUrlInput" class="form-control" placeholder="https://images.unsplash.com/... or leave blank for typographic logo">
-            <div class="flex items-center gap-2" style="margin-top: 8px;">
-              <span class="form-hint">Quick Logo Presets:</span>
-              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=200&q=80')">Fashion Monogram</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80')">Artisan Bake</button>
-              <button type="button" class="btn btn-outline btn-sm" onclick="setPresetLogo('')">Clear</button>
+        <!-- Store Hero Banner Option (For Owner) -->
+        <div class="wireframe-banner-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="form-label" style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0;">Store Hero Banner Option</label>
+            <span class="badge badge-primary">Spatial AI Live Preview</span>
+          </div>
+
+          <div class="banner-preview-box" id="bannerPreviewBox" onclick="document.getElementById('bannerFileInput').click()" title="Click to upload banner image">
+            <div class="banner-preview-img-overlay"></div>
+            <img id="bannerPreviewImg" src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" alt="Hero Banner Preview">
+            <div class="banner-preview-content">
+              <span class="banner-badge">HERO BANNER PREVIEW</span>
+              <div class="banner-preview-headline" id="bannerPreviewHeadline">Welcome to our official store</div>
+              <div class="banner-preview-sub" id="bannerPreviewSub">Curated premium items crafted for discerning tastes.</div>
+            </div>
+          </div>
+
+          <div class="banner-controls-col">
+            <div class="flex items-center gap-3">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('bannerFileInput').click()">
+                📁 Upload Banner Image
+              </button>
+              <input type="file" id="bannerFileInput" accept="image/*" style="display: none;" onchange="handleBannerFileUpload(event)">
+              <span class="text-muted" style="font-size: 0.85rem;">or enter banner image URL below:</span>
+            </div>
+
+            <input type="url" id="bannerImageUrlInput" class="form-control" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80" oninput="updateBannerPreviewFromInput(this.value)">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="bannerHeadlineInput" style="font-size: 0.82rem;">Banner Headline</label>
+                <input type="text" id="bannerHeadlineInput" class="form-control" value="Welcome to our official store" oninput="updateBannerTextPreview()">
+              </div>
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="bannerSubtitleInput" style="font-size: 0.82rem;">Banner Subtitle</label>
+                <input type="text" id="bannerSubtitleInput" class="form-control" value="Curated premium items crafted for discerning tastes." oninput="updateBannerTextPreview()">
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2" style="flex-wrap: wrap; margin-top: 4px;">
+              <span class="form-hint">Quick Banner Presets:</span>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetBanner('https://images.unsplash.com/photo-1509967419530-da38b4704bc6?auto=format&fit=crop&w=1200&q=80', 'Streetwear Dark')">Streetwear Dark</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetBanner('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1200&q=80', 'Artisan Bakery')">Artisan Bake</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetBanner('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80', 'Luxury Silk')">Luxury Silk</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetBanner('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80', 'Cyber Tech')">Cyber Tech</button>
+              <button type="button" class="btn btn-outline btn-xs" onclick="setPresetBanner('https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1200&q=80', 'Modern Minimal')">Modern Minimal</button>
             </div>
           </div>
         </div>
 
         <div class="wizard-actions">
           <a href="/design-system" class="btn btn-outline">Explore Design Tokens</a>
-          <button type="button" class="btn btn-primary" onclick="proceedToStep(2)">Next: Categories & Catalog →</button>
+          <button type="button" class="btn btn-primary btn-lg" onclick="proceedToStep(2)">Next: Categories & Catalog →</button>
         </div>
       </div>
 
@@ -553,18 +622,15 @@
           </div>
         </div>
 
-        <!-- Hero Customizer Mini Controls -->
+        <!-- Hero Customizer Summary Card -->
         <div class="card" style="margin-top: 24px; background: var(--surface-elevated);">
-          <h4 style="font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Storefront Hero Banner Parameters:</h4>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label" for="bannerHeadlineInput">Banner Headline</label>
-              <input type="text" id="bannerHeadlineInput" class="form-control" value="Welcome to our official store">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="bannerSubtitleInput">Banner Subtitle</label>
-              <input type="text" id="bannerSubtitleInput" class="form-control" value="Curated premium items crafted for discerning tastes.">
-            </div>
+          <div class="flex items-center justify-between" style="margin-bottom: 8px;">
+            <h4 style="font-size: 1rem; font-weight: 700; margin: 0;">Storefront Hero Banner Status:</h4>
+            <span class="badge badge-primary">Configured in Step 1</span>
+          </div>
+          <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 12px;">Your custom banner image, headline, and subtitle configured during Store Details will be published live to your storefront.</p>
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <button type="button" class="btn btn-outline btn-sm" onclick="proceedToStep(1)">✏️ Edit Banner in Step 1</button>
           </div>
         </div>
 
@@ -579,23 +645,51 @@
         <div class="published-success">
           <div style="font-size: 3.5rem; margin-bottom: 12px; animation: bounce 1s infinite alternate;">🎉</div>
           <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--text);">Your Online Store is Live!</h2>
-          <p class="text-muted" style="max-width: 580px; margin: 8px auto 24px; font-size: 1rem;">
+          <p class="text-muted" style="max-width: 580px; margin: 8px auto 20px; font-size: 1rem;">
             Your store document has been committed to MongoDB with isolated multi-tenant records, sample inventory, and responsive storefront themes.
           </p>
 
-          <!-- Live URL Box -->
-          <div class="live-url-box">
-            <span id="createdStoreUrlText" style="word-break: break-all;">http://localhost:5000/store/your-store</span>
-            <button type="button" class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy</button>
+          <!-- Store QR & Share Card -->
+          <div class="store-share-card">
+            <div class="qr-code-box">
+              <div id="storeQrCodeDisplay" class="qr-canvas-holder"></div>
+              <div class="qr-scan-hint">SCAN TO VISIT STORE</div>
+            </div>
+            <div class="share-details-box">
+              <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--primary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; font-weight: 700;">Instant Customer Access</div>
+              <h3 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 8px;">Share Link & Download Store QR Code</h3>
+              <p class="text-muted" style="font-size: 0.88rem; margin-bottom: 14px; line-height: 1.5;">
+                Share your live URL directly or use the high-resolution QR code for product packaging, flyers, social media, and customer support.
+              </p>
+
+              <!-- Live URL Box -->
+              <div class="live-url-box" style="margin-bottom: 14px;">
+                <span id="createdStoreUrlText" style="word-break: break-all;">http://localhost:5000/store/your-store</span>
+                <button type="button" class="btn btn-outline btn-sm" onclick="copyStoreUrl()">📋 Copy</button>
+              </div>
+
+              <!-- Share & Download Actions -->
+              <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="downloadStoreQr('storeQrCodeDisplay', document.getElementById('storeNameInput').value)">
+                  📥 Download QR Code (PNG)
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="shareStoreToWhatsApp()">
+                  💬 Share on WhatsApp
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="shareStoreNative()">
+                  🔗 Share Link
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap;">
+          <div class="flex items-center justify-center gap-4" style="flex-wrap: wrap; margin-top: 24px;">
             <a href="#" id="viewStoreLink" class="btn btn-primary btn-lg" target="_blank">🌐 Open Live Storefront →</a>
             <a href="#" id="openAdminLink" class="btn btn-secondary btn-lg">⚙️ Open Merchant Dashboard</a>
             <button type="button" class="btn btn-outline btn-lg" onclick="location.reload()">+ Synthesize Another Store</button>
           </div>
 
-          <div style="margin-top: 40px; padding: 22px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: left; max-width: 680px; margin-left: auto; margin-right: auto;">
+          <div style="margin-top: 36px; padding: 22px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); text-align: left; max-width: 760px; margin-left: auto; margin-right: auto;">
             <div style="font-weight: 700; margin-bottom: 8px; color: var(--text);">💡 Live Operations Ready:</div>
             <ul style="padding-left: 20px; font-size: 0.9rem; color: var(--text-muted); line-height: 1.7;">
               <li><strong>Live Customer Storefront:</strong> Cart drawer, filter tabs, product variants, and complete checkout.</li>
@@ -650,6 +744,7 @@
 
   <!-- Scripts -->
   <script src="/js/api.js"></script>
+  <script src="/js/qrcode.min.js"></script>
   <script src="/js/onboarding.js"></script>
 
   <!-- Spatial Particle Canvas & AI Prompt Synthesizer Script -->

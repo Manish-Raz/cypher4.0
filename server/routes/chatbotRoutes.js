@@ -86,7 +86,7 @@ router.post('/query', async (req, res) => {
           SKU: p.sku || 'N/A',
           Category: p.category,
           'Remaining Stock': p.stock,
-          Price: `$${p.price.toFixed(2)}`
+          Price: `₹${p.price.toFixed(2)}`
         })),
         queryType: 'low_stock'
       });
@@ -124,14 +124,14 @@ router.post('/query', async (req, res) => {
       return res.json({
         success: true,
         answer: `Here is the financial summary for **${store.name}**:\n` +
-          `- **Lifetime Revenue:** $${totalRevenue.toFixed(2)} across ${nonCancelled.length} fulfilled/active orders.\n` +
-          `- **This Past Week:** $${thisWeekRevenue.toFixed(2)} (${thisWeekCount} orders).\n` +
-          `- **Previous Week:** $${lastWeekRevenue.toFixed(2)} (${lastWeekCount} orders).\n` +
-          `- **Average Order Value (AOV):** $${avgOrder.toFixed(2)}.`,
+          `- **Lifetime Revenue:** ₹${totalRevenue.toFixed(2)} across ${nonCancelled.length} fulfilled/active orders.\n` +
+          `- **This Past Week:** ₹${thisWeekRevenue.toFixed(2)} (${thisWeekCount} orders).\n` +
+          `- **Previous Week:** ₹${lastWeekRevenue.toFixed(2)} (${lastWeekCount} orders).\n` +
+          `- **Average Order Value (AOV):** ₹${avgOrder.toFixed(2)}.`,
         dataEvidence: [
-          { Period: 'Past 7 Days (This Week)', Revenue: `$${thisWeekRevenue.toFixed(2)}`, Orders: thisWeekCount },
-          { Period: 'Prior 7 Days (Last Week)', Revenue: `$${lastWeekRevenue.toFixed(2)}`, Orders: lastWeekCount },
-          { Period: 'All-Time Total', Revenue: `$${totalRevenue.toFixed(2)}`, Orders: nonCancelled.length }
+          { Period: 'Past 7 Days (This Week)', Revenue: `₹${thisWeekRevenue.toFixed(2)}`, Orders: thisWeekCount },
+          { Period: 'Prior 7 Days (Last Week)', Revenue: `₹${lastWeekRevenue.toFixed(2)}`, Orders: lastWeekCount },
+          { Period: 'All-Time Total', Revenue: `₹${totalRevenue.toFixed(2)}`, Orders: nonCancelled.length }
         ],
         queryType: 'revenue'
       });
@@ -190,7 +190,7 @@ router.post('/query', async (req, res) => {
         });
       }
 
-      const listText = topCustomers.map((c, i) => `${i + 1}. **${c.name}** (${c.email}) — ${c.ordersCount} order${c.ordersCount > 1 ? 's' : ''}, spent $${c.totalSpent.toFixed(2)}`).join('\n');
+      const listText = topCustomers.map((c, i) => `${i + 1}. **${c.name}** (${c.email}) — ${c.ordersCount} order${c.ordersCount > 1 ? 's' : ''}, spent ₹${c.totalSpent.toFixed(2)}`).join('\n');
 
       return res.json({
         success: true,
@@ -199,7 +199,7 @@ router.post('/query', async (req, res) => {
           Customer: c.name,
           Email: c.email,
           Orders: c.ordersCount,
-          'Total Spend': `$${c.totalSpent.toFixed(2)}`
+          'Total Spend': `₹${c.totalSpent.toFixed(2)}`
         })),
         queryType: 'customers'
       });
