@@ -222,16 +222,16 @@
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
 
-      // Adjust master rig position on smaller screens
+      // Adjust master rig position to orbit behind the right-column 3D stage
       if (width < 768) {
-        masterRig.position.set(0, -0.6, -1.5);
-        masterRig.scale.setScalar(0.72);
+        masterRig.position.set(0, 0.4, -1.5);
+        masterRig.scale.setScalar(0.68);
       } else if (width < 1100) {
-        masterRig.position.set(0.9, 0, -0.5);
+        masterRig.position.set(1.3, 0.1, -0.5);
         masterRig.scale.setScalar(0.85);
       } else {
-        masterRig.position.set(1.4, 0.15, 0);
-        masterRig.scale.setScalar(1.0);
+        masterRig.position.set(2.35, 0.1, 0);
+        masterRig.scale.setScalar(1.08);
       }
     }
 

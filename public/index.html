@@ -12,88 +12,260 @@
   <!-- =========================================================================
        Platform Navbar
        ========================================================================= -->
+  <!-- =========================================================================
+       Platform Navbar
+       ========================================================================= -->
   <header class="wizard-topbar">
-    <div class="flex items-center justify-between" style="max-width: 1200px; margin: 0 auto; width: 100%;">
+    <div class="topbar-inner-wrap">
       <div class="wizard-brand">
-        <span style="color: var(--primary); font-size: 1.4rem;">✦</span>
-        <span>LaunchX</span>
-        <span class="badge badge-primary" style="margin-left: 4px;">Spatial AI</span>
+        <span class="brand-sparkle">✦</span>
+        <span class="brand-name">LaunchX</span>
+        <span class="badge-spatial-ai">Spatial AI</span>
       </div>
       
-      <div class="flex items-center gap-3" style="flex-wrap: wrap;">
-        <a href="#solutions" class="btn btn-outline btn-sm" style="border: none;">Solutions</a>
-        <a href="#showcase" class="btn btn-outline btn-sm" style="border: none;">Past Work</a>
-        <a href="#appreciation" class="btn btn-outline btn-sm" style="border: none;">Appreciation</a>
-        <a href="/editor" class="btn btn-outline btn-sm">🎨 Visual Studio Editor</a>
-        <a href="/admin?store=urban-threads" class="btn btn-secondary btn-sm">⚙️ Dashboard</a>
-        <a href="/login" class="btn btn-outline btn-sm">🔑 Login</a>
-        <button class="btn btn-secondary btn-sm" onclick="togglePlatformTheme()" id="themeNavBtn">☀️ Light</button>
-        <a href="#build-your-store" class="btn btn-primary btn-sm">Build Your Store →</a>
+      <div class="topbar-nav-links">
+        <a href="#solutions" class="topbar-link">Solutions</a>
+        <a href="#showcase" class="topbar-link">Past Work</a>
+        <a href="#appreciation" class="topbar-link">Appreciation</a>
+      </div>
+
+      <div class="topbar-right-actions">
+        <a href="/editor" class="topbar-pill-btn">🎨 Visual Studio Editor</a>
+        <a href="/admin?store=urban-threads" class="topbar-pill-btn">⚙️ Dashboard</a>
+        <a href="/login" class="topbar-pill-btn">🔑 Login</a>
+        <button class="topbar-pill-btn" onclick="togglePlatformTheme()" id="themeNavBtn">☀️ Light</button>
+        <a href="#build-your-store" class="topbar-cta-btn">Build Your Store →</a>
       </div>
     </div>
   </header>
 
   <!-- =========================================================================
-       Spatial Hero Section with Restrained 3D Particle Canvas
+       Spatial Hero Section — 2-Column Split Layout
+       Left: Copy & AI prompt Synthesizer
+       Right: 3D Holographic Storefront & Pedestal Stage
        ========================================================================= -->
   <section class="landing-hero">
     <!-- Abstract Green 3D Ambient WebGL Scene -->
     <div id="spatialHeroCanvasContainer" aria-hidden="true"></div>
     <div class="hero-fade-overlay" aria-hidden="true"></div>
 
-    <div class="hero-inner-content">
-      <div class="hero-pill-badge">
-        <span>⚡</span> LaunchX Spatial Architecture • v2.0 Production Ready
+    <div class="hero-split-grid">
+      <!-- LEFT COLUMN -->
+      <div class="hero-left-content">
+        <div class="hero-pill-badge">
+          <span class="badge-bolt">⚡</span>
+          <span>LaunchX Spatial Architecture &bull; v2.0</span>
+        </div>
+        
+        <!-- Primary Required Headlines with Exact Colors and Doodle -->
+        <h1 class="hero-split-title">
+          <span class="title-line-1">Build your store</span>
+          <span class="title-line-2">
+            in <span class="txt-mint">few</span> <span class="txt-cyan">minutes</span>
+          </span>
+          <span class="hero-doodle-wrap" aria-hidden="true">
+            <svg class="hero-underline-doodle" viewBox="0 0 260 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 14C55 5 145 19 255 7M35 18C100 10 185 17 248 12" stroke="#34d399" stroke-width="3.5" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </h1>
+        
+        <!-- Primary Lead Subtitle with Pure White font color and highlighted AI Copilot -->
+        <p class="hero-lead-text">
+          Create a production-ready multi-tenant e-commerce store with instant live routing, modern themes, automatic inventory ingestion, and an <span class="txt-copilot-pill">AI Copilot</span> powered by real MongoDB transactions.
+        </p>
+
+        <!-- Interactive Spatial AI Prompt Synthesizer -->
+        <div class="ai-prompt-box-wrap">
+          <div class="ai-prompt-box">
+            <span class="prompt-sparkle">✨</span>
+            <input type="text" id="aiPromptInput" class="ai-prompt-input" placeholder="Describe your store (e.g. 'A high-end mechanical keyboard store')...">
+            <button type="button" class="btn-synthesize-action" onclick="synthesizeFromPrompt()">
+              Synthesize Store ⚡
+            </button>
+          </div>
+
+          <!-- Prompt suggestions presets -->
+          <div class="prompt-suggestions">
+            <button type="button" class="prompt-pill" onclick="fillPromptPreset('Cyberpunk Techwear Atelier', 'Fashion & Apparel', 'cyber')">⚡ Cyberpunk Techwear Atelier</button>
+            <button type="button" class="prompt-pill" onclick="fillPromptPreset('Artisan Sourdough & Viennoiserie Bakery', 'Food & Gourmet Bakery', 'organic')">🥐 Artisan Sourdough Bakery</button>
+            <button type="button" class="prompt-pill" onclick="fillPromptPreset('Nordic Minimalist Ceramics & Living', 'Home & Lifestyle', 'luxury')">🏺 Nordic Minimal Ceramics</button>
+            <button type="button" class="prompt-pill" onclick="fillPromptPreset('Acoustic Audiophile & Mechanical Studio', 'Electronics & Tech', 'modern')">🎧 Audiophile Audio Studio</button>
+          </div>
+        </div>
+
+        <div class="hero-actions-row">
+          <a href="#build-your-store" class="btn btn-primary btn-md">
+            ⚡ Launch Interactive Builder Now ↓
+          </a>
+          <a href="#showcase" class="btn btn-secondary btn-md">
+            👀 Inspect Live Stores
+          </a>
+        </div>
       </div>
-      
-      <!-- Primary Required Headlines -->
-      <h1 class="hero-main-title">Build your store</h1>
-      <div class="hero-sub-title">in few minutes</div>
-      
-      <p class="hero-lead-text">
-        Synthesize a production-grade multi-tenant e-commerce store with instant live routing, selective glassmorphic themes, automatic inventory ingestion, and an AI Copilot grounded in real MongoDB transactions.
-      </p>
 
-      <!-- Interactive Spatial AI Prompt Synthesizer -->
-      <div class="ai-prompt-box-wrap">
-        <div class="ai-prompt-box">
-          <span style="font-size: 1.25rem;">✨</span>
-          <input type="text" id="aiPromptInput" class="ai-prompt-input" placeholder="Describe your store (e.g. 'A high-end mechanical keyboard studio with dark neon accents')...">
-          <button type="button" class="btn btn-primary btn-sm" onclick="synthesizeFromPrompt()">
-            Synthesize Store ⚡
-          </button>
-        </div>
+      <!-- RIGHT COLUMN: 3D Holographic Storefront & Pedestal Stage -->
+      <div class="hero-right-stage" aria-hidden="false">
+        <div class="stage-rig-container">
+          
+          <!-- Satellite Badge 1: Inventory Box (Top-Left) -->
+          <div class="satellite-tile sat-tl" title="Smart Catalog Ingestion">
+            <div class="sat-inner">
+              <svg viewBox="0 0 24 24" class="sat-svg" fill="none" stroke="#34d399" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+            </div>
+          </div>
 
-        <!-- Prompt suggestions -->
-        <div class="prompt-suggestions">
-          <span class="prompt-pill" onclick="fillPromptPreset('Cyberpunk Techwear Atelier', 'Fashion & Apparel', 'cyber')">⚡ Cyberpunk Techwear Atelier</span>
-          <span class="prompt-pill" onclick="fillPromptPreset('Artisan Sourdough & Viennoiserie Bakery', 'Food & Gourmet Bakery', 'organic')">🥐 Artisan Sourdough Bakery</span>
-          <span class="prompt-pill" onclick="fillPromptPreset('Nordic Minimalist Ceramics & Living', 'Home & Lifestyle', 'luxury')">🏺 Nordic Minimal Ceramics</span>
-          <span class="prompt-pill" onclick="fillPromptPreset('Acoustic Audiophile & Mechanical Studio', 'Electronics & Tech', 'modern')">🎧 Audiophile Audio Studio</span>
-        </div>
-      </div>
+          <!-- Satellite Badge 2: Analytics Chart (Top-Right) -->
+          <div class="satellite-tile sat-tr" title="Real-Time Analytics">
+            <div class="sat-inner">
+              <svg viewBox="0 0 24 24" class="sat-svg" fill="none" stroke="#34d399" stroke-width="2.4">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+          </div>
 
-      <div class="flex items-center justify-center gap-4" style="margin-bottom: 28px; flex-wrap: wrap;">
-        <a href="#build-your-store" class="btn btn-primary btn-lg" style="box-shadow: var(--shadow-glow);">
-          ⚡ Launch Interactive Builder Now ↓
-        </a>
-        <a href="#showcase" class="btn btn-secondary btn-lg">
-          👀 Inspect Live Deployed Stores
-        </a>
-      </div>
+          <!-- Satellite Badge 3: Delivery Truck (Mid-Right) -->
+          <div class="satellite-tile sat-mr" title="Instant Fulfillment">
+            <div class="sat-inner">
+              <svg viewBox="0 0 24 24" class="sat-svg" fill="none" stroke="#34d399" stroke-width="2">
+                <rect x="1" y="3" width="15" height="13"/>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+                <circle cx="5.5" cy="18.5" r="2.5"/>
+                <circle cx="18.5" cy="18.5" r="2.5"/>
+              </svg>
+            </div>
+          </div>
 
-      <div class="hero-perks-row">
-        <div class="hero-perk-item">
-          <span>⏱️</span> <span>Setup in &lt; 60 seconds</span>
-        </div>
-        <div class="hero-perk-item">
-          <span>🍃</span> <span>Isolated MongoDB Multi-Tenancy</span>
-        </div>
-        <div class="hero-perk-item">
-          <span>🛒</span> <span>Working Cart & Live Checkout</span>
-        </div>
-        <div class="hero-perk-item">
-          <span>🤖</span> <span>Zero-Hallucination AI Copilot</span>
+          <!-- Satellite Badge 4: Customer Users (Bottom-Right) -->
+          <div class="satellite-tile sat-br" title="Multi-Tenant Customers">
+            <div class="sat-inner">
+              <svg viewBox="0 0 24 24" class="sat-svg" fill="none" stroke="#34d399" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Glowing Connecting Energy Arcs -->
+          <svg class="stage-energy-lines" viewBox="0 0 600 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 50 110 Q 160 210 260 250" stroke="rgba(52, 211, 153, 0.45)" stroke-width="1.8" stroke-dasharray="5 5"/>
+            <path d="M 530 110 Q 430 200 370 240" stroke="rgba(52, 211, 153, 0.45)" stroke-width="1.8" stroke-dasharray="5 5"/>
+            <path d="M 550 270 Q 460 290 390 300" stroke="rgba(52, 211, 153, 0.45)" stroke-width="1.8" stroke-dasharray="5 5"/>
+            <path d="M 520 420 Q 440 380 380 350" stroke="rgba(52, 211, 153, 0.45)" stroke-width="1.8" stroke-dasharray="5 5"/>
+          </svg>
+
+          <!-- 3D Glass Storefront Window Card -->
+          <div class="storefront-card-3d">
+            
+            <!-- Green and White Striped Canopy Awning -->
+            <div class="storefront-canopy">
+              <div class="canopy-roof">
+                <span class="canopy-strip green"></span>
+                <span class="canopy-strip white"></span>
+                <span class="canopy-strip green"></span>
+                <span class="canopy-strip white"></span>
+                <span class="canopy-strip green"></span>
+                <span class="canopy-strip white"></span>
+                <span class="canopy-strip green"></span>
+              </div>
+              <div class="canopy-fringe">
+                <span class="fringe-scallop green"></span>
+                <span class="fringe-scallop white"></span>
+                <span class="fringe-scallop green"></span>
+                <span class="fringe-scallop white"></span>
+                <span class="fringe-scallop green"></span>
+                <span class="fringe-scallop white"></span>
+                <span class="fringe-scallop green"></span>
+              </div>
+            </div>
+
+            <!-- Storefront Header Bar -->
+            <div class="sf-card-header">
+              <div class="sf-card-dots">
+                <span class="dot-red"></span>
+                <span class="dot-yellow"></span>
+                <span class="dot-green"></span>
+              </div>
+              <div class="sf-card-search">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>store.launchx.live/preview</span>
+              </div>
+              <div class="sf-card-icons">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              </div>
+            </div>
+
+            <!-- Storefront Showcase Products (3 Items) -->
+            <div class="sf-card-body">
+              <div class="sf-items-row">
+                
+                <!-- Item 1: Sneaker -->
+                <div class="sf-item-card">
+                  <div class="sf-item-thumb">
+                    <svg viewBox="0 0 100 64" class="thumb-art" fill="none">
+                      <path d="M 12 52 C 22 52 82 52 88 52 C 92 52 94 48 91 44 L 88 42 C 84 42 78 44 68 44 L 18 44 C 14 44 10 47 12 52 Z" fill="#ffffff"/>
+                      <path d="M 14 44 C 18 36 28 26 40 26 C 46 26 52 30 62 30 C 72 30 82 22 87 28 C 91 32 91 40 88 42 L 14 44 Z" fill="#064e3b" stroke="#34d399" stroke-width="2"/>
+                      <path d="M 42 30 L 64 38" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                      <path d="M 48 26 L 70 34" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+                      <circle cx="82" cy="34" r="3" fill="#34d399"/>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Item 2: Streetwear Hoodie -->
+                <div class="sf-item-card">
+                  <div class="sf-item-thumb">
+                    <svg viewBox="0 0 100 64" class="thumb-art" fill="none">
+                      <path d="M 38 18 C 42 12 58 12 62 18 C 66 24 62 26 50 26 C 38 26 34 24 38 18 Z" fill="#334155" stroke="#94a3b8" stroke-width="1.8"/>
+                      <path d="M 34 24 L 18 36 L 24 46 L 30 42 L 30 56 L 70 56 L 70 42 L 76 46 L 82 36 L 66 24 Z" fill="#1e293b" stroke="#cbd5e1" stroke-width="1.8"/>
+                      <rect x="40" y="42" width="20" height="12" rx="2" fill="#0f172a" stroke="#34d399" stroke-width="1.2"/>
+                      <text x="50" y="50" font-size="6" fill="#34d399" text-anchor="middle" font-family="sans-serif" font-weight="bold">LX</text>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Item 3: Luxury Watch -->
+                <div class="sf-item-card">
+                  <div class="sf-item-thumb">
+                    <svg viewBox="0 0 100 64" class="thumb-art" fill="none">
+                      <rect x="44" y="6" width="12" height="52" rx="2" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+                      <circle cx="50" cy="32" r="16" fill="#030712" stroke="#e2e8f0" stroke-width="2.2"/>
+                      <circle cx="50" cy="32" r="13" fill="none" stroke="#34d399" stroke-width="0.8" stroke-dasharray="2 2"/>
+                      <line x1="50" y1="32" x2="50" y2="22" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="50" y1="32" x2="58" y2="34" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/>
+                      <circle cx="50" cy="32" r="2" fill="#38bdf8"/>
+                    </svg>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Floating "Add to Cart" Pill Button -->
+            <button class="floating-add-cart-btn" onclick="location.href='/store/urban-threads'">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              <span>Add to Cart</span>
+            </button>
+
+          </div>
+
+          <!-- Circular Futuristic Glowing Neon Stage Pedestal -->
+          <div class="stage-pedestal">
+            <div class="pedestal-disc-base"></div>
+            <div class="pedestal-ring-neon-outer"></div>
+            <div class="pedestal-ring-neon-inner"></div>
+            <div class="pedestal-core-glow"></div>
+          </div>
+
         </div>
       </div>
     </div>
