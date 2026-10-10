@@ -17,15 +17,15 @@
 
 /* THEME: Cyber Streetwear (LaunchX Spatial Signature) */
 body.theme-cyber {
-  --sf-primary: #8B5CF6;
-  --sf-secondary: #22D3EE;
+  --sf-primary: #7ee8c4;
+  --sf-secondary: #34d399;
   --sf-font: 'Space Grotesk', sans-serif;
-  --sf-radius: 6px;
-  --sf-bg: #0B0D17;
-  --sf-surface: #151827;
-  --sf-text: #F5F6FF;
-  --sf-muted: #A5A9BD;
-  --sf-border: #292D42;
+  --sf-radius: 8px;
+  --sf-bg: #040608;
+  --sf-surface: #0a0d11;
+  --sf-text: #F3F5F7;
+  --sf-muted: #9AA3AC;
+  --sf-border: rgba(255, 255, 255, 0.08);
 }
 
 /* THEME: Luxury Elegance */

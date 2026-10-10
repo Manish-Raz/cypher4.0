@@ -37,8 +37,9 @@
        Spatial Hero Section with Restrained 3D Particle Canvas
        ========================================================================= -->
   <section class="landing-hero">
-    <!-- Restrained 3D Ambient Canvas -->
-    <canvas id="spatialHeroCanvas"></canvas>
+    <!-- Abstract Green 3D Ambient WebGL Scene -->
+    <div id="spatialHeroCanvasContainer" aria-hidden="true"></div>
+    <div class="hero-fade-overlay" aria-hidden="true"></div>
 
     <div class="hero-inner-content">
       <div class="hero-pill-badge">
@@ -815,91 +816,40 @@
       showToast(`✨ Synthesizing parameters for "${text}"...`, 'success');
       document.getElementById('build-your-store').scrollIntoView({ behavior: 'smooth' });
     }
+  </script>
 
-    // Restrained 3D Particle Ambient Canvas
-    (function initSpatialCanvas() {
-      const canvas = document.getElementById('spatialHeroCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = canvas.parentElement.offsetHeight;
+  <!-- Three.js Library & 3D Abstract Hero Scene -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.1/three.min.js"></script>
+  <script src="/js/hero-3d.js"></script>
 
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = canvas.parentElement.offsetHeight;
-      });
-
-      // Particles definition
-      const particles = [];
-      const particleCount = Math.min(50, Math.floor(width / 30));
-
-      for (let i = 0; i < particleCount; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 2 + 1,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: (Math.random() - 0.5) * 0.4,
-          alpha: Math.random() * 0.5 + 0.2,
-          color: Math.random() > 0.5 ? '#8B5CF6' : '#22D3EE'
-        });
+  <!-- Scroll Reveal Observer (Inspired by Reference) -->
+  <script>
+    (function initScrollReveals() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('is-visible'));
+        return;
       }
 
-      let mouse = { x: width / 2, y: height / 2 };
-      window.addEventListener('mousemove', (e) => {
-        mouse.x = e.clientX;
-        mouse.y = e.clientY;
-      });
+      const revealElements = document.querySelectorAll('.reveal-on-scroll, .bento-feature-card, .showcase-card, .testimonial-card, .bento-metric-card');
+      if (!revealElements.length) return;
 
-      function draw() {
-        ctx.clearRect(0, 0, width, height);
-
-        // Draw connections
-        for (let i = 0; i < particles.length; i++) {
-          for (let j = i + 1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-
-            if (dist < 130) {
-              ctx.beginPath();
-              ctx.strokeStyle = particles[i].color;
-              ctx.globalAlpha = (1 - dist / 130) * 0.15;
-              ctx.lineWidth = 1;
-              ctx.moveTo(particles[i].x, particles[i].y);
-              ctx.lineTo(particles[j].x, particles[j].y);
-              ctx.stroke();
-            }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
           }
-        }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
 
-        // Draw particles
-        for (let p of particles) {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.alpha;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = p.color;
-          ctx.fill();
-
-          // Movement with gentle mouse parallax
-          p.x += p.vx + (mouse.x - width / 2) * 0.0003;
-          p.y += p.vy + (mouse.y - height / 2) * 0.0003;
-
-          if (p.x < 0) p.x = width;
-          if (p.x > width) p.x = 0;
-          if (p.y < 0) p.y = height;
-          if (p.y > height) p.y = 0;
-        }
-
-        requestAnimationFrame(draw);
-      }
-
-      // Check prefers-reduced-motion
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        draw();
-      }
+      revealElements.forEach((el, index) => {
+        el.classList.add('reveal-on-scroll');
+        el.style.transitionDelay = `${(index % 4) * 80}ms`;
+        observer.observe(el);
+      });
     })();
   </script>
 </body>

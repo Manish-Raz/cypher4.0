@@ -161,20 +161,167 @@ function switchAdminTab(tabKey) {
   if (nav) nav.classList.add('active');
 }
 
-// 3. Dashboard Overview (Checkpoint 8)
+// 3. Dashboard Overview & Animated Metrics (Checkpoint 8 Dynamic Enhancements)
+let currentDashboardOrders = [];
+let currentChartMode = 'revenue'; // 'revenue' | 'orders'
+
+function animateValue(elem, start, end, duration = 1000, prefix = '', decimals = 0) {
+  if (!elem) return;
+  const numEnd = Number(end) || 0;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || isNaN(numEnd)) {
+    elem.innerText = prefix + (decimals > 0 ? numEnd.toFixed(decimals) : Math.round(numEnd));
+    return;
+  }
+  const startTime = performance.now();
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const ease = 1 - Math.pow(1 - progress, 3);
+    const current = start + (numEnd - start) * ease;
+    elem.innerText = prefix + (decimals > 0 ? current.toFixed(decimals) : Math.round(current));
+    if (progress < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      elem.innerText = prefix + (decimals > 0 ? numEnd.toFixed(decimals) : Math.round(numEnd));
+    }
+  }
+  requestAnimationFrame(tick);
+}
+
+function toggleDashboardChartMode(mode) {
+  currentChartMode = mode;
+  const revBtn = document.getElementById('chartToggleRevenue');
+  const ordBtn = document.getElementById('chartToggleOrders');
+  if (revBtn && ordBtn) {
+    revBtn.classList.toggle('active', mode === 'revenue');
+    ordBtn.classList.toggle('active', mode === 'orders');
+  }
+  renderDashboardChart(currentDashboardOrders, currentChartMode);
+}
+
+function updateHealthMeters(stats, orders) {
+  const totalOrders = stats.totalOrders || 0;
+  const fulfilledOrders = (orders || []).filter(o => o.status === 'shipped' || o.status === 'delivered').length;
+  const fulfillmentPct = totalOrders > 0 ? Math.round((fulfilledOrders / totalOrders) * 100) : 100;
+
+  const totalProducts = stats.totalProducts || 0;
+  const lowStockCount = stats.lowStockCount || 0;
+  const inStockPct = totalProducts > 0 ? Math.max(0, Math.round(((totalProducts - lowStockCount) / totalProducts) * 100)) : 100;
+
+  const aovTarget = 1500;
+  const aovPct = Math.min(100, Math.round(((stats.averageOrderValue || 0) / aovTarget) * 100));
+
+  const fTxt = document.getElementById('healthFulfillmentTxt');
+  const fBar = document.getElementById('healthFulfillmentBar');
+  if (fTxt) fTxt.innerText = `${fulfillmentPct}%`;
+  if (fBar) fBar.style.width = `${fulfillmentPct}%`;
+
+  const sTxt = document.getElementById('healthStockTxt');
+  const sBar = document.getElementById('healthStockBar');
+  if (sTxt) sTxt.innerText = `${inStockPct}%`;
+  if (sBar) {
+    sBar.style.width = `${inStockPct}%`;
+    sBar.style.background = inStockPct < 60 
+      ? 'linear-gradient(90deg, #f59e0b 0%, #ef4444 100%)' 
+      : 'linear-gradient(90deg, #34d399 0%, #7ee8c4 100%)';
+  }
+
+  const aTxt = document.getElementById('healthAovTxt');
+  const aBar = document.getElementById('healthAovBar');
+  if (aTxt) aTxt.innerText = `${aovPct}%`;
+  if (aBar) aBar.style.width = `${aovPct}%`;
+}
+
+function renderDashboardChart(orders, mode = 'revenue') {
+  const container = document.getElementById('dashboardChartWrapper');
+  if (!container) return;
+
+  if (!orders || orders.length === 0) {
+    container.innerHTML = `
+      <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem; gap: 8px;">
+        <span style="font-size: 1.6rem;">📊</span>
+        <span>Awaiting orders. Place an order on the storefront to generate live trajectory metrics.</span>
+      </div>
+    `;
+    return;
+  }
+
+  const sorted = [...orders].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  const dataPoints = sorted.map((o, idx) => ({
+    label: new Date(o.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) || `Order #${o.orderNumber}`,
+    val: mode === 'revenue' ? (o.total || 0) : 1
+  }));
+
+  let points = dataPoints;
+  if (points.length === 1) {
+    points = [
+      { label: 'Store Launch', val: 0 },
+      { label: points[0].label, val: points[0].val }
+    ];
+  }
+
+  const maxVal = Math.max(...points.map(p => p.val), 10);
+  const width = container.clientWidth || 550;
+  const height = 200;
+  const paddingX = 35;
+  const paddingY = 25;
+  const plotW = Math.max(100, width - paddingX * 2);
+  const plotH = Math.max(50, height - paddingY * 2);
+
+  const coords = points.map((p, i) => {
+    const x = paddingX + (i / Math.max(1, points.length - 1)) * plotW;
+    const y = height - paddingY - (p.val / maxVal) * plotH;
+    return { x, y, ...p };
+  });
+
+  let pathD = `M ${coords[0].x} ${coords[0].y}`;
+  for (let i = 0; i < coords.length - 1; i++) {
+    const p0 = coords[i];
+    const p1 = coords[i + 1];
+    const cpX1 = p0.x + (p1.x - p0.x) / 2;
+    const cpY1 = p0.y;
+    const cpX2 = p0.x + (p1.x - p0.x) / 2;
+    const cpY2 = p1.y;
+    pathD += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p1.x} ${p1.y}`;
+  }
+
+  const areaD = `${pathD} L ${coords[coords.length - 1].x} ${height - paddingY} L ${coords[0].x} ${height - paddingY} Z`;
+
+  container.innerHTML = `
+    <svg class="chart-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="mintChartGradient" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7ee8c4" stop-opacity="0.38"/>
+          <stop offset="100%" stop-color="#7ee8c4" stop-opacity="0.0"/>
+        </linearGradient>
+      </defs>
+      <line x1="${paddingX}" y1="${height - paddingY}" x2="${width - paddingX}" y2="${height - paddingY}" stroke="rgba(255,255,255,0.08)" stroke-width="1" />
+      <line x1="${paddingX}" y1="${height / 2}" x2="${width - paddingX}" y2="${height / 2}" stroke="rgba(255,255,255,0.04)" stroke-dasharray="4,4" stroke-width="1" />
+      <path d="${areaD}" class="chart-area-path" />
+      <path d="${pathD}" class="chart-line-path" />
+      ${coords.map(c => `
+        <circle cx="${c.x}" cy="${c.y}" r="4.5" class="chart-dot">
+          <title>${c.label}: ${mode === 'revenue' ? '₹' + c.val.toFixed(2) : c.val + ' order'}</title>
+        </circle>
+      `).join('')}
+    </svg>
+  `;
+}
+
 async function refreshDashboard() {
   try {
     const res = await API.getStats(currentSlug);
     const stats = res.stats;
 
-    document.getElementById('metricRevenue').innerText = `₹${stats.totalRevenue.toFixed(2)}`;
-    document.getElementById('metricOrders').innerText = stats.totalOrders;
+    // Smooth Count-Up Animations for Metric Figures
+    animateValue(document.getElementById('metricRevenue'), 0, stats.totalRevenue, 1100, '₹', 2);
+    animateValue(document.getElementById('metricOrders'), 0, stats.totalOrders, 900, '', 0);
     document.getElementById('metricActiveOrders').innerText = `${stats.activeOrders} pending fulfillment`;
-    document.getElementById('metricAov').innerText = `₹${stats.averageOrderValue.toFixed(2)}`;
-    document.getElementById('metricProducts').innerText = stats.totalProducts;
+    animateValue(document.getElementById('metricAov'), 0, stats.averageOrderValue, 1000, '₹', 2);
+    animateValue(document.getElementById('metricProducts'), 0, stats.totalProducts, 800, '', 0);
     document.getElementById('metricLowStockCount').innerText = `${stats.lowStockCount} low in stock`;
 
-    // Low stock warning banner
+    // Low stock warning banner with glowing accent
     const alertBanner = document.getElementById('lowStockAlertBanner');
     if (stats.lowStockCount > 0) {
       alertBanner.style.display = 'flex';
@@ -183,10 +330,15 @@ async function refreshDashboard() {
       alertBanner.style.display = 'none';
     }
 
-    // Recent orders
+    // Recent orders and dynamic telemetry chart
     const ordersRes = await API.getOrders(currentSlug, 'all');
-    const recent = (ordersRes.orders || []).slice(0, 5);
+    currentDashboardOrders = ordersRes.orders || [];
+    const recent = currentDashboardOrders.slice(0, 5);
     renderRecentOrders(recent);
+
+    // Update real-data trajectory chart & operational health meters
+    renderDashboardChart(currentDashboardOrders, currentChartMode);
+    updateHealthMeters(stats, currentDashboardOrders);
 
   } catch (err) {
     console.error('Stats error:', err);

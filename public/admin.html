@@ -159,7 +159,74 @@
               <span>🛍️</span>
             </div>
             <div class="metric-value" id="metricProducts">0</div>
-            <div class="metric-sub" id="metricLowStockCount">0 low in stock</div>
+          </div>
+        </div>
+
+        <!-- Analytics & Operational Health Section (Checkpoint 8 Dynamic Enhancements) -->
+        <div class="analytics-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-title">Revenue & Orders Trajectory</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Real-time transaction flow from MongoDB</div>
+              </div>
+              <div class="chart-pills">
+                <button type="button" class="chart-pill active" id="chartToggleRevenue" onclick="toggleDashboardChartMode('revenue')">Revenue (₹)</button>
+                <button type="button" class="chart-pill" id="chartToggleOrders" onclick="toggleDashboardChartMode('orders')">Orders Count</button>
+              </div>
+            </div>
+            <div class="chart-container-box" id="dashboardChartWrapper">
+              <!-- SVG chart injected dynamically from real store orders -->
+            </div>
+          </div>
+
+          <div class="health-meters-card">
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                <h4 style="font-size: 1.05rem; font-weight: 700; color: var(--text);">Operational Health</h4>
+                <span class="badge badge-primary" style="font-size: 0.75rem;">Live Telemetry</span>
+              </div>
+
+              <!-- Meter 1: Fulfillment Velocity -->
+              <div class="meter-item">
+                <div class="meter-header">
+                  <span class="meter-label"><span>🚚</span> Order Fulfillment Rate</span>
+                  <span class="meter-value-txt" id="healthFulfillmentTxt">0%</span>
+                </div>
+                <div class="meter-bar-track">
+                  <div class="meter-bar-fill" id="healthFulfillmentBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <!-- Meter 2: Stock Health -->
+              <div class="meter-item">
+                <div class="meter-header">
+                  <span class="meter-label"><span>📦</span> In-Stock Catalog Health</span>
+                  <span class="meter-value-txt" id="healthStockTxt">100%</span>
+                </div>
+                <div class="meter-bar-track">
+                  <div class="meter-bar-fill" id="healthStockBar" style="width: 100%;"></div>
+                </div>
+              </div>
+
+              <!-- Meter 3: Average Order Ticket Benchmark -->
+              <div class="meter-item" style="margin-bottom: 0;">
+                <div class="meter-header">
+                  <span class="meter-label"><span>💎</span> Target AOV Pacing</span>
+                  <span class="meter-value-txt" id="healthAovTxt">0%</span>
+                </div>
+                <div class="meter-bar-track">
+                  <div class="meter-bar-fill" id="healthAovBar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: var(--surface-elevated); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-top: 18px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.2rem;">⚡</span>
+              <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.4;">
+                <strong style="color: var(--text);">Real-time database sync:</strong> Customer checkouts update inventory & fulfillment queues instantly.
+              </div>
+            </div>
           </div>
         </div>
 
