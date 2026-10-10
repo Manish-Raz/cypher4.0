@@ -1,6 +1,4 @@
-# ✦ LaunchX — Spatial AI Minimalism: Multi-Tenant Website Builder & Grounded AI Engine
 
-A production-ready platform where users can describe a business, synthesize an online store in minutes, customize its appearance in an interactive studio editor, preview it across responsive viewports, and publish it live backed by **MongoDB**.
 
 ---
 # 🚀 LaunchX — AI-Powered E-Commerce Builder
