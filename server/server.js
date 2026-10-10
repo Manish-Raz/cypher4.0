@@ -1,7 +1,10 @@
+
 require('dotenv').config();
+
 const path = require('path');
 const express = require('express');
 const cors = require('cors');
+
 const connectDB = require('./config/db');
 const seedDatabase = require('./seed/seedData');
 
@@ -18,7 +21,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static frontend assets
+// Serve static frontend files
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // API Routes
@@ -26,6 +29,18 @@ app.use('/api/stores', storeRoutes);
 app.use('/api/stores/:slug/products', productRoutes);
 app.use('/api/stores/:slug/orders', orderRoutes);
 app.use('/api/stores/:slug/chatbot', chatbotRoutes);
+
+// Health check: verify that the server is responding
+app.get('/api/health', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'LaunchX API is running',
+    database:
+      require('mongoose').connection.readyState === 1
+        ? 'connected'
+        : 'disconnected',
+  });
+});
 
 // Friendly HTML Routes
 app.get('/store/:slug', (req, res) => {
@@ -60,31 +75,53 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// Fallback error handler
-app.use((err, req, res, next) => {
-  console.error('[Server Error]', err.stack);
-  res.status(500).json({ success: false, error: 'Internal Server Error' });
+// 404 handler for unknown API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'API route not found',
+  });
 });
 
-// Start server and connect DB
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error('[Server Error]', err.message);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
+  res.status(err.status || 500).json({
+    success: false,
+    error:
+      process.env.NODE_ENV === 'production'
+        ? 'Internal Server Error'
+        : err.message,
+  });
+});
+
+// Start server only after the database connects
 const startServer = async () => {
   try {
     await connectDB();
+    console.log('MongoDB Atlas connected successfully');
+
     await seedDatabase();
+    console.log('Database seeding completed');
 
     app.listen(PORT, () => {
-      console.log(`\n======================================================`);
-      console.log(`🚀 LaunchX Engine is running!`);
+      console.log('\n==============================================');
+      console.log('🚀 LaunchX Engine is running!');
       console.log(`📡 URL: http://localhost:${PORT}`);
-      console.log(`✨ Onboarding Wizard: http://localhost:${PORT}/`);
-      console.log(`🎨 Design System:    http://localhost:${PORT}/design-system`);
-      console.log(`🏬 Sample Store 1:   http://localhost:${PORT}/store/urban-threads`);
-      console.log(`🥐 Sample Store 2:   http://localhost:${PORT}/store/artisan-bakery`);
-      console.log(`⚙️  Admin Dashboard:  http://localhost:${PORT}/admin?store=urban-threads`);
-      console.log(`======================================================\n`);
+      console.log(`❤️ Health: http://localhost:${PORT}/api/health`);
+      console.log(`🎨 Design System: http://localhost:${PORT}/design-system`);
+      console.log(`🏬 Sample Store: http://localhost:${PORT}/store/urban-threads`);
+      console.log(`⚙️ Admin: http://localhost:${PORT}/admin?store=urban-threads`);
+      console.log('==============================================\n');
     });
   } catch (err) {
-    console.error('Failed to start server:', err);
+    console.error('Failed to start LaunchX:', err.message);
+    process.exitCode = 1;
   }
 };
 
